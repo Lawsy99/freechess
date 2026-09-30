@@ -1585,3 +1585,67 @@
   font-weight: 800;
   font-size: 14px;
 }
+
+/* Vision trainer (Sep 2026): the square to find, big, above the board. */
+.fc-vision-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+  text-align: center;
+}
+
+.fc-vision-target {
+  font-size: 56px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.fc-vision-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+  color: var(--muted);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-vision-stats .low {
+  color: var(--bad);
+}
+
+.fc-vision-result strong {
+  display: block;
+  font-size: 56px;
+  line-height: 1;
+}
+
+.fc-vision-result span,
+.fc-vision-intro p {
+  color: var(--muted);
+}
+
+.fc-vision-intro h1 {
+  margin: 0;
+}
+
+.fc-vision-intro p {
+  margin: 6px 0 0;
+}
+
+.fc-vision-board {
+  width: min(100%, 520px);
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.fc-vision-board.resting {
+  opacity: 0.6;
+}
+
+.fc-segmented.two,
+.fc-vision .fc-segmented {
+  grid-template-columns: 1fr 1fr;
+}

@@ -6,7 +6,7 @@ import { dayKey, type Profile } from '../logic/profile'
 import { loadPuzzleProgress } from '../storage/db'
 import { CheckIcon, ChevronIcon, PuzzleIcon } from './icons'
 
-export type PuzzleMode = { kind: 'rated' } | { kind: 'daily' } | { kind: 'theme'; theme: string; label: string } | { kind: 'rush' }
+export type PuzzleMode = { kind: 'rated' } | { kind: 'daily' } | { kind: 'theme'; theme: string; label: string } | { kind: 'rush' } | { kind: 'vision' }
 
 type Props = {
   profile: Profile
@@ -67,6 +67,15 @@ export function PuzzlesTab({ profile, onStart }: Props) {
         <span>
           <strong>Puzzle Rush</strong>
           <span>Three minutes, three strikes. They get harder as you go.</span>
+        </span>
+        <ChevronIcon size={20} />
+      </button>
+
+      <button type="button" className="fc-card fc-mode" onClick={() => onStart({ kind: 'vision' })}>
+        <span className="fc-mode-badge vision">e4</span>
+        <span>
+          <strong>Vision</strong>
+          <span>Name the square: tap it, as many as you can in 30 seconds.</span>
         </span>
         <ChevronIcon size={20} />
       </button>

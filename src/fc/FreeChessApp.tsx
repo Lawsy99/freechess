@@ -8,7 +8,8 @@ import { BOT_GROUPS, findBot, type Bot } from '../data/bots'
 import { characterOpponentId } from '../data/opponents'
 import { newGameRecord, outcomeOf, upgradeGameRecord, type GameRecord } from '../logic/gameRecord'
 import type { PathGame } from '../logic/path'
-import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordCoachGame, recordLesson, withRushScore, type Profile } from '../logic/profile'
+import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordCoachGame, recordLesson, withRushScore,
+  withVisionScore, type Profile } from '../logic/profile'
 import type { Lesson } from '../data/learnPath'
 import { LearnTab } from './LearnTab'
 import { LessonPlayer } from './LessonPlayer'
@@ -35,6 +36,7 @@ import {
 import { BotSheet, type ColourChoice } from './BotSheet'
 import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
+import { VisionTrainer } from './VisionTrainer'
 import { InsightsScreen } from './InsightsScreen'
 import { AchievementsScreen } from './AchievementsScreen'
 import { newlyEarned } from '../logic/achievements'
@@ -286,7 +288,9 @@ export function FreeChessApp() {
     }
     return (
       <BoardThemeContext.Provider value={settings.board}>
-        {puzzleMode.kind === 'rush' ? (
+        {puzzleMode.kind === 'vision' ? (
+          <VisionTrainer best={profile.visionBest ?? 0} onFinished={(score) => updateProfile(withVisionScore(profile, score))} onBack={back} />
+        ) : puzzleMode.kind === 'rush' ? (
           <PuzzleRush best={profile.rushBest ?? 0} onFinished={(score) => updateProfile(withRushScore(profile, score))} onBack={back} />
         ) : (
           <PuzzleRun

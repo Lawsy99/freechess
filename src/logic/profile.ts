@@ -37,6 +37,8 @@ export type Profile = {
   /** Puzzles: how many solved in all, the best Puzzle Rush score, and the last day the daily puzzle was solved. */
   puzzlesSolved?: number
   rushBest?: number
+  /** Best score in the vision trainer (squares named in 30 seconds). */
+  visionBest?: number
   dailySolvedOn?: string
   /** Learn: lessons passed, by id (data/learnPath.ts). */
   lessonsDone?: string[]
@@ -180,4 +182,9 @@ export function withRushScore(p: Profile, score: number): Profile {
 export function recordLesson(p: Profile, lessonId: string, now: Date): Profile {
   const done = p.lessonsDone ?? []
   return completeGoal({ ...p, lessonsDone: done.includes(lessonId) ? done : [...done, lessonId] }, 'lesson', dayKey(now))
+}
+
+/** A vision trainer score: the best is remembered. */
+export function withVisionScore(p: Profile, score: number): Profile {
+  return { ...p, visionBest: Math.max(p.visionBest ?? 0, score) }
 }
