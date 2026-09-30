@@ -145,3 +145,18 @@
   color: var(--muted-dim);
   opacity: 1;
 }
+
+/* Opens the analysis board at this move (FreeChess, Sep 2026). */
+.full-game .analyse {
+  min-height: 40px;
+  margin-left: auto;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}

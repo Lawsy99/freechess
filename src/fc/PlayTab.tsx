@@ -7,14 +7,16 @@ import { BOT_GROUPS, botsIn, type Bot, type BotGroup } from '../data/bots'
 import type { Profile } from '../logic/profile'
 import { ChevronIcon, Stars, StarIcon } from './icons'
 import { groupFor } from '../logic/botPicks'
+import { MenuList } from './MenuList'
 
 type Props = {
   profile: Profile
   onPick: (bot: Bot) => void
   onPlayCoach: () => void
+  onAnalysis: () => void
 }
 
-export function PlayTab({ profile, onPick, onPlayCoach }: Props) {
+export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis }: Props) {
   const rating = profile.rating ? Math.round(profile.rating.rating) : 800
   const [open, setOpen] = useState<BotGroup[]>([groupFor(rating)])
   const toggle = (g: BotGroup) => setOpen((o) => (o.includes(g) ? o.filter((x) => x !== g) : [...o, g]))
@@ -79,6 +81,11 @@ export function PlayTab({ profile, onPick, onPlayCoach }: Props) {
           </section>
         )
       })}
+
+      <MenuList
+        label="More"
+        items={[{ id: 'analysis', title: 'Analysis board', detail: 'Set up or paste any position and explore it', onClick: onAnalysis }]}
+      />
     </main>
   )
 }

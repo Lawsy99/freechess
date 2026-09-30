@@ -1255,3 +1255,57 @@
   align-self: stretch;
   margin-top: 12px;
 }
+
+/* Menu cards (Sep 2026): the quieter extras, grouped in one card with rows. */
+.fc-menu-label {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.fc-menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.fc-menu li + li {
+  border-top: 1px solid var(--line-soft);
+}
+
+.fc-menu-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fc-menu-row:active {
+  background: var(--panel);
+}
+
+.fc-menu-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fc-menu-text strong {
+  font-size: 16px;
+}
+
+.fc-menu-text span {
+  color: var(--muted);
+  font-size: 14px;
+}

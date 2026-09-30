@@ -8,6 +8,8 @@ import { RATING_GLYPHS, RATING_LABELS } from '../logic/moveRating'
 import type { PositionEval, ReviewedMove } from '../logic/review'
 import { momentAt } from '../logic/mistakeCards'
 import { SPECIAL_GLYPHS, SPECIAL_LABELS, type Special } from '../logic/reviewExtras'
+import { START_FEN } from '../logic/analysisLine'
+import { AnalysisBoard } from './AnalysisBoard'
 import { Board } from './Board'
 import { MomentTrainer } from './MomentTrainer'
 import { EvalGraph } from './EvalGraph'
@@ -40,6 +42,8 @@ export function FullGameView({ moves, evals, reviewed, specials = new Map(), pla
   // "Try it again" (Joseph, Sep 2026): the position before one of your moves,
   // to look for a better one, then back to the step-through at the same place.
   const [retryPly, setRetryPly] = useState<number | null>(retryAt)
+  // The analysis board, from the move on the board now (and back to it after).
+  const [analysing, setAnalysing] = useState(false)
   const retry = useMemo(() => (retryPly === null ? null : momentAt(moves, evals, retryPly, playerColour)), [retryPly, moves, evals, playerColour])
   const last = moves.length
   const fen = useMemo(() => replay(moves.slice(0, index)).fen(), [moves, index])
@@ -62,6 +66,16 @@ export function FullGameView({ moves, evals, reviewed, specials = new Map(), pla
     .map((m) => ({ index: m.ply + 1, rating: m.rating }))
 
   const step = (to: number) => setIndex(Math.max(0, Math.min(last, to)))
+
+  if (analysing) {
+    return (
+      <AnalysisBoard
+        initial={{ startFen: START_FEN, moves: [...moves], cursor: index }}
+        orientation={playerColour === 'w' ? 'white' : 'black'}
+        onBack={() => setAnalysing(false)}
+      />
+    )
+  }
 
   if (retry && retryPly !== null) {
     return (
@@ -87,6 +101,9 @@ export function FullGameView({ moves, evals, reviewed, specials = new Map(), pla
           ‹ Back
         </button>
         <h1>Full game</h1>
+        <button type="button" className="analyse" onClick={() => setAnalysing(true)}>
+          Analyse
+        </button>
       </header>
 
       <Board

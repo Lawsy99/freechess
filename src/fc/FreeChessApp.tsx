@@ -35,12 +35,13 @@ import {
 import { BotSheet, type ColourChoice } from './BotSheet'
 import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
+import { AnalysisBoard } from '../components/AnalysisBoard'
 import { ProfileTab } from './ProfileTab'
 import { ResultScreen, type LastResult } from './ResultScreen'
 import { TabBar, type Tab } from './TabBar'
 import './fc.css'
 
-type View = 'tabs' | 'bot' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson'
+type View = 'tabs' | 'bot' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis'
 
 const CHARACTER_PREFIX = 'char:'
 
@@ -281,6 +282,14 @@ export function FreeChessApp() {
     )
   }
 
+  if (view === 'analysis') {
+    return (
+      <BoardThemeContext.Provider value={settings.board}>
+        <AnalysisBoard canSetUp onBack={() => setView('tabs')} />
+      </BoardThemeContext.Provider>
+    )
+  }
+
   if (view === 'lesson' && lesson) {
     const back = () => {
       setView('tabs')
@@ -323,7 +332,7 @@ export function FreeChessApp() {
       {tab === 'home' && (
         <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onOpenLearn={() => setTab('learn')} />
       )}
-      {tab === 'play' && <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} />}
+      {tab === 'play' && <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onAnalysis={() => setView('analysis')} />}
       {tab === 'puzzles' && (
         <PuzzlesTab
           profile={profile}
