@@ -1,0 +1,149 @@
+/* Learn and Home, look reworked Sep 2026. */
+
+/* Learn: each unit's piece as a big faded picture in its banner. */
+.fc-learn .fc-unit-banner {
+  position: relative;
+  overflow: hidden;
+  padding-right: 96px;
+  min-height: 72px;
+}
+
+.fc-unit-art {
+  position: absolute;
+  right: -6px;
+  bottom: -18px;
+  opacity: 0.35;
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+
+.fc-unit-banner > strong,
+.fc-unit-banner > span:not(.fc-unit-art) {
+  position: relative;
+  z-index: 1;
+}
+
+.fc-node {
+  position: relative;
+}
+
+.fc-learn .fc-node.locked {
+  background: var(--panel);
+}
+
+.fc-node-tick {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--good);
+  color: #10281a;
+  box-shadow: 0 0 0 3px var(--bg);
+}
+
+.fc-path li {
+  position: relative;
+}
+
+/* The Coach beside your next lesson. */
+.fc-path-coach {
+  position: absolute;
+  top: -6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  animation: fc-bob 2.4s ease-in-out infinite;
+}
+
+.fc-path-coach.left {
+  right: calc(50% + 50px);
+}
+
+.fc-path-coach.right {
+  left: calc(50% + 50px);
+}
+
+.fc-path-coach-say {
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: #fff;
+  color: #16181d;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+@keyframes fc-bob {
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Home: a greeting from the Coach, with today's ring. */
+.fc-hello {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 20px;
+  overflow: hidden;
+  background:
+    repeating-conic-gradient(rgba(255, 255, 255, 0.07) 0 25%, transparent 0 50%) 0 0 / 32px 32px,
+    linear-gradient(135deg, #5b8ff9, #3d6fe0);
+  color: #fff;
+  box-shadow: var(--lift);
+}
+
+.fc-hello .fc-face {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
+}
+
+.fc-hello-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.fc-hello-text strong {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.fc-hello-text span {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.fc-hello .fc-ring circle:first-child {
+  stroke: rgba(255, 255, 255, 0.3);
+}
+
+.fc-hello .fc-ring text {
+  fill: #fff;
+}
+
+.fc-today .fc-goals {
+  margin-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-path-coach {
+    animation: none;
+  }
+}
+
+.fc-home .fc-today {
+  padding: 6px 16px;
+}
+
+.fc-today .fc-goals li:first-child {
+  border-top: none;
+}

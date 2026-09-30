@@ -1,10 +1,15 @@
 // Learn: the path, Duolingo style (Joseph, Sep 2026). Units in their own
-// colours; lessons as round buttons winding down the page. Done lessons can
-// be played again; the next one glows; the rest are locked until you get there.
+// colours, each with its piece as a big faded picture; lessons as round
+// buttons winding down the page, each showing a piece that suits it. Done
+// lessons get a tick and can be played again; the next one glows, with the
+// Coach beside it; the rest are locked until you get there.
+import { defaultPieces } from 'react-chessboard'
+import { Portrait } from '../components/Portrait'
 import { ALL_LESSONS, LEARN_PATH, type Lesson } from '../data/learnPath'
 import { isOpen, nextLesson } from '../logic/learn'
 import type { Profile } from '../logic/profile'
-import { CheckIcon, LearnIcon } from './icons'
+import { CheckIcon } from './icons'
+import './learnhome.css'
 
 type Props = {
   profile: Profile
@@ -13,6 +18,47 @@ type Props = {
 
 /** How far each button sits from the middle, in a gentle wave. */
 const WAVE = [0, 44, 64, 44, 0, -44, -64, -44]
+
+/** Each unit's piece, for its banner. */
+const UNIT_PIECE: Record<string, string> = {
+  'first-steps': 'wP',
+  tactics: 'wN',
+  mates: 'wQ',
+  openings: 'wB',
+  endgames: 'wK',
+  'winning-ideas': 'wR',
+}
+
+/** The piece on each lesson's button: the one that does the job (knights fork, rooks mate on the back rank). */
+const LESSON_PIECE: Record<string, string> = {
+  'free-pieces': 'wP',
+  'mate-in-one': 'wQ',
+  'lone-king': 'wK',
+  'stay-safe': 'wR',
+  forks: 'wN',
+  pins: 'wB',
+  skewers: 'wR',
+  discovered: 'wB',
+  'double-check': 'wQ',
+  'back-rank': 'wR',
+  smothered: 'wN',
+  'mate-in-two': 'wQ',
+  'mate-in-three': 'wK',
+  italian: 'wB',
+  london: 'wB',
+  'black-e4': 'bP',
+  'black-d4': 'bN',
+  'opening-traps': 'wN',
+  'king-pawn': 'wK',
+  promotion: 'wP',
+  'rook-endings': 'wR',
+  sacrifices: 'wQ',
+  deflection: 'wR',
+  trapped: 'wB',
+  'quiet-moves': 'wN',
+}
+
+const piece = (key: string, size: number) => defaultPieces[key]({ svgStyle: { width: size, height: size } })
 
 export function LearnTab({ profile, onStart }: Props) {
   const done = profile.lessonsDone ?? []
@@ -33,6 +79,9 @@ export function LearnTab({ profile, onStart }: Props) {
           <div className="fc-unit-banner" style={{ background: unit.colour }}>
             <strong>{unit.title}</strong>
             <span>{unit.about}</span>
+            <span className="fc-unit-art" aria-hidden="true">
+              {piece(UNIT_PIECE[unit.id] ?? 'wP', 96)}
+            </span>
           </div>
           <ol className="fc-path">
             {unit.lessons.map((lesson) => {
@@ -42,6 +91,13 @@ export function LearnTab({ profile, onStart }: Props) {
               const current = upNext?.id === lesson.id
               return (
                 <li key={lesson.id} style={{ transform: `translateX(${offset}px)` }}>
+                  {/* The Coach stands beside your next lesson, on the side with room. */}
+                  {current && (
+                    <span className={`fc-path-coach ${offset > 0 ? 'left' : 'right'}`} aria-hidden="true">
+                      <span className="fc-path-coach-say">Start here!</span>
+                      <Portrait who="coach" size={56} expression="pleased" className="fc-face" />
+                    </span>
+                  )}
                   <button
                     type="button"
                     className={`fc-node ${isDone ? 'done' : current ? 'current' : 'locked'}`}
@@ -50,9 +106,14 @@ export function LearnTab({ profile, onStart }: Props) {
                     aria-label={`${lesson.title}${isDone ? ', done' : open ? '' : ', locked'}`}
                     onClick={() => onStart(lesson)}
                   >
-                    {isDone ? <CheckIcon size={30} /> : open ? <LearnIcon size={28} /> : <LockIcon />}
+                    {open ? piece(LESSON_PIECE[lesson.id] ?? 'wP', 44) : <LockIcon />}
+                    {isDone && (
+                      <span className="fc-node-tick">
+                        <CheckIcon size={14} />
+                      </span>
+                    )}
                   </button>
-                  <span className={`fc-node-label ${open ? '' : 'locked'}`}>{current ? `Start: ${lesson.title}` : lesson.title}</span>
+                  <span className={`fc-node-label ${open ? '' : 'locked'}`}>{lesson.title}</span>
                 </li>
               )
             })}

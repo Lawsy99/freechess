@@ -6,6 +6,7 @@ import type { Bot } from '../data/bots'
 import { currentStreak, dayKey, todaysGoals, totalStars, type Goal, type Profile } from '../logic/profile'
 import { CheckIcon, ChevronIcon, FlameIcon, Stars, StarIcon } from './icons'
 import { Logo } from './Logo'
+import './learnhome.css'
 import { suggestedBot } from '../logic/botPicks'
 
 type Props = {
@@ -43,22 +44,25 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
         </span>
       </header>
 
+      {/* A hello from the Coach (Sep 2026), with how today is going. */}
+      <section className="fc-hello">
+        <Portrait who="coach" size={60} expression="pleased" className="fc-face" />
+        <span className="fc-hello-text">
+          <strong>{greeting(new Date())}</strong>
+          <span>
+            {done.length === 3
+              ? 'All three goals done. See you tomorrow.'
+              : streak > 0 && !doneToday
+                ? `Keep your ${streak}-day streak going.`
+                : doneToday
+                  ? `${3 - done.length} of today’s goals to go.`
+                  : 'Do one of today’s goals to start a streak.'}
+          </span>
+        </span>
+        <GoalRing done={done.length} total={3} />
+      </section>
+
       <section className="fc-card fc-today">
-        <div className="fc-today-head">
-          <GoalRing done={done.length} total={3} />
-          <div>
-            <h2>Today’s goals</h2>
-            <p>
-              {done.length === 3
-                ? 'All three done. See you tomorrow.'
-                : streak > 0 && !doneToday
-                  ? `Keep your ${streak}-day streak going.`
-                  : doneToday
-                    ? `${3 - done.length} to go.`
-                    : 'Do one to start a streak.'}
-            </p>
-          </div>
-        </div>
         <ul className="fc-goals">
           {(['bot', 'coach', 'lesson'] as Goal[]).map((goal) => {
             const text = GOAL_TEXT[goal]
@@ -139,6 +143,11 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
   )
 }
 
+function greeting(now: Date): string {
+  const h = now.getHours()
+  return h < 12 ? 'Good morning!' : h < 18 ? 'Good afternoon!' : 'Good evening!'
+}
+
 /** A ring that fills a third for each goal done. */
 function GoalRing({ done, total }: { done: number; total: number }) {
   const r = 22
@@ -151,7 +160,7 @@ function GoalRing({ done, total }: { done: number; total: number }) {
         cy="28"
         r={r}
         fill="none"
-        stroke={done === total ? 'var(--good)' : 'var(--buff)'}
+        stroke={done === total ? 'var(--good)' : '#fff'}
         strokeWidth="6"
         strokeLinecap="round"
         strokeDasharray={`${(done / total) * c} ${c}`}
