@@ -3,6 +3,7 @@
 // character's face is put together from parts chosen to suit them: skin,
 // hair, clothes, glasses, a beard, earrings. Expressions change the eyes,
 // eyebrows and mouth (components/Portrait.tsx). Colours are hex, without "#".
+import type { Expression } from '../logic/dialogue'
 
 export type FaceHair = 'fonze' | 'mrT' | 'dougFunny' | 'mrClean' | 'dannyPhantom' | 'full' | 'turban' | 'pixie'
 
@@ -21,7 +22,12 @@ export type Face = {
   earrings?: 'hoop' | 'stud'
   /** Annoyed as a tight, nervous smile (Toby, who never shows it). */
   tightSmile?: boolean
+  /** How they look when clearly winning or losing (pleased and annoyed unless set). */
+  moods?: { winning: Expression; losing: Expression }
 }
+
+/** Most people look pleased when winning and put out when losing. */
+export const DEFAULT_MOODS: { winning: Expression; losing: Expression } = { winning: 'pleased', losing: 'annoyed' }
 
 // Skin tones, lightest to deepest.
 const S = { l1: 'f6d7c3', l2: 'f0c8a8', m1: 'e0a97e', m2: 'c68a5e', d1: 'a36b45', d2: '7d4f31', d3: '5a3622' }
@@ -30,7 +36,7 @@ export const FACES: Record<string, Face> = {
   coach: { bg: '8fb3ff', skin: S.m2, hair: 'dannyPhantom', hairColour: '2a1d17', shirt: 'collared', shirtColour: '3d6fe0' },
 
   // Beginner
-  bo: { bg: 'ffd56b', skin: S.l2, hair: 'dougFunny', hairColour: 'e0b25a', shirt: 'crew', shirtColour: 'e05d6f' },
+  bo: { bg: 'ffd56b', skin: S.l2, hair: 'dougFunny', hairColour: 'e0b25a', shirt: 'crew', shirtColour: 'e05d6f', moods: { winning: 'pleased', losing: 'surprised' } },
   grace: { bg: 'f7c59f', skin: S.d2, hair: 'pixie', hairColour: 'd9d6cf', lashes: true, glasses: 'round', shirt: 'open', shirtColour: '2f8f6b', earrings: 'stud' },
   finn: { bg: 'a8e0a0', skin: S.l1, hair: 'fonze', hairColour: 'c8612a', shirt: 'collared', shirtColour: '2f7a3d' },
   ada: { bg: 'f2b6a0', skin: S.l1, hair: 'full', hairColour: 'c8612a', lashes: true, shirt: 'crew', shirtColour: 'e05d6f' },
@@ -55,7 +61,7 @@ export const FACES: Record<string, Face> = {
   luca: { bg: 'bfe3c0', skin: S.m1, hair: 'fonze', hairColour: '2b1d16', beard: 'scruff', shirt: 'open', shirtColour: 'c0463a' },
   zeynep: { bg: 'c7d7f2', skin: S.m1, hair: 'full', hairColour: '4a2a1c', lashes: true, glasses: 'round', shirt: 'crew', shirtColour: '3b7dd8' },
   thandi: { bg: 'f3d27a', skin: S.d3, hair: 'pixie', hairColour: '141010', lashes: true, shirt: 'collared', shirtColour: '1f6f5c', earrings: 'hoop' },
-  minh: { bg: 'd3e6b8', skin: S.l2, hair: 'dannyPhantom', hairColour: '141212', shirt: 'crew', shirtColour: '4a4f6a' },
+  minh: { bg: 'd3e6b8', skin: S.l2, hair: 'dannyPhantom', hairColour: '141212', shirt: 'crew', shirtColour: '4a4f6a', moods: { winning: 'neutral', losing: 'neutral' } },
   marjorie: { bg: 'd9b9a6', skin: S.l1, hair: 'pixie', hairColour: 'd9d6cf', lashes: true, glasses: 'round', shirt: 'open', shirtColour: 'a86a6f', earrings: 'stud' },
   jonas: { bg: 'aac4dc', skin: S.l1, hair: 'dannyPhantom', hairColour: 'd9c07a', glasses: 'round', shirt: 'crew', shirtColour: 'b24a3d' },
   dex: { bg: '9fd0c8', skin: S.d1, hair: 'mrT', hairColour: '4f86f7', shirt: 'open', shirtColour: '4f6f78', earrings: 'stud' },
@@ -79,8 +85,8 @@ export const FACES: Record<string, Face> = {
   malcolm: { bg: 'b3b1c4', skin: S.l2, hair: 'dannyPhantom', hairColour: '9c9790', glasses: 'square', shirt: 'collared', shirtColour: '2f3440' },
 
   // Master
-  tariq: { bg: 'b9d6b0', skin: S.d1, hair: 'fonze', hairColour: '141010', beard: 'beard', shirt: 'collared', shirtColour: '1f6f3d' },
-  leila: { bg: 'd9c2e8', skin: S.m1, hair: 'turban', hairColour: '3a2f5c', lashes: true, glasses: 'round', shirt: 'collared', shirtColour: '3a2f5c' },
+  tariq: { bg: 'b9d6b0', skin: S.d1, hair: 'fonze', hairColour: '141010', beard: 'beard', shirt: 'collared', shirtColour: '1f6f3d', moods: { winning: 'smug', losing: 'annoyed' } },
+  leila: { bg: 'd9c2e8', skin: S.m1, hair: 'turban', hairColour: '3a2f5c', lashes: true, glasses: 'round', shirt: 'collared', shirtColour: '3a2f5c', moods: { winning: 'neutral', losing: 'surprised' } },
   nino: { bg: 'e8b8b8', skin: S.l1, hair: 'full', hairColour: '241a16', lashes: true, shirt: 'open', shirtColour: '1f2a44', earrings: 'hoop' },
   samuel: { bg: 'b9d6b0', skin: S.d3, hair: 'mrClean', beard: 'scruff', glasses: 'square', shirt: 'collared', shirtColour: '2d3b2f' },
   elena: { bg: 'cdbfdc', skin: S.l1, hair: 'pixie', hairColour: '3a2419', lashes: true, glasses: 'round', shirt: 'collared', shirtColour: '4a2d3f', earrings: 'stud' },

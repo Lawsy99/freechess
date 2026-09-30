@@ -22,6 +22,7 @@ import { Portrait } from '../components/Portrait'
 import { playEndSound, playMoveSound } from '../components/moveSound'
 import { BulbIcon, FlagIcon, HalfIcon, NextIcon, PauseIcon, PrevIcon, UndoIcon } from '../components/GameIcons'
 import { APPEARANCES } from '../data/appearances'
+import { DEFAULT_MOODS, FACES } from '../data/faces'
 import { moodFor } from '../logic/mood'
 import { matchMoment } from '../logic/matchReaction'
 import type { Expression } from '../logic/dialogue'
@@ -245,7 +246,10 @@ export function GameScreen({
 
   // The opponent's face: the expression of whatever they've just said, else
   // how the game is going for them (or went, once it's over).
-  const moods = opponent.character ? APPEARANCES[opponent.character.id]?.moods : undefined
+  // (Every face has moods now: its own, or pleased when winning and annoyed when losing.)
+  const moods = opponent.character
+    ? (APPEARANCES[opponent.character.id]?.moods ?? FACES[opponent.character.id]?.moods ?? (FACES[opponent.character.id] ? DEFAULT_MOODS : undefined))
+    : undefined
   const gameMood = outcome
     ? outcome.winner === null
       ? 'neutral'
