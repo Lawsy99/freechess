@@ -5,8 +5,8 @@ import type { GameRecord } from './gameRecord'
 const KIND_LABELS: Record<string, string> = {
   trial: 'Trial night',
   exhibition: 'Just for fun',
-  coaching: 'Coached',
-  friendly: 'Practice',
+  coaching: 'Coach game',
+  friendly: 'Bot game',
   match: 'Saturday match',
   'cup-round': 'Knockout cup',
   boss: 'Cup final',
@@ -15,6 +15,6 @@ const KIND_LABELS: Record<string, string> = {
 const STAGE_LABELS: Record<string, string> = { assisted: 'Coached', guided: 'Practice', real: 'Match' }
 
 export function gameKindLabel(game: Pick<GameRecord, 'path' | 'stage'>): string {
-  if (game.path?.helped) return `${KIND_LABELS[game.path.kind] ?? 'Match'}, with Pemberton’s help`
+  if (game.path?.helped) return `${KIND_LABELS[game.path.kind] ?? 'Match'}, with help`
   return (game.path && KIND_LABELS[game.path.kind]) ?? STAGE_LABELS[game.stage] ?? 'Game'
 }

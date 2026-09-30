@@ -660,7 +660,7 @@ export function GameScreen({
     // The week's focus (Joseph, Sep 2026): when it's the very mistake you're
     // working on, he says so instead of his usual opener.
     const onFocus = focusKinds.includes(errorKind(facts))
-    dialogue.say(`${onFocus ? 'That’s the one we’re working on this week.' : pickLine(coachVoice.afterMistake, null)} ${comment}`, coachVoice.afterGood ? 'neutral' : 'annoyed')
+    dialogue.say(`${onFocus ? 'That’s the one we’ve been working on.' : pickLine(coachVoice.afterMistake, null)} ${comment}`, coachVoice.afterGood ? 'neutral' : 'annoyed')
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once per rated move
   }, [ratedKey])
 

@@ -17,8 +17,8 @@ describe('backup', () => {
   })
 
   it('refuses anything else, with a plain reason', () => {
-    expect(() => parseBackup('not json')).toThrow("isn't a Club Night backup")
-    expect(() => parseBackup(JSON.stringify({ app: 'other' }))).toThrow("isn't a Club Night backup")
+    expect(() => parseBackup('not json')).toThrow("isn't a FreeChess backup")
+    expect(() => parseBackup(JSON.stringify({ app: 'other' }))).toThrow("isn't a FreeChess backup")
     expect(() => parseBackup(JSON.stringify({ ...good, version: 2 }))).toThrow('newer version')
     expect(() => parseBackup(JSON.stringify({ ...good, games: 'x' }))).toThrow('incomplete')
     expect(() => parseBackup(JSON.stringify({ ...good, games: [{}] }))).toThrow('damaged')

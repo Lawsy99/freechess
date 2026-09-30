@@ -20,11 +20,11 @@ export function parseBackup(text: string): Backup {
   try {
     data = JSON.parse(text)
   } catch {
-    throw new Error("That file isn't a Club Night backup (it couldn't be read).")
+    throw new Error("That file isn't a FreeChess backup (it couldn't be read).")
   }
   const b = data as Partial<Backup>
   if (!b || typeof b !== 'object' || b.app !== 'freechess') {
-    throw new Error("That file isn't a Club Night backup.")
+    throw new Error("That file isn't a FreeChess backup.")
   }
   if (b.version !== 1) throw new Error('That backup is from a newer version of the app. Update the app first.')
   if (!b.state || typeof b.state !== 'object' || !Array.isArray(b.games) || !Array.isArray(b.cards)) {

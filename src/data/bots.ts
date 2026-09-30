@@ -41,10 +41,10 @@ export const BOTS: Bot[] = [
   { id: 'ada', name: 'Ada', group: 'beginner', rating: 250, flag: '🇬🇧', country: 'England', bio: 'Learnt the moves last week. Very proud of her queen.', style: 'aggressive', thinkSpeed: 0.6 },
   { id: 'kofi', name: 'Kofi', group: 'beginner', rating: 300, flag: '🇬🇭', country: 'Ghana', bio: 'Plays his grandad in the market every Saturday. Loves a capture.', style: 'aggressive', thinkSpeed: 0.7 },
   { id: 'mei', name: 'Mei', group: 'beginner', rating: 350, flag: '🇨🇳', country: 'China', bio: 'Careful and tidy. Sometimes a bit too careful.', style: 'solid' },
-  { id: 'sheila', name: 'Sheila', group: 'beginner', rating: 400, flag: '🇬🇧', country: 'England', bio: 'Runs the raffle at Wexley Chess Club. Plays when asked.', style: 'solid' },
+  { id: 'sheila', name: 'Sheila', group: 'beginner', rating: 400, flag: '🇬🇧', country: 'England', bio: 'Plays for the company and the chat. Moves quickly and hopes for the best.', style: 'solid' },
   { id: 'mateo', name: 'Mateo', group: 'beginner', rating: 450, flag: '🇦🇷', country: 'Argentina', bio: 'Football first, chess second. Attacks like a winger.', style: 'aggressive', traits: ['pawn-storm'], thinkSpeed: 0.6 },
   { id: 'hanna', name: 'Hanna', group: 'beginner', rating: 500, flag: '🇸🇪', country: 'Sweden', bio: 'Likes things symmetrical and quiet. Swaps whenever she can.', style: 'simplifying', traits: ['queen-trader'] },
-  { id: 'bill', name: 'Bill', group: 'beginner', rating: 550, flag: '🇬🇧', country: 'England', bio: 'A club member since 1974. Remembers every game he has ever lost.', style: 'simplifying', thinkSpeed: 1.3, resigns: 'plays-to-mate' },
+  { id: 'bill', name: 'Bill', group: 'beginner', rating: 550, flag: '🇬🇧', country: 'England', bio: 'Has played since 1974. Remembers every game he has ever lost.', style: 'simplifying', thinkSpeed: 1.3, resigns: 'plays-to-mate' },
   { id: 'ravi', name: 'Ravi', group: 'beginner', rating: 600, flag: '🇮🇳', country: 'India', bio: 'Knows a lot of openings. Remembers about half of each one.', style: 'theoretical' },
   { id: 'yuki', name: 'Yuki', group: 'beginner', rating: 650, flag: '🇯🇵', country: 'Japan', bio: 'Patient. Waits for you to make the mistake.', style: 'grinding', thinkSpeed: 1.2 },
   { id: 'oscar', name: 'Oscar', group: 'beginner', rating: 700, flag: '🇬🇧', country: 'England', bio: 'Eleven years old and improving fast. Barely pauses between moves.', style: 'aggressive', thinkSpeed: 0.35, resigns: 'quickly' },
@@ -56,13 +56,13 @@ export const BOTS: Bot[] = [
   { id: 'omar', name: 'Omar', group: 'beginner', rating: 925, flag: '🇪🇬', country: 'Egypt', bio: 'A café player. Talks the whole game, plays surprisingly well.', style: 'adaptive', thinkSpeed: 0.8 },
 
   // Intermediate
-  { id: 'marjorie', name: 'Marjorie', group: 'intermediate', rating: 1000, flag: '🇬🇧', country: 'England', bio: 'Has played at Wexley since 1979. Swaps queens and grinds you down.', style: 'solid', traits: ['queen-trader'], resigns: 'plays-to-mate' },
+  { id: 'marjorie', name: 'Marjorie', group: 'intermediate', rating: 1000, flag: '🇬🇧', country: 'England', bio: 'Forty years at the board. Puts the kettle on, swaps queens and grinds you down.', style: 'solid', traits: ['queen-trader'], resigns: 'plays-to-mate' },
   { id: 'jonas', name: 'Jonas', group: 'intermediate', rating: 1050, flag: '🇳🇴', country: 'Norway', bio: 'Grew up on long winter nights and chess books.', style: 'theoretical', thinkSpeed: 1.2 },
   { id: 'dex', name: 'Dex', group: 'intermediate', rating: 1100, flag: '🇬🇧', country: 'England', bio: 'Streams his games. Throws his pawns at your king.', style: 'aggressive', traits: ['pawn-storm'], thinkSpeed: 0.5 },
   { id: 'fatima', name: 'Fatima', group: 'intermediate', rating: 1150, flag: '🇲🇦', country: 'Morocco', bio: 'A sharp tactician who hates a quiet position.', style: 'aggressive' },
   { id: 'clive', name: 'Clive', group: 'intermediate', rating: 1200, flag: '🇬🇧', country: 'England', bio: 'Quiet, tidy, happy with a draw. Hard to beat.', style: 'simplifying', traits: ['queen-trader'], thinkSpeed: 0.9 },
   { id: 'tomas', name: 'Tomás', group: 'intermediate', rating: 1250, flag: '🇪🇸', country: 'Spain', bio: 'Loves the centre. Pawns first, questions later.', style: 'solid', traits: ['centre-pawns'] },
-  { id: 'graham', name: 'Graham', group: 'intermediate', rating: 1300, flag: '🇬🇧', country: 'England', bio: 'Club secretary. Plays by the book, and has read the rule book.', style: 'solid', traits: ['centre-pawns'], thinkSpeed: 1.2 },
+  { id: 'graham', name: 'Graham', group: 'intermediate', rating: 1300, flag: '🇬🇧', country: 'England', bio: 'Plays by the book, has read the rule book, and keeps a record of every game.', style: 'solid', traits: ['centre-pawns'], thinkSpeed: 1.2 },
   { id: 'olga', name: 'Olga', group: 'intermediate', rating: 1350, flag: '🇺🇦', country: 'Ukraine', bio: 'Grinds out endgames for fun. Never offers a draw.', style: 'grinding', thinkSpeed: 1.2 },
   { id: 'kenji', name: 'Kenji', group: 'intermediate', rating: 1400, flag: '🇯🇵', country: 'Japan', bio: 'Plays the same opening every game, and plays it very well.', style: 'theoretical' },
   { id: 'priya', name: 'Priya', group: 'intermediate', rating: 1450, flag: '🇬🇧', country: 'England', bio: 'Studies openings from books. Lost once she leaves them.', style: 'theoretical', thinkSpeed: 1.4 },
@@ -72,9 +72,9 @@ export const BOTS: Bot[] = [
   // Advanced
   { id: 'toby', name: 'Toby', group: 'advanced', rating: 1650, flag: '🇬🇧', country: 'England', bio: 'Friendly, relaxed, and somehow always a move ahead.', style: 'adaptive', thinkSpeed: 0.8 },
   { id: 'aarav', name: 'Aarav', group: 'advanced', rating: 1700, flag: '🇮🇳', country: 'India', bio: 'Studies every night. Sees tactics three moves deep.', style: 'adaptive' },
-  { id: 'ray', name: 'Ray', group: 'advanced', rating: 1750, flag: '🇬🇧', country: 'England', bio: 'Runs the junior club. Teaches by beating you, kindly.', style: 'solid' },
+  { id: 'ray', name: 'Ray', group: 'advanced', rating: 1750, flag: '🇬🇧', country: 'England', bio: 'Teaches chess to kids. Teaches you by beating you, kindly.', style: 'solid' },
   { id: 'ingrid', name: 'Ingrid', group: 'advanced', rating: 1850, flag: '🇩🇰', country: 'Denmark', bio: 'Squeezes small advantages until something breaks.', style: 'grinding', thinkSpeed: 1.2 },
-  { id: 'malcolm', name: 'Malcolm', group: 'advanced', rating: 1950, flag: '🇬🇧', country: 'England', bio: 'Board one. Hardly speaks. Plays correct, patient chess.', style: 'solid', thinkSpeed: 1.1 },
+  { id: 'malcolm', name: 'Malcolm', group: 'advanced', rating: 1950, flag: '🇬🇧', country: 'England', bio: 'Hardly speaks. Writes every move down. Plays correct, patient chess.', style: 'solid', thinkSpeed: 1.1 },
 
   // Master
   { id: 'nino', name: 'Nino', group: 'master', rating: 2100, flag: '🇬🇪', country: 'Georgia', bio: 'National champion at seventeen. Attacks with both bishops.', style: 'aggressive' },

@@ -56,7 +56,7 @@ export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Pro
       const file = new File([JSON.stringify(backup)], name, { type: 'application/json' })
       // On iPhone the share sheet is the natural way to keep a file ("Save to Files").
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'Club Night backup' })
+        await navigator.share({ files: [file], title: 'FreeChess backup' })
       } else {
         const url = URL.createObjectURL(file)
         const link = document.createElement('a')
@@ -65,7 +65,7 @@ export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Pro
         link.click()
         setTimeout(() => URL.revokeObjectURL(url), 10_000)
       }
-      setMessage(`Backup made: ${backup.games.length} games and ${backup.cards.length} deck cards.`)
+      setMessage(`Backup made: ${backup.games.length} games.`)
     } catch (err) {
       // Closing the share sheet counts as an error; that's not worth a message.
       if ((err as Error).name !== 'AbortError') setMessage(`Couldn't make the backup: ${(err as Error).message}`)
@@ -81,7 +81,7 @@ export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Pro
       const rating = s.rating !== null ? `rating ${s.rating}, ` : ''
       const when = new Date(s.exportedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
       const ok = window.confirm(
-        `Restore the backup from ${when}? (${who}${rating}${s.games} games, ${s.cards} deck cards)\n\nEverything on this phone will be replaced.`,
+        `Restore the backup from ${when}? (${who}${rating}${s.games} games)\n\nEverything on this phone will be replaced.`,
       )
       if (!ok) return
       await importAll(backup)
@@ -102,7 +102,7 @@ export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Pro
 
       <section>
         <h2>Chatter</h2>
-        <p className="settings-note">How much the other players say.</p>
+        <p className="settings-note">How much the bots say.</p>
         <div className="settings-options" role="radiogroup" aria-label="Chatter">
           {CHATTER_OPTIONS.map((o) => (
             <button

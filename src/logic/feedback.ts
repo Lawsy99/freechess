@@ -13,7 +13,7 @@ export type FeedbackContext = {
 
 export function composeFeedback(message: string, ctx: FeedbackContext): string {
   return [
-    'Club Night feedback',
+    'FreeChess feedback',
     '',
     message.trim() || '(no message)',
     '',

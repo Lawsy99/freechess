@@ -60,8 +60,8 @@ export function openingAdvice(fen: string, uci: string, movesSoFar: readonly str
   }
   if (move.piece === 'r') return 'The rooks come out last, once the king has castled.'
   return expectedWhy
-    ? `That’s playable, but it’s not tonight’s opening. Think about this: ${expectedWhy.charAt(0).toLowerCase()}${expectedWhy.slice(1)}`
-    : 'That’s playable, but it’s not tonight’s opening. Try again.'
+    ? `That’s playable, but it’s not the opening we’re learning. Think about this: ${expectedWhy.charAt(0).toLowerCase()}${expectedWhy.slice(1)}`
+    : 'That’s playable, but it’s not the opening we’re learning. Try again.'
 }
 
 function replayedMoves(moves: readonly string[]): Move[] {
