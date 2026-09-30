@@ -12,6 +12,7 @@ import { START_FEN } from '../logic/analysisLine'
 import { AnalysisBoard } from './AnalysisBoard'
 import { Portrait } from './Portrait'
 import { stepExplanation } from '../logic/stepExplain'
+import { nameOf } from '../logic/notation'
 import { Board } from './Board'
 import { MomentTrainer } from './MomentTrainer'
 import { EvalGraph } from './EvalGraph'
@@ -140,7 +141,7 @@ export function FullGameView({ moves, evals, reviewed, specials = new Map(), pla
 
       <p className="full-game-coach" aria-live="polite">
         <Portrait who="coach" size={32} expression={move && move.mover === playerColour && isError(move) ? 'neutral' : 'pleased'} className="fc-face" />
-        <span>{coachSays ?? (move && move.mover !== playerColour ? `They played ${move.san}. Your move next.` : 'A sensible move. Nothing to add.')}</span>
+        <span>{coachSays ?? (move && move.mover !== playerColour ? `They played ${nameOf(move.fenBefore, move.uci) ?? move.san}.` : 'A sensible move. Nothing to add.')}</span>
       </p>
 
       <EvalGraph points={points} markers={markers} current={index} onSelect={step} />
