@@ -37,7 +37,9 @@ folder is still called `open-file` (the app's first working name).
   useful. Coach games pitched at your rating, not rated. Puzzles: own rating.
 - Daily goals (Duolingo style): a bot game, a coached game, a lesson; a streak for
   each day with at least one done.
-- Review after every game; the step-through has "Try it again" on your moves.
+- Review after every game: summary, then the step-through with "Try it again" on your
+  moves. No "biggest moments" to play through (Try it again replaced them).
+- Bots never resign: every game is played to the end (logic/opponentDecisions.ts).
 - Moves in words below 1500, notation from there (logic/notation.ts).
 - Storage names are FreeChess's own ("freechess"), so it never clashes with Club
   Night on the same github.io address.

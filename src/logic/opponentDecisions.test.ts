@@ -10,14 +10,9 @@ const marjorie = findCharacter('marjorie')
 const dex = findCharacter('dex')
 
 describe('resigning', () => {
-  it('needs three hopeless moves in a row', () => {
-    expect(shouldResign(dex, [-700, -800])).toBe(false)
-    expect(shouldResign(dex, [-700, -800, -900])).toBe(true)
-    expect(shouldResign(dex, [-700, -200, -900])).toBe(false)
-  })
-
-  it('Oscar resigns quickly; Marjorie plays on to mate', () => {
-    expect(shouldResign(oscar, [-700])).toBe(true)
+  it('never happens: every game is played to the end', () => {
+    expect(shouldResign(dex, [-700, -800, -900])).toBe(false)
+    expect(shouldResign(oscar, [-700])).toBe(false)
     expect(shouldResign(marjorie, [-2000, -3000, -9000])).toBe(false)
   })
 })

@@ -5,24 +5,18 @@ import type { Character } from '../data/characters'
 
 /** Clearly worse: accepts the player's draw offer / Toby offers one. */
 const CLEARLY_WORSE = -150
-/** Hopelessly lost: resignation territory. */
-const HOPELESS = -600
 /** Level enough for Clive to suggest a draw. */
 const LEVEL = 50
 /** Dead level, for everyone else's rare endgame offers. */
 const DEAD_LEVEL = 30
 
 /**
- * Resigns when hopelessly lost for three of its own moves in a row. Oscar
- * gives up at the first hopeless moment; Derek never resigns; Marjorie plays
- * on to checkmate. `recent` holds the latest evaluations, newest last.
+ * FreeChess: bots never resign (Joseph, Sep 2026). You always get to finish
+ * the game, and checkmate them yourself. (Club Night's resigning habits are
+ * kept on the characters, unused.)
  */
-export function shouldResign(character: Character | undefined, recent: readonly number[]): boolean {
-  const style = character?.resigns ?? 'normal'
-  if (style === 'never' || style === 'plays-to-mate') return false
-  const needed = style === 'quickly' ? 1 : 3
-  const lastFew = recent.slice(-needed)
-  return lastFew.length === needed && lastFew.every((cp) => cp <= HOPELESS)
+export function shouldResign(_character: Character | undefined, _recent: readonly number[]): boolean {
+  return false
 }
 
 /** Accepts the player's draw offer only when clearly worse (Vera and Derek never). */
