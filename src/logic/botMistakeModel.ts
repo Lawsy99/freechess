@@ -20,6 +20,8 @@ export type MistakeProfile = {
 
 /** Interpolated between anchor ratings, so any rating gets a sensible profile. */
 const ANCHORS: [rating: number, profile: MistakeProfile][] = [
+  // (Sep 2026: bots below 200 for complete newcomers; half their moves are careless.)
+  [100, { carelessness: 0.5, looseness: 350 }],
   [200, { carelessness: 0.35, looseness: 250 }],
   [400, { carelessness: 0.22, looseness: 160 }],
   [600, { carelessness: 0.1, looseness: 90 }],

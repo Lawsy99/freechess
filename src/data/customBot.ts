@@ -7,7 +7,7 @@ import type { Bot } from './bots'
 import type { Style } from './characters'
 
 export const CUSTOM_PREFIX = 'custom-'
-export const CUSTOM_MIN = 250
+export const CUSTOM_MIN = 100
 export const CUSTOM_MAX = 2400
 export const CUSTOM_STEP = 50
 

@@ -5,7 +5,7 @@ import { customBot, customStyle } from './customBot'
 
 describe('the custom bot', () => {
   it('keeps its strength in range and its style in its id', () => {
-    expect(customBot(10, 'solid').rating).toBe(250)
+    expect(customBot(10, 'solid').rating).toBe(100)
     expect(customBot(9999, 'solid').rating).toBe(2400)
     expect(customBot(1437, 'aggressive')).toMatchObject({ id: 'custom-aggressive', rating: 1450, group: 'intermediate' })
     expect(customStyle('custom-grinding')).toBe('grinding')

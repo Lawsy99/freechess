@@ -30,7 +30,7 @@ export type Bot = {
 }
 
 export const BOT_GROUPS: { id: BotGroup; label: string; range: string; about: string }[] = [
-  { id: 'beginner', label: 'Beginner', range: '250–950', about: 'Just starting out. They leave pieces hanging, and so might you.' },
+  { id: 'beginner', label: 'Beginner', range: '100–950', about: 'Just starting out. They leave pieces hanging, and so might you.' },
   { id: 'intermediate', label: 'Intermediate', range: '1000–1550', about: 'Know their tactics, have favourite openings, punish loose play.' },
   { id: 'advanced', label: 'Advanced', range: '1650–1950', about: 'Strong club players. Plans, patience and sharp calculation.' },
   { id: 'master', label: 'Master', range: '2100–2400', about: 'Titled strength. Every mistake gets found.' },
@@ -38,6 +38,9 @@ export const BOT_GROUPS: { id: BotGroup; label: string; range: string; about: st
 
 export const BOTS: Bot[] = [
   // Beginner
+  { id: 'bo', name: 'Bo', group: 'beginner', rating: 100, flag: '🇺🇸', country: 'USA', bio: 'Six years old. Knows how the horse moves. Mostly.', style: 'aggressive', thinkSpeed: 0.5 },
+  { id: 'grace', name: 'Grace', group: 'beginner', rating: 150, flag: '🇯🇲', country: 'Jamaica', bio: 'Learning with her grandson. Takes every piece she can reach.', style: 'aggressive', thinkSpeed: 0.9 },
+  { id: 'finn', name: 'Finn', group: 'beginner', rating: 200, flag: '🇮🇪', country: 'Ireland', bio: 'Plays between rugby matches. Loves giving check.', style: 'aggressive', thinkSpeed: 0.6 },
   { id: 'ada', name: 'Ada', group: 'beginner', rating: 250, flag: '🇬🇧', country: 'England', bio: 'Learnt the moves last week. Very proud of her queen.', style: 'aggressive', thinkSpeed: 0.6 },
   { id: 'kofi', name: 'Kofi', group: 'beginner', rating: 300, flag: '🇬🇭', country: 'Ghana', bio: 'Plays his grandad in the market every Saturday. Loves a capture.', style: 'aggressive', thinkSpeed: 0.7 },
   { id: 'mei', name: 'Mei', group: 'beginner', rating: 350, flag: '🇨🇳', country: 'China', bio: 'Careful and tidy. Sometimes a bit too careful.', style: 'solid' },
@@ -56,6 +59,11 @@ export const BOTS: Bot[] = [
   { id: 'omar', name: 'Omar', group: 'beginner', rating: 925, flag: '🇪🇬', country: 'Egypt', bio: 'A café player. Talks the whole game, plays surprisingly well.', style: 'adaptive', thinkSpeed: 0.8 },
 
   // Intermediate
+  { id: 'mina', name: 'Mina', group: 'intermediate', rating: 1075, flag: '🇰🇷', country: 'South Korea', bio: 'Solves puzzles every night. Sees forks everywhere.', style: 'aggressive', thinkSpeed: 0.8 },
+  { id: 'luca', name: 'Luca', group: 'intermediate', rating: 1175, flag: '🇮🇹', country: 'Italy', bio: 'Plays the Italian Game, obviously. Talks with his hands.', style: 'theoretical' },
+  { id: 'zeynep', name: 'Zeynep', group: 'intermediate', rating: 1275, flag: '🇹🇷', country: 'Türkiye', bio: 'Chemistry student. Treats every position like an experiment.', style: 'adaptive' },
+  { id: 'thandi', name: 'Thandi', group: 'intermediate', rating: 1325, flag: '🇿🇦', country: 'South Africa', bio: 'Coaches a school team. Solid, sensible and hard to trick.', style: 'solid', traits: ['centre-pawns'] },
+  { id: 'minh', name: 'Minh', group: 'intermediate', rating: 1425, flag: '🇻🇳', country: 'Vietnam', bio: 'Quiet and quick, and deadly once the queens come off.', style: 'grinding', traits: ['queen-trader'], thinkSpeed: 0.9 },
   { id: 'marjorie', name: 'Marjorie', group: 'intermediate', rating: 1000, flag: '🇬🇧', country: 'England', bio: 'Forty years at the board. Puts the kettle on, swaps queens and grinds you down.', style: 'solid', traits: ['queen-trader'], resigns: 'plays-to-mate' },
   { id: 'jonas', name: 'Jonas', group: 'intermediate', rating: 1050, flag: '🇳🇴', country: 'Norway', bio: 'Grew up on long winter nights and chess books.', style: 'theoretical', thinkSpeed: 1.2 },
   { id: 'dex', name: 'Dex', group: 'intermediate', rating: 1100, flag: '🇬🇧', country: 'England', bio: 'Streams his games. Throws his pawns at your king.', style: 'aggressive', traits: ['pawn-storm'], thinkSpeed: 0.5 },
@@ -70,6 +78,8 @@ export const BOTS: Bot[] = [
   { id: 'chloe', name: 'Chloé', group: 'intermediate', rating: 1550, flag: '🇫🇷', country: 'France', bio: 'Elegant and positional. Never in a hurry.', style: 'solid', thinkSpeed: 1.2 },
 
   // Advanced
+  { id: 'isabel', name: 'Isabel', group: 'advanced', rating: 1800, flag: '🇨🇴', country: 'Colombia', bio: 'Goes for your king from move one. Rarely misses a mate.', style: 'aggressive', traits: ['pawn-storm'] },
+  { id: 'pieter', name: 'Pieter', group: 'advanced', rating: 1900, flag: '🇳🇱', country: 'Netherlands', bio: 'Total chess, like total football. Every piece joins in.', style: 'adaptive' },
   { id: 'toby', name: 'Toby', group: 'advanced', rating: 1650, flag: '🇬🇧', country: 'England', bio: 'Friendly, relaxed, and somehow always a move ahead.', style: 'adaptive', thinkSpeed: 0.8 },
   { id: 'aarav', name: 'Aarav', group: 'advanced', rating: 1700, flag: '🇮🇳', country: 'India', bio: 'Studies every night. Sees tactics three moves deep.', style: 'adaptive' },
   { id: 'ray', name: 'Ray', group: 'advanced', rating: 1750, flag: '🇬🇧', country: 'England', bio: 'Teaches chess to kids. Teaches you by beating you, kindly.', style: 'solid' },
@@ -77,6 +87,8 @@ export const BOTS: Bot[] = [
   { id: 'malcolm', name: 'Malcolm', group: 'advanced', rating: 1950, flag: '🇬🇧', country: 'England', bio: 'Hardly speaks. Writes every move down. Plays correct, patient chess.', style: 'solid', thinkSpeed: 1.1 },
 
   // Master
+  { id: 'tariq', name: 'Tariq', group: 'master', rating: 2200, flag: '🇵🇰', country: 'Pakistan', bio: 'Blitz legend of his city. Deadly in sharp positions.', style: 'aggressive', thinkSpeed: 0.8 },
+  { id: 'leila', name: 'Leila', group: 'master', rating: 2300, flag: '🇮🇷', country: 'Iran', bio: 'A trainer of champions. Every move she makes has a reason.', style: 'solid', thinkSpeed: 1.1 },
   { id: 'nino', name: 'Nino', group: 'master', rating: 2100, flag: '🇬🇪', country: 'Georgia', bio: 'National champion at seventeen. Attacks with both bishops.', style: 'aggressive' },
   { id: 'samuel', name: 'Samuel', group: 'master', rating: 2250, flag: '🇰🇪', country: 'Kenya', bio: 'Calm, deep and hard to read. Adapts to whatever you play.', style: 'adaptive', thinkSpeed: 1.1 },
   { id: 'elena', name: 'Elena', group: 'master', rating: 2400, flag: '🇷🇴', country: 'Romania', bio: 'A grandmaster-level grinder. She will outlast you.', style: 'grinding', thinkSpeed: 1.2 },
