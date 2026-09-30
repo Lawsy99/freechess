@@ -16,6 +16,8 @@ export type LastResult = {
   newBest: boolean
   /** A game with the Coach: no stars or rating, it's a lesson. */
   coach?: boolean
+  /** The custom bot: rated, but no stars. */
+  custom?: boolean
 }
 
 type Props = LastResult & {
@@ -27,7 +29,7 @@ type Props = LastResult & {
 const TITLES: Record<BotResult, string> = { win: 'You won!', loss: 'You lost', draw: 'Draw' }
 const COACH_TITLES: Record<BotResult, string> = { win: 'You beat the Coach!', loss: 'Good game!', draw: 'A draw with the Coach' }
 
-export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBest, coach = false, onReview, onRematch, onDone }: Props) {
+export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBest, coach = false, custom = false, onReview, onRematch, onDone }: Props) {
   const diff = ratingChange ? ratingChange.to - ratingChange.from : 0
   // (The Coach is pleased whatever happened: a good game is a good game.)
   const expression = coach ? 'pleased' : result === 'win' ? 'annoyed' : result === 'loss' ? 'pleased' : 'neutral'
@@ -36,13 +38,13 @@ export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBe
       <Portrait who={bot.id} size={96} expression={expression} className="fc-face" />
       <h1>{coach ? COACH_TITLES[result] : TITLES[result]}</h1>
       <p className="fc-result-sub">
-        {coach ? `with the Coach · at your level (${bot.rating})` : `vs ${bot.name} ${bot.flag} · ${bot.rating}`}
+        {coach ? `with the Coach · at your level (${bot.rating})` : `vs ${bot.name} ${bot.flag} · ${bot.rating}`.replace('  ', ' ')}
       </p>
       {coach ? (
         <p className="fc-result-note fc-coach-note">
           Coach games aren’t rated: they’re for learning. Today’s coach goal is done. Have a look at the review to see what to work on.
         </p>
-      ) : (
+      ) : custom ? null : (
         <>
       <div className="fc-result-stars" aria-label={`${stars} of 3 stars`}>
         {[0, 1, 2].map((i) => (

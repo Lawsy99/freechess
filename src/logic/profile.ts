@@ -3,6 +3,7 @@
 // goals: one bot game, one coached game, one lesson a day). Pure functions;
 // saving lives in storage/db.ts.
 import { NEW_PLAYER, rateGame, type PlayerRating } from './glicko2'
+import type { Style } from '../data/characters'
 
 export type Level = 'new' | 'beginner' | 'intermediate' | 'advanced'
 
@@ -39,6 +40,8 @@ export type Profile = {
   dailySolvedOn?: string
   /** Learn: lessons passed, by id (data/learnPath.ts). */
   lessonsDone?: string[]
+  /** The custom bot you last set up (strength and style), to start from next time. */
+  customBot?: { rating: number; style: Style }
 }
 
 export const NEW_PROFILE: Profile = {
@@ -114,6 +117,8 @@ export function recordBotGame(
   result: BotResult,
   aidsUsed: number,
   now: Date,
+  /** Stars and a record against this bot (not for the custom bot, which has neither). */
+  keepRecord = true,
 ): { profile: Profile; stars: number; ratingChange: { from: number; to: number } | null } {
   const stars = starsFor(result === 'win', aidsUsed)
   const score = result === 'win' ? 1 : result === 'draw' ? 0.5 : 0
@@ -138,12 +143,12 @@ export function recordBotGame(
     ...p,
     rating: after,
     ratingHistory: [...p.ratingHistory, { at: now.getTime(), rating: Math.round(after.rating) }].slice(-200),
-    stars: { ...p.stars, [bot.id]: Math.max(p.stars[bot.id] ?? 0, stars) },
-    results,
+    stars: keepRecord ? { ...p.stars, [bot.id]: Math.max(p.stars[bot.id] ?? 0, stars) } : p.stars,
+    results: keepRecord ? results : p.results,
   }
   return {
     profile: completeGoal(next, 'bot', dayKey(now)),
-    stars,
+    stars: keepRecord ? stars : 0,
     ratingChange: { from: Math.round(before.rating), to: Math.round(after.rating) },
   }
 }

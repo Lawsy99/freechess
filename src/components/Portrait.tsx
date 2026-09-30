@@ -20,6 +20,19 @@ type Props = {
 export function Portrait({ who, expression = 'neutral', size = 44, className }: Props) {
   const clip = useId()
   const look = APPEARANCES[who]
+  // The custom bot (FreeChess): no person, just a tile with sliders.
+  if (who.startsWith('custom-')) {
+    return (
+      <span className={`${className ?? ''} custom-face`} style={{ width: size, height: size, flex: `0 0 ${size}px` }} aria-hidden="true">
+        <svg width={size * 0.5} height={size * 0.5} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round">
+          <path d="M5 4v16M12 4v16M19 4v16" opacity={0.45} />
+          <circle cx="5" cy="14" r="2.4" fill="currentColor" />
+          <circle cx="12" cy="8" r="2.4" fill="currentColor" />
+          <circle cx="19" cy="16" r="2.4" fill="currentColor" />
+        </svg>
+      </span>
+    )
+  }
   if (!look) {
     // Unknown speaker: a plain initial, as before.
     return (

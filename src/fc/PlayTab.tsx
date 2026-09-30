@@ -14,9 +14,10 @@ type Props = {
   onPick: (bot: Bot) => void
   onPlayCoach: () => void
   onAnalysis: () => void
+  onCustom: () => void
 }
 
-export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis }: Props) {
+export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis, onCustom }: Props) {
   const rating = profile.rating ? Math.round(profile.rating.rating) : 800
   const [open, setOpen] = useState<BotGroup[]>([groupFor(rating)])
   const toggle = (g: BotGroup) => setOpen((o) => (o.includes(g) ? o.filter((x) => x !== g) : [...o, g]))
@@ -84,7 +85,10 @@ export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis }: Props) {
 
       <MenuList
         label="More"
-        items={[{ id: 'analysis', title: 'Analysis board', detail: 'Set up or paste any position and explore it', onClick: onAnalysis }]}
+        items={[
+          { id: 'custom', title: 'Custom bot', detail: 'Choose any strength and style', onClick: onCustom },
+          { id: 'analysis', title: 'Analysis board', detail: 'Set up or paste any position and explore it', onClick: onAnalysis },
+        ]}
       />
     </main>
   )

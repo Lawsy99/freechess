@@ -35,6 +35,8 @@ import {
 import { BotSheet, type ColourChoice } from './BotSheet'
 import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
+import { CustomBotSheet } from './CustomBotSheet'
+import { customBot, customStyle, isCustomBot } from '../data/customBot'
 import { AnalysisBoard } from '../components/AnalysisBoard'
 import { setShowLegalMoves } from '../components/boardPrefs'
 import { ProfileTab } from './ProfileTab'
@@ -42,7 +44,7 @@ import { ResultScreen, type LastResult } from './ResultScreen'
 import { TabBar, type Tab } from './TabBar'
 import './fc.css'
 
-type View = 'tabs' | 'bot' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis'
+type View = 'tabs' | 'bot' | 'custom' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis'
 
 const CHARACTER_PREFIX = 'char:'
 
@@ -56,7 +58,10 @@ function opponentOf(game: GameRecord): Bot | undefined {
 }
 
 function botOf(game: GameRecord): Bot | undefined {
-  return game.levelId.startsWith(CHARACTER_PREFIX) ? findBot(game.levelId.slice(CHARACTER_PREFIX.length)) : undefined
+  if (!game.levelId.startsWith(CHARACTER_PREFIX)) return undefined
+  const id = game.levelId.slice(CHARACTER_PREFIX.length)
+  const style = customStyle(id)
+  return style ? customBot(game.opponentRating ?? 800, style) : findBot(id)
 }
 
 export function FreeChessApp() {
@@ -168,10 +173,10 @@ export function FreeChessApp() {
       const result = outcome.winner === null ? 'draw' : outcome.winner === g.playerColour ? 'win' : 'loss'
       const aidsUsed = g.takebacksUsed + (g.hintsUsed ?? 0)
       const bestBefore = profile.stars[b.id] ?? 0
-      const recorded = recordBotGame(profile, b, result, aidsUsed, new Date())
+      const recorded = recordBotGame(profile, b, result, aidsUsed, new Date(), !isCustomBot(b.id))
       updateProfile(recorded.profile)
       setGame({ ...g, resultRecorded: true })
-      setLast({ bot: b, result, stars: recorded.stars, aidsUsed, ratingChange: recorded.ratingChange, newBest: recorded.stars > bestBefore })
+      setLast({ bot: b, result, stars: recorded.stars, aidsUsed, ratingChange: recorded.ratingChange, newBest: recorded.stars > bestBefore, custom: isCustomBot(b.id) })
     }
     setView('result')
   }
@@ -313,6 +318,19 @@ export function FreeChessApp() {
     )
   }
 
+  if (view === 'custom') {
+    return (
+      <CustomBotSheet
+        profile={profile}
+        onBack={() => setView('tabs')}
+        onPlay={(b, c) => {
+          updateProfile({ ...profile, customBot: { rating: b.rating, style: b.style } })
+          startBotGame(b, c)
+        }}
+      />
+    )
+  }
+
   if (view === 'bot' && bot) {
     return <BotSheet bot={bot} profile={profile} onBack={() => setView('tabs')} onPlay={(c) => startBotGame(bot, c)} />
   }
@@ -334,7 +352,7 @@ export function FreeChessApp() {
       {tab === 'home' && (
         <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onOpenLearn={() => setTab('learn')} />
       )}
-      {tab === 'play' && <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onAnalysis={() => setView('analysis')} />}
+      {tab === 'play' && <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onAnalysis={() => setView('analysis')} onCustom={() => (paused ? setView('game') : setView('custom'))} />}
       {tab === 'puzzles' && (
         <PuzzlesTab
           profile={profile}
