@@ -1825,3 +1825,9 @@
   background: var(--bad);
   color: #fff;
 }
+
+.fc-openings-line {
+  margin-top: 4px;
+  color: var(--text) !important;
+  font-size: 14px;
+}

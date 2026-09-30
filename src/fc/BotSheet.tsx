@@ -10,6 +10,7 @@ import type { TimeControlId } from '../logic/clock'
 import { GameOptions } from './GameOptions'
 import { BackIcon, Stars, StyleIcon } from './icons'
 import { STYLE_LABELS } from '../logic/botPicks'
+import { favouriteOpenings } from '../logic/favouriteOpenings'
 
 export type ColourChoice = 'w' | 'random' | 'b'
 
@@ -29,6 +30,8 @@ export function BotSheet({ bot, profile, onBack, onPlay, timeControl }: Props) {
   const style = STYLE_LABELS[bot.style]
   const group = BOT_GROUPS.find((g) => g.id === bot.group)
   const bg = FACES[bot.id]?.bg ?? '8fb3ff'
+  const openings = favouriteOpenings(bot.id)
+  const list = (xs: string[]) => xs.join(' and ')
   return (
     <main className={`fc-page fc-bot-sheet lvl-${bot.group}`}>
       <BotBanner bg={bg} who={bot.id} onBack={onBack} />
@@ -51,6 +54,13 @@ export function BotSheet({ bot, profile, onBack, onPlay, timeControl }: Props) {
         <span className="fc-style-text">
           <strong>{style.label}</strong>
           <span>{style.detail}</span>
+          {(openings.white.length > 0 || openings.black.length > 0) && (
+            <span className="fc-openings-line">
+              {openings.white.length > 0 && <>Opens with {list(openings.white)} as White</>}
+              {openings.white.length > 0 && openings.black.length > 0 && <>, and </>}
+              {openings.black.length > 0 && <>{openings.white.length > 0 ? '' : 'Plays '}{list(openings.black)} as Black</>}.
+            </span>
+          )}
         </span>
       </div>
       {record && record.wins + record.losses + record.draws > 0 && (
