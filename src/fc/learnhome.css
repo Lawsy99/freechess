@@ -203,3 +203,26 @@
   font-weight: 800;
   opacity: 0.85;
 }
+
+/* Streak freezes (Sep 2026). */
+.fc-head-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fc-freeze {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--card);
+  color: #8fd3ff;
+  font-weight: 800;
+}
+
+.fc-week li.frozen .fc-week-dot {
+  background: #bfe6ff;
+  color: #1f6fa8;
+}

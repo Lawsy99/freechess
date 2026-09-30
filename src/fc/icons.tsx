@@ -127,3 +127,10 @@ export const StyleIcon = ({ style, ...p }: IconProps & { style: string }) => (
     {style === 'adaptive' && <path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" />}
   </Svg>
 )
+
+/** A snowflake, for streak freezes (Sep 2026). */
+export const SnowIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M12 2v20M4.9 7l14.2 10M19.1 7 4.9 17M9.5 3.5 12 6l2.5-2.5M9.5 20.5 12 18l2.5 2.5" />
+  </Svg>
+)

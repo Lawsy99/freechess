@@ -4,7 +4,7 @@
 import { Portrait } from '../components/Portrait'
 import type { Bot } from '../data/bots'
 import { currentStreak, dayKey, thisWeek, todaysGoals, totalStars, type Goal, type Profile } from '../logic/profile'
-import { CheckIcon, ChevronIcon, FlameIcon, Stars, StarIcon } from './icons'
+import { CheckIcon, ChevronIcon, FlameIcon, SnowIcon, Stars, StarIcon } from './icons'
 import { Logo } from './Logo'
 import './learnhome.css'
 import { suggestedBot } from '../logic/botPicks'
@@ -38,9 +38,17 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
     <main className="fc-page fc-home">
       <header className="fc-home-head">
         <Logo />
-        <span className={`fc-streak ${doneToday ? 'lit' : ''}`} aria-label={`${streak} day streak`}>
-          <FlameIcon size={22} lit={streak > 0} />
-          {streak}
+        <span className="fc-head-chips">
+          {(profile.freezes ?? 0) > 0 && (
+            <span className="fc-freeze" aria-label={`${profile.freezes} streak ${profile.freezes === 1 ? 'freeze' : 'freezes'}: a missed day won't break your streak`}>
+              <SnowIcon size={18} />
+              {profile.freezes}
+            </span>
+          )}
+          <span className={`fc-streak ${doneToday ? 'lit' : ''}`} aria-label={`${streak} day streak`}>
+            <FlameIcon size={22} lit={streak > 0} />
+            {streak}
+          </span>
         </span>
       </header>
 
@@ -52,7 +60,7 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
           <strong>{greeting(new Date())}</strong>
           <span>
             {done.length === 3
-              ? 'All three goals done. See you tomorrow.'
+              ? 'All three done. A streak freeze now covers a day you miss.'
               : streak > 0 && !doneToday
                 ? `Keep your ${streak}-day streak going.`
                 : doneToday
@@ -65,8 +73,8 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
         {/* This week, Duolingo style: a flame for each day you practised. */}
         <ol className="fc-week" aria-label="This week">
           {thisWeek(profile, new Date()).map((d) => (
-            <li key={d.day} className={[d.active ? 'active' : '', d.today ? 'today' : '', d.future ? 'future' : ''].join(' ').trim()}>
-              <span className="fc-week-dot">{d.active ? <FlameIcon size={16} lit /> : null}</span>
+            <li key={d.day} className={[d.active ? 'active' : '', d.frozen ? 'frozen' : '', d.today ? 'today' : '', d.future ? 'future' : ''].join(' ').trim()}>
+              <span className="fc-week-dot">{d.active ? <FlameIcon size={16} lit /> : d.frozen ? <SnowIcon size={15} /> : null}</span>
               <span className="fc-week-label">{d.label}</span>
             </li>
           ))}

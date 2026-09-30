@@ -44,6 +44,13 @@ export type Profile = {
   lessonsDone?: string[]
   /** The most rating points above you of a bot you've beaten (for the Giant killer badges). */
   bestUpset?: number
+  /**
+   * Streak freezes (Sep 2026, as Duolingo has them): one earned each day all
+   * three goals are done, two at most. A missed day uses one, and the streak
+   * carries on. The days they covered are kept for the week on Home.
+   */
+  freezes?: number
+  frozenDays?: string[]
   /** Days with at least one goal done ("2026-09-30"), the last 60, for the week on Home. */
   activeDays?: string[]
   /** The custom bot you last set up (strength and style), to start from next time. */
@@ -93,10 +100,25 @@ export function todaysGoals(p: Profile, today: string): Goal[] {
   return p.daily.day === today ? p.daily.done : []
 }
 
-/** The streak as it stands today: it only counts if the last goal was today or yesterday. */
+/** Most streak freezes you can hold. */
+export const MAX_FREEZES = 2
+
+/** The days missed between the last goal and today (none if it was today or yesterday). */
+function missedDays(lastDay: string | null, today: string): string[] {
+  if (!lastDay || lastDay >= today) return []
+  const missed: string[] = []
+  for (let d = previousDay(today); d > lastDay && missed.length <= MAX_FREEZES; d = previousDay(d)) missed.push(d)
+  return missed
+}
+
+/**
+ * The streak as it stands today: it counts if the last goal was today or
+ * yesterday, or if your freezes cover the days missed since.
+ */
 export function currentStreak(p: Profile, today: string): number {
   const last = p.streak.lastDay
-  return last === today || (last !== null && last === previousDay(today)) ? p.streak.count : 0
+  if (last === null) return 0
+  return missedDays(last, today).length <= (p.freezes ?? 0) ? p.streak.count : 0
 }
 
 /** Ticks off one of today's goals, and keeps the streak going. */
@@ -104,16 +126,27 @@ export function completeGoal(p: Profile, goal: Goal, today: string): Profile {
   const done = todaysGoals(p, today)
   const daily = { day: today, done: done.includes(goal) ? done : [...done, goal] }
   let streak = p.streak
+  let freezes = p.freezes ?? 0
+  let frozenDays = p.frozenDays ?? []
   if (streak.lastDay !== today) {
-    const count = streak.lastDay === previousDay(today) ? streak.count + 1 : 1
+    const missed = missedDays(streak.lastDay, today)
+    // Missed days your freezes can cover: used up, and the streak carries on.
+    const bridged = streak.lastDay !== null && missed.length > 0 && missed.length <= freezes
+    if (bridged) {
+      freezes -= missed.length
+      frozenDays = [...frozenDays, ...missed].slice(-30)
+    }
+    const count = streak.lastDay !== null && (missed.length === 0 || bridged) ? streak.count + 1 : 1
     streak = { count, lastDay: today, best: Math.max(streak.best, count) }
   }
+  // All three goals done today, for the first time today: a freeze earned.
+  if (daily.done.length === 3 && done.length < 3) freezes = Math.min(MAX_FREEZES, freezes + 1)
   const days = p.activeDays ?? []
   const activeDays = days.includes(today) ? days : [...days, today].slice(-60)
-  return { ...p, daily, streak, activeDays }
+  return { ...p, daily, streak, activeDays, freezes, frozenDays }
 }
 
-export type WeekDay = { day: string; label: string; active: boolean; today: boolean; future: boolean }
+export type WeekDay = { day: string; label: string; active: boolean; frozen: boolean; today: boolean; future: boolean }
 
 /**
  * This week, Monday to Sunday, with the days you practised (Sep 2026, as
@@ -130,7 +163,8 @@ export function thisWeek(p: Profile, now: Date): WeekDay[] {
   }
   return ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((label, i) => {
     const day = dayKey(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i))
-    return { day, label, active: (p.activeDays ?? []).includes(day) || streakDays.has(day), today: day === today, future: day > today }
+    const frozen = (p.frozenDays ?? []).includes(day)
+    return { day, label, active: !frozen && ((p.activeDays ?? []).includes(day) || streakDays.has(day)), frozen, today: day === today, future: day > today }
   })
 }
 

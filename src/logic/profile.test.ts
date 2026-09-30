@@ -73,3 +73,34 @@ describe('the week on Home', () => {
     expect(week[3].future).toBe(true)
   })
 })
+
+describe('streak freezes', () => {
+  it('earns one for doing all three goals, two at most', async () => {
+    const { completeGoal, NEW_PROFILE } = await import('./profile')
+    let p = NEW_PROFILE
+    for (const day of ['2026-09-28', '2026-09-29', '2026-09-30']) {
+      for (const goal of ['bot', 'coach', 'lesson'] as const) p = completeGoal(p, goal, day)
+      p = completeGoal(p, 'bot', day) // (doing one again earns nothing more)
+    }
+    expect(p.freezes).toBe(2)
+  })
+
+  it('covers a missed day, and the streak carries on', async () => {
+    const { completeGoal, currentStreak, thisWeek, NEW_PROFILE } = await import('./profile')
+    let p = completeGoal(completeGoal(completeGoal(NEW_PROFILE, 'bot', '2026-09-28'), 'coach', '2026-09-28'), 'lesson', '2026-09-28')
+    expect(p.freezes).toBe(1)
+    // Missed the 29th; on the 30th the streak is still alive, and playing keeps it.
+    expect(currentStreak(p, '2026-09-30')).toBe(1)
+    p = completeGoal(p, 'bot', '2026-09-30')
+    expect(p.streak.count).toBe(2)
+    expect(p.freezes).toBe(0)
+    expect(thisWeek(p, new Date('2026-09-30T12:00:00'))[1]).toMatchObject({ frozen: true, active: false })
+  })
+
+  it('without freezes, a missed day ends the streak', async () => {
+    const { completeGoal, currentStreak, NEW_PROFILE } = await import('./profile')
+    const p = completeGoal(NEW_PROFILE, 'bot', '2026-09-28')
+    expect(currentStreak(p, '2026-09-30')).toBe(0)
+    expect(completeGoal(p, 'bot', '2026-09-30').streak.count).toBe(1)
+  })
+})
