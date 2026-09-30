@@ -1,0 +1,95 @@
+// What the opponent says on the game screen: a line before the game, a few
+// during friendlies, and one after. Lines fade after about 4 seconds or on
+// tap (start and end lines stay until tapped).
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { DIALOGUE, SPEAKER_NAMES } from '../data/dialogue'
+import { fillName, rememberLine, selectLine, type DialogueHistory, type Expression, type Trigger } from '../logic/dialogue'
+import { loadDialogueHistory, saveDialogueHistory } from '../storage/db'
+
+export type SpokenLine = {
+  text: string
+  /** Someone other than the opponent (e.g. Neil), by display name. */
+  speaker: string | null
+  /** Whose face to show (character or speaker id), and how they look saying it. */
+  face: string
+  expression: Expression
+  key: number
+}
+
+type Options = {
+  character: string | undefined
+  gameType: 'friendly' | 'match'
+  act: number
+  rematch: number
+  losingStreak: number
+  playerName?: string
+  /** Chatter set to Off: only story beats are said. */
+  storyOnly?: boolean
+}
+
+const FADE_MS = 4000
+
+export function useDialogue({ character, gameType, act, rematch, losingStreak, playerName, storyOnly = false }: Options) {
+  const [line, setLine] = useState<SpokenLine | null>(null)
+  const history = useRef<DialogueHistory | null>(null)
+  const counter = useRef(0)
+
+  useEffect(() => {
+    loadDialogueHistory()
+      .then((h) => (history.current = h))
+      .catch(() => (history.current = { recent: [], onceShown: [] }))
+  }, [])
+
+  // In-game chatter fades; start and end lines stay until tapped.
+  const [persist, setPersist] = useState(false)
+  useEffect(() => {
+    if (!line || persist) return
+    const t = window.setTimeout(() => setLine(null), FADE_MS)
+    return () => window.clearTimeout(t)
+  }, [line, persist])
+
+  /** Says something for this trigger, if there's a fitting line. Returns whether it did. */
+  const speak = useCallback(
+    (trigger: Trigger, stay = false, flags: readonly string[] = [], vars: Record<string, string | undefined> = {}): boolean => {
+      if (!character) return false
+      const h = history.current ?? { recent: [], onceShown: [] }
+      // Lines that name something on the board ("{piece}") only when we know it.
+      const usable = DIALOGUE.filter((l) => [...l.text.matchAll(/\{(\w+)\}/g)].every(([, k]) => k === 'name' || vars[k]))
+      const chosen = selectLine(
+        usable,
+        { character, trigger, act, gameType, rematch, losingStreak, flags, playerName, storyOnly },
+        h,
+      )
+      if (!chosen) return false
+      history.current = rememberLine(h, chosen)
+      saveDialogueHistory(history.current).catch(() => undefined)
+      setPersist(stay)
+      setLine({
+        text: fillName(chosen.text, playerName).replace(/\{(\w+)\}/g, (all, k: string) => vars[k] ?? all),
+        speaker: chosen.speaker ? (SPEAKER_NAMES[chosen.speaker] ?? chosen.speaker) : null,
+        face: chosen.speaker ?? chosen.character,
+        expression: chosen.expression,
+        key: ++counter.current,
+      })
+      return true
+    },
+    [character, act, gameType, rematch, losingStreak, playerName, storyOnly],
+  )
+
+  /**
+   * Says something written on the spot (the coach's comments and hints, which
+   * are built from the board, not picked from the dialogue file). It stays
+   * until tapped or the next move, since it's something to read.
+   */
+  const say = useCallback(
+    (text: string, expression: Expression = 'neutral') => {
+      if (!character) return
+      setPersist(true)
+      setLine({ text, speaker: null, face: character, expression, key: ++counter.current })
+    },
+    [character],
+  )
+
+  const dismiss = useCallback(() => setLine(null), [])
+  return { line, speak, say, dismiss }
+}

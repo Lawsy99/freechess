@@ -1,0 +1,172 @@
+/* A story moment: quiet, clean, one thing at a time. The whole screen is the
+   tap target for the next line. */
+.story-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  min-height: 100svh;
+  padding: 20px 16px 32px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.story-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.story-kicker {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--brass);
+  font-style: italic;
+  font-family: var(--serif);
+  letter-spacing: 0;
+}
+
+.story-skip {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 8px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.story-title {
+  margin: 0;
+  font-size: 22px;
+}
+
+.scene-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.story-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.story-lines > p {
+  margin: 0;
+  animation: story-in 0.4s ease-out;
+}
+
+.story-direction {
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.story-speech {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.45;
+  font-size: 17px;
+}
+
+.story-speaker {
+  display: block;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--brass);
+  font-style: italic;
+  font-family: var(--serif);
+  letter-spacing: 0;
+}
+
+/* The study: a document, not a scene. Paper on the table. */
+.story-study {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.story-study-page {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--buff);
+  color: var(--ink);
+  animation: story-in 0.4s ease-out;
+}
+
+.story-study-page h2 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 400;
+  font-style: italic;
+  font-family: var(--serif);
+  letter-spacing: 0;
+  opacity: 0.7;
+}
+
+.story-study-page p {
+  margin: 0 0 6px;
+  line-height: 1.45;
+}
+
+.story-study-page p:last-child {
+  margin-bottom: 0;
+}
+
+.story-study-sign {
+  margin: 4px 0 0;
+  text-align: right;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  animation: story-in 0.4s ease-out;
+}
+
+.story-foot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.story-next {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brass);
+  animation: story-in 0.4s ease-out;
+}
+
+.story-tap {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@keyframes story-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-lines > p,
+  .story-study-page,
+  .story-study-sign {
+    animation: none;
+  }
+}

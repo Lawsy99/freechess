@@ -1,0 +1,35 @@
+/* The week's focus: quiet, like a note pinned up by the board. */
+.focus-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-left: 3px solid var(--brass);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--lift);
+}
+
+.focus-card p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.focus-kicker {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--brass);
+  font-style: italic;
+  font-family: var(--serif);
+  letter-spacing: 0;
+}
+
+.focus-verdict {
+  margin-top: 4px !important;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.focus-habit {
+  margin-top: 4px !important;
+}

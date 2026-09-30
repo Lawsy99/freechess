@@ -1,0 +1,100 @@
+// The three help stages, as set out in the design document ("The help stages").
+
+export type HelpStageId = 'assisted' | 'guided' | 'real' | 'bot'
+
+export type BlunderWarningRule = {
+  /** Warn when a move gives away at least this much advantage, in centipawns (100 = one pawn). */
+  minLossCp: number
+  /** Always warn when a move allows a forced mate. */
+  allowsMate: boolean
+}
+
+export type HelpStage = {
+  id: HelpStageId
+  label: string
+  /** Short description shown under the game title. */
+  summary: string
+  evalBar: boolean
+  /** Hints per game (the coach's nudges in words). */
+  hints: number
+  /** Takebacks allowed per game (Infinity = unlimited). */
+  takebacks: number
+  blunderWarning: BlunderWarningRule | null
+}
+
+export const HELP_STAGES: Record<HelpStageId, HelpStage> = {
+  // FreeChess bot games (Joseph, Sep 2026): takebacks and hints whenever you
+  // want, but each one costs a star (logic/profile.ts starsFor). A hint is an
+  // arrow for the best move. No evaluation bar; the review comes afterwards.
+  bot: {
+    id: 'bot',
+    label: 'Bot game',
+    summary: 'takebacks and hints cost a star',
+    evalBar: false,
+    hints: Infinity,
+    takebacks: Infinity,
+    blunderWarning: null,
+  },
+  assisted: {
+    id: 'assisted',
+    // The coached game (Joseph, Sep 2026): the analysis bar; three takebacks,
+    // which also pay for taking back a move Pemberton queries; three hints,
+    // in his words; no best-line button. He comments on your mistakes.
+    label: 'Coached',
+    summary: 'with Pemberton',
+    evalBar: true,
+    hints: 3,
+    takebacks: 3,
+    // "When a move gives away 2 pawns' worth of advantage or more, or allows
+    // mate". He only steps in some of the time (see COACH_STEPS_IN).
+    blunderWarning: { minLossCp: 200, allowsMate: true },
+  },
+  // Practice night (Joseph, Sep 2026): you see how each move rated and the
+  // analysis bar, and get three takebacks, but nothing that tells you what to
+  // play. No hints, no best line, and no "are you sure?" warning before a
+  // move (that was really just free extra takebacks).
+  guided: {
+    id: 'guided',
+    label: 'Practice',
+    summary: 'move feedback',
+    evalBar: true,
+    hints: 0,
+    takebacks: 3,
+    blunderWarning: null,
+  },
+  real: {
+    id: 'real',
+    label: 'Real',
+    summary: 'no help',
+    evalBar: false,
+    hints: 0,
+    takebacks: 0,
+    blunderWarning: null,
+  },
+}
+
+/**
+ * The "Full help" setting (Joseph, Sep 2026): the coached game's help with no
+ * limits. Games keep the 'assisted' stage id, so everything that goes with it
+ * (hints, "are you sure?", seeing the better move) works the same.
+ */
+export const UNLIMITED_HELP: HelpStage = {
+  ...HELP_STAGES.assisted,
+  label: 'Full help',
+  summary: 'unlimited hints and takebacks',
+  hints: Infinity,
+  takebacks: Infinity,
+}
+
+/** The help a saved game gets. */
+export function helpFor(game: { stage: HelpStageId; unlimited?: boolean }): HelpStage {
+  return game.unlimited ? UNLIMITED_HELP : HELP_STAGES[game.stage]
+}
+
+/**
+ * How often Pemberton queries a bad move before it's played. Not every time:
+ * he lets you make some mistakes, and talks about them afterwards.
+ */
+export const COACH_STEPS_IN = 0.6
+
+export const HELP_STAGE_ORDER: HelpStageId[] = ['assisted', 'guided', 'real']

@@ -1,0 +1,57 @@
+.rating-graph {
+  margin: 0;
+}
+
+.rating-graph svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: pan-y; /* vertical scrolling still works over the graph */
+}
+
+.graph-grid {
+  stroke: var(--line-soft);
+  stroke-width: 1;
+}
+
+.graph-axis {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.graph-line {
+  fill: none;
+  stroke: var(--brass);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.graph-cross {
+  stroke: #5b6d61;
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.graph-dot {
+  fill: var(--brass);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.rating-graph figcaption {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.rating-graph figcaption strong {
+  color: var(--text);
+  font-size: 16px;
+}
+
+.graph-empty {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}

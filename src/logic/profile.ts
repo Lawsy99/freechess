@@ -1,0 +1,146 @@
+// The player's FreeChess profile: rating, stars against each bot, results,
+// and the daily goals with their streak (Joseph, Sep 2026: Duolingo-style
+// goals: one bot game, one coached game, one lesson a day). Pure functions;
+// saving lives in storage/db.ts.
+import { NEW_PLAYER, rateGame, type PlayerRating } from './glicko2'
+
+export type Level = 'new' | 'beginner' | 'intermediate' | 'advanced'
+
+/** Where each answer to "How much chess have you played?" starts the rating. */
+export const START_RATINGS: Record<Level, number> = { new: 400, beginner: 800, intermediate: 1200, advanced: 1600 }
+
+/** A new player's rating starts this unsure: it moves quickly, but not wildly. */
+export const NEW_DEVIATION = 200
+/** The most one game can move the rating. */
+export const MAX_CHANGE = 80
+
+export type Goal = 'bot' | 'coach' | 'lesson'
+export const GOALS: Goal[] = ['bot', 'coach', 'lesson']
+
+export type Record3 = { wins: number; losses: number; draws: number }
+
+export type Profile = {
+  level: Level | null
+  rating: PlayerRating | null
+  /** Rating after each rated game, oldest first (for the graph). */
+  ratingHistory: { at: number; rating: number }[]
+  /** Best stars earned against each bot (0 to 3). */
+  stars: Record<string, number>
+  results: Record<string, Record3>
+  /** Today's goals, by local date ("2026-09-30"). */
+  daily: { day: string; done: Goal[] }
+  /** Days in a row with at least one goal done. */
+  streak: { count: number; lastDay: string | null; best: number }
+}
+
+export const NEW_PROFILE: Profile = {
+  level: null,
+  rating: null,
+  ratingHistory: [],
+  stars: {},
+  results: {},
+  daily: { day: '', done: [] },
+  streak: { count: 0, lastDay: null, best: 0 },
+}
+
+/** Local date as "YYYY-MM-DD" (the day, as the player sees it). */
+export function dayKey(date: Date): string {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+function previousDay(day: string): string {
+  const [y, m, d] = day.split('-').map(Number)
+  return dayKey(new Date(y, m - 1, d - 1))
+}
+
+/** Answering the first question: the starting rating, not yet settled (it moves quickly at first). */
+export function withLevel(p: Profile, level: Level, now: number): Profile {
+  const rating = { ...NEW_PLAYER, rating: START_RATINGS[level] }
+  return { ...p, level, rating, ratingHistory: [{ at: now, rating: rating.rating }] }
+}
+
+/**
+ * Stars for a game against a bot (Joseph, Sep 2026): three for a win with no
+ * help, one fewer for each takeback or hint, none below that. Draws and
+ * losses earn none.
+ */
+export function starsFor(won: boolean, aidsUsed: number): number {
+  return won ? Math.max(0, 3 - aidsUsed) : 0
+}
+
+/** The day's goals as they stand today (yesterday's ticks don't carry over). */
+export function todaysGoals(p: Profile, today: string): Goal[] {
+  return p.daily.day === today ? p.daily.done : []
+}
+
+/** The streak as it stands today: it only counts if the last goal was today or yesterday. */
+export function currentStreak(p: Profile, today: string): number {
+  const last = p.streak.lastDay
+  return last === today || (last !== null && last === previousDay(today)) ? p.streak.count : 0
+}
+
+/** Ticks off one of today's goals, and keeps the streak going. */
+export function completeGoal(p: Profile, goal: Goal, today: string): Profile {
+  const done = todaysGoals(p, today)
+  const daily = { day: today, done: done.includes(goal) ? done : [...done, goal] }
+  let streak = p.streak
+  if (streak.lastDay !== today) {
+    const count = streak.lastDay === previousDay(today) ? streak.count + 1 : 1
+    streak = { count, lastDay: today, best: Math.max(streak.best, count) }
+  }
+  return { ...p, daily, streak }
+}
+
+export type BotResult = 'win' | 'loss' | 'draw'
+
+/**
+ * After a game against a bot: the rating (every bot game is rated), the best
+ * stars against that bot, the record, and today's bot goal.
+ */
+export function recordBotGame(
+  p: Profile,
+  bot: { id: string; rating: number },
+  result: BotResult,
+  aidsUsed: number,
+  now: Date,
+): { profile: Profile; stars: number; ratingChange: { from: number; to: number } | null } {
+  const stars = starsFor(result === 'win', aidsUsed)
+  const score = result === 'win' ? 1 : result === 'draw' ? 0.5 : 0
+  // No question at the start (Joseph, Sep 2026): a new player starts at 800,
+  // not yet settled, so the first few games place them quickly.
+  const before = p.rating ?? { ...NEW_PLAYER, rating: START_RATINGS.beginner, deviation: NEW_DEVIATION }
+  const rated = rateGame(before, bot.rating, score)
+  // No single game moves it wildly (a loss to a much weaker bot was costing
+  // over 500 points at first).
+  const change = Math.max(-MAX_CHANGE, Math.min(MAX_CHANGE, rated.rating - before.rating))
+  const after = { ...rated, rating: before.rating + change }
+  const record = p.results[bot.id] ?? { wins: 0, losses: 0, draws: 0 }
+  const results = {
+    ...p.results,
+    [bot.id]: {
+      wins: record.wins + (result === 'win' ? 1 : 0),
+      losses: record.losses + (result === 'loss' ? 1 : 0),
+      draws: record.draws + (result === 'draw' ? 1 : 0),
+    },
+  }
+  const next: Profile = {
+    ...p,
+    rating: after,
+    ratingHistory: [...p.ratingHistory, { at: now.getTime(), rating: Math.round(after.rating) }].slice(-200),
+    stars: { ...p.stars, [bot.id]: Math.max(p.stars[bot.id] ?? 0, stars) },
+    results,
+  }
+  return {
+    profile: completeGoal(next, 'bot', dayKey(now)),
+    stars,
+    ratingChange: { from: Math.round(before.rating), to: Math.round(after.rating) },
+  }
+}
+
+/** Stars collected across all bots, out of three per bot. */
+export function totalStars(p: Profile): number {
+  return Object.values(p.stars).reduce((a, b) => a + b, 0)
+}

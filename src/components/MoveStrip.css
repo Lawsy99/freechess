@@ -1,0 +1,34 @@
+.move-strip {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0 16px;
+  list-style: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  /* Moves as they'd go on a scoresheet: typed */
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--muted);
+  scrollbar-width: none;
+}
+
+.move-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.move-strip.empty {
+  overflow: visible;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.move-strip .num {
+  margin-right: 3px;
+  opacity: 0.7;
+}
+
+.move-strip li.latest {
+  color: var(--text);
+  font-weight: 600;
+}

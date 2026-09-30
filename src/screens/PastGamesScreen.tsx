@@ -1,0 +1,92 @@
+// Past games: every finished game, newest first. Tap one to review it again
+// (the analysis is kept, so reviewed games open instantly).
+import { useEffect, useState } from 'react'
+import { resolveOpponent } from '../data/opponents'
+import { gameKindLabel } from '../logic/gameLabels'
+import { outcomeOf } from '../logic/gameRecord'
+import { gameAccuracy, reviewMoves, SHORTEST_REVIEW } from '../logic/review'
+import { listArchivedGames, type ArchivedGame } from '../storage/db'
+import './ReviewScreen.css'
+import './PastGamesScreen.css'
+
+type Props = {
+  onOpen: (game: ArchivedGame) => void
+  onBack: () => void
+}
+
+export function PastGamesScreen({ onOpen, onBack }: Props) {
+  const [games, setGames] = useState<ArchivedGame[] | null>(null)
+
+  useEffect(() => {
+    listArchivedGames()
+      .then(setGames)
+      .catch(() => setGames([]))
+  }, [])
+
+  return (
+    <main className="review-screen">
+      <header className="review-topline">
+        <h1>Past games</h1>
+        <button type="button" className="review-skip" onClick={onBack}>
+          Back
+        </button>
+      </header>
+
+      {!games ? (
+        <p className="review-note">Loading…</p>
+      ) : games.length === 0 ? (
+        <p className="review-note">No finished games yet.</p>
+      ) : (
+        <ul className="past-games">
+          {games.map((g) => (
+            <li key={g.id}>
+              <button type="button" onClick={() => onOpen(g)}>
+                <PastGameRow game={g} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
+  )
+}
+
+function PastGameRow({ game }: { game: ArchivedGame }) {
+  const opponent = resolveOpponent(game.levelId, game.opponentRating, game.path?.kind === 'exhibition')
+  const outcome = safeOutcome(game)
+  const result = !outcome ? '–' : outcome.winner === null ? 'Draw' : outcome.winner === game.playerColour ? 'Won' : 'Lost'
+  const accuracy =
+    game.evals?.length === game.moves.length + 1
+      ? gameAccuracy(reviewMoves(game.moves, game.evals), game.playerColour)
+      : null
+  const date = new Date(game.finishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+  const moveCount = Math.ceil(game.moves.length / 2)
+
+  return (
+    <>
+      <span className={`past-result ${result.toLowerCase()}`}>{result}</span>
+      <span className="past-main">
+        <strong>
+          vs {opponent.name}{' '}
+          {!opponent.unrated && game.path?.kind !== 'trial' && <span className="past-rating">{opponent.rating}</span>}
+        </strong>
+        <span className="past-meta">
+          {date} · {gameKindLabel(game)} · {game.playerColour === 'w' ? 'White' : 'Black'} · {moveCount}{' '}
+          {moveCount === 1 ? 'move' : 'moves'}
+        </span>
+      </span>
+      <span className="past-accuracy">
+        {accuracy !== null ? `${accuracy}%` : game.moves.length < SHORTEST_REVIEW ? 'Too short' : 'Not reviewed'}
+      </span>
+    </>
+  )
+}
+
+/** Games saved by much older versions might not replay; show them without a result. */
+function safeOutcome(game: ArchivedGame) {
+  try {
+    return outcomeOf(game)
+  } catch {
+    return null
+  }
+}

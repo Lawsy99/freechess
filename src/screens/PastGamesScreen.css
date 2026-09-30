@@ -1,0 +1,76 @@
+.past-games {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 2px 16px;
+  list-style: none;
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--lift);
+}
+
+.past-games button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.past-result {
+  flex: 0 0 44px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+}
+
+.past-result.won {
+  color: var(--good);
+}
+
+.past-result.lost {
+  color: var(--bad);
+}
+
+.past-result.draw {
+  color: var(--muted);
+}
+
+.past-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.past-rating {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.past-meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.past-accuracy {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--muted);
+  text-align: right;
+}
+
+.past-games li:last-child button {
+  border-bottom: none;
+}

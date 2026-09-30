@@ -1,0 +1,181 @@
+// Post-game review maths: grading every move and working out accuracy.
+// Pure functions; the engine work that produces the evaluations lives in
+// src/engine/reviewAnalysis.ts.
+import { Chess } from 'chess.js'
+import { winChance } from './evaluation'
+import { creditFor } from './lineFacts'
+import { applyUci, type Colour } from './game'
+import { rateMove, type MoveRating } from './moveRating'
+
+/** Games shorter than this (in single moves) aren't reviewed: nothing to grade. */
+export const SHORTEST_REVIEW = 8
+
+/** The engine's verdict on one position of the game. */
+export type PositionEval = {
+  /** From White's point of view, in centipawns; mates are ±10,000-ish. */
+  cp: number
+  /** The engine's choice in this position (UCI), or null if the game is over. */
+  bestMove: string | null
+  /**
+   * The engine's expected line from here, starting with bestMove (a few
+   * moves; Sep 2026, so the coach's explanations follow the real line).
+   * Missing on games analysed by older versions.
+   */
+  pv?: string[]
+}
+
+/** How many moves of the engine's line are kept with each position. */
+export const PV_KEPT = 10
+
+export type ReviewedMove = {
+  ply: number // 0 = White's first move
+  mover: Colour
+  uci: string
+  san: string
+  /** Position before the move, so it can be shown again. */
+  fenBefore: string
+  /** Winning chances (0–1) for the mover, before (with best play) and after. */
+  winBefore: number
+  winAfter: number
+  rating: MoveRating
+  bestMove: string | null
+  /** 0–100, Lichess-style: how much of the available advantage was kept. */
+  accuracy: number
+}
+
+const forMover = (cp: number, mover: Colour) => (mover === 'w' ? cp : -cp)
+const chanceFor = (cp: number, mover: Colour) => winChance({ type: 'cp', value: forMover(cp, mover) })
+
+/**
+ * Lichess's per-move accuracy formula: 100 when nothing is lost, falling
+ * steeply as the mover's winning chances (in %) drop.
+ */
+export function moveAccuracy(winBefore: number, winAfter: number): number {
+  const drop = (winBefore - winAfter) * 100
+  if (drop <= 0) return 100
+  const acc = 103.1668 * Math.exp(-0.04354 * drop) - 3.1669
+  return Math.max(0, Math.min(100, acc))
+}
+
+/** Grades every move. `evals` has one entry per position: moves.length + 1. */
+export function reviewMoves(moves: readonly string[], evals: readonly PositionEval[]): ReviewedMove[] {
+  const chess = new Chess()
+  return moves.map((uci, ply) => {
+    const mover: Colour = ply % 2 === 0 ? 'w' : 'b'
+    const fenBefore = chess.fen()
+    const san = applyUci(chess, uci)?.san ?? uci
+    const before = evals[ply]
+    const after = evals[ply + 1]
+    const winBefore = chanceFor(before.cp, mover)
+    const winAfter = chanceFor(after.cp, mover)
+    return {
+      ply,
+      mover,
+      uci,
+      san,
+      fenBefore,
+      winBefore,
+      winAfter,
+      rating: rateMove({
+        bestBefore: { type: 'cp', value: forMover(before.cp, mover) },
+        after: { type: 'cp', value: forMover(after.cp, mover) },
+        playedBestMove: before.bestMove === uci,
+      }),
+      bestMove: before.bestMove,
+      accuracy: moveAccuracy(winBefore, winAfter),
+    }
+  })
+}
+
+/**
+ * One accuracy figure for a side's whole game. Lichess blends an ordinary
+ * average with a harmonic mean (which punishes the odd disaster harder);
+ * we do the same, without Lichess's extra volatility weighting.
+ */
+export function gameAccuracy(moves: readonly ReviewedMove[], side: Colour): number | null {
+  const accs = moves.filter((m) => m.mover === side).map((m) => m.accuracy)
+  if (accs.length === 0) return null
+  const mean = accs.reduce((a, b) => a + b, 0) / accs.length
+  const harmonic = accs.length / accs.reduce((sum, a) => sum + 1 / Math.max(a, 1), 0)
+  return Math.round((mean + harmonic) / 2)
+}
+
+/** How much a move cost the mover, in winning chances (0–1). */
+export const dropOf = (m: ReviewedMove) => m.winBefore - m.winAfter
+
+/**
+ * The player's biggest errors (at most `count`), in the order they happened.
+ * Only real errors count: an inaccuracy or worse.
+ */
+export function biggestMoments(moves: readonly ReviewedMove[], side: Colour, count = 3): ReviewedMove[] {
+  return moves
+    .filter((m) => m.mover === side && ['inaccuracy', 'mistake', 'blunder'].includes(m.rating))
+    .sort((a, b) => dropOf(b) - dropOf(a))
+    .slice(0, count)
+    .sort((a, b) => a.ply - b.ply)
+}
+
+/** Opening moves (the first 5 each) are usually routine, not highlights. */
+const OPENING_PLIES = 10
+
+/** Their error has to be at least this big (in winning chances) to be "punished". */
+const PUNISHABLE = 0.15
+
+/**
+ * The player's best moment: a top-rated move that did something. Joseph,
+ * Sep 2026: "you punished their mistake" was being said about castling after
+ * they castled. So: never castling, no routine opening moves, and "punished"
+ * only when the move really took advantage in the game (it won material, or
+ * led to mate), not just because their move before was graded a mistake.
+ */
+export function bestMoveOfGame(
+  moves: readonly ReviewedMove[],
+  side: Colour,
+): { move: ReviewedMove; punished: boolean } | null {
+  let best: { move: ReviewedMove; punished: boolean; score: number } | null = null
+  for (const m of moves) {
+    if (m.mover !== side || m.rating !== 'best') continue
+    if (m.san.startsWith('O-O')) continue
+    // What really happened from this move on, in the game.
+    const real = creditFor(m.fenBefore, moves.slice(m.ply).map((x) => x.uci))
+    const won = real.net >= 1 || real.mates
+    const forcing = /[x+#]/.test(m.san)
+    if (m.ply < OPENING_PLIES && !won) continue
+    const previous = moves[m.ply - 1]
+    const theirError = previous ? dropOf(previous) : 0
+    const punished = theirError >= PUNISHABLE && won
+    // Something won counts most, then punishing an error, then forcing moves,
+    // then simply leaving you better off.
+    const score = (won ? 2 + Math.min(real.net, 9) / 9 : 0) + (punished ? theirError : 0) + (forcing ? 0.3 : 0) + m.winAfter * 0.5
+    if (!best || score > best.score) best = { move: m, punished, score }
+  }
+  return best && { move: best.move, punished: best.punished }
+}
+
+/**
+ * Average advantage given away per move, in centipawns (100 = a pawn), for
+ * one side. Positions beyond ±10 pawns are capped, so throwing away part of
+ * a completely won game doesn't swamp the average.
+ */
+export function averageCentipawnLoss(
+  moves: readonly string[],
+  evals: readonly PositionEval[],
+  side: Colour,
+): number | null {
+  const cap = (cp: number) => Math.max(-1000, Math.min(1000, cp))
+  const losses: number[] = []
+  for (let ply = 0; ply < moves.length; ply++) {
+    const mover: Colour = ply % 2 === 0 ? 'w' : 'b'
+    if (mover !== side) continue
+    const before = cap(forMover(evals[ply].cp, mover))
+    const after = cap(forMover(evals[ply + 1].cp, mover))
+    losses.push(Math.max(0, before - after))
+  }
+  return losses.length ? losses.reduce((a, b) => a + b, 0) / losses.length : null
+}
+
+export function ratingCounts(moves: readonly ReviewedMove[], side: Colour): Record<MoveRating, number> {
+  const counts: Record<MoveRating, number> = { best: 0, good: 0, inaccuracy: 0, mistake: 0, blunder: 0 }
+  for (const m of moves) if (m.mover === side) counts[m.rating]++
+  return counts
+}

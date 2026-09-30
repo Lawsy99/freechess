@@ -1,0 +1,56 @@
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.demo-caption {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-height: 72px;
+  margin: 0 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--buff);
+  color: var(--ink);
+}
+
+.demo-caption strong {
+  font-size: 13px;
+}
+
+.demo-caption p {
+  margin: 2px 0 0;
+  line-height: 1.45;
+}
+
+/* Placeholder portrait until the portraits are drawn (phase 7) */
+.demo-nav {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 8px;
+  margin: 0 16px;
+}
+
+.demo-nav button {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.demo-nav button.primary {
+  border: none;
+  background: var(--brass);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.demo-nav button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

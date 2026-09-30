@@ -1,0 +1,27 @@
+/* Move-rating colours, shared by the game screen and the review, tuned for
+   the dark background. They never carry meaning alone: every use also shows
+   the label or the chess annotation (?!, ?, ??). */
+.rating-best {
+  --rating: #5fd38d;
+  --rating-ink: #10281a;
+}
+
+.rating-good {
+  --rating: #a9d6b8;
+  --rating-ink: #10281a;
+}
+
+.rating-inaccuracy {
+  --rating: #f5c04a;
+  --rating-ink: #2a2110;
+}
+
+.rating-mistake {
+  --rating: #ff9a5c;
+  --rating-ink: #2a160f;
+}
+
+.rating-blunder {
+  --rating: #ff5d5d;
+  --rating-ink: #ffffff;
+}

@@ -1,0 +1,449 @@
+// The post-game review. Every game, won or lost, ends here: Stockfish checks
+// every move (with a progress bar), then a short sequence: summary, your
+// biggest moments (find a better move), and the best move of the game.
+import { useEffect, useMemo, useState } from 'react'
+import { FullGameView } from '../components/FullGameView'
+import { MomentTrainer } from '../components/MomentTrainer'
+import { MoveReplay } from '../components/MoveReplay'
+import { Portrait } from '../components/Portrait'
+import { coachNotes, gameErrorKinds, gameErrors } from '../logic/coachNotes'
+import { findFocus } from '../data/focuses'
+import { focusCheck, type WeekFocus } from '../logic/weeklyFocus'
+import type { ErrorKind } from '../logic/explain'
+import { drawRule } from '../logic/path'
+import { analyseGame } from '../engine/reviewAnalysis'
+import { explainGoodMove } from '../logic/explain'
+import { describeOutcome, replay, type Colour } from '../logic/game'
+import { outcomeOf, type GameRecord } from '../logic/gameRecord'
+import { RATING_LABELS, type MoveRating } from '../logic/moveRating'
+import { moveName } from '../logic/notation'
+import { bestMoveOfGame, gameAccuracy, ratingCounts, reviewMoves, SHORTEST_REVIEW, type PositionEval } from '../logic/review'
+import { cardId, cardsFromMoments, gameMoments, moveLabel } from '../logic/mistakeCards'
+import { addCardsIfNew, getArchivedGame, listArchivedGames, retireCardById, saveGameAnalysis } from '../storage/db'
+import '../components/ratings.css'
+import './ReviewScreen.css'
+
+type Props = {
+  /** This week's focus: checked first in Pemberton's notes (games played since it was set). */
+  focus?: WeekFocus | null
+  /** Practice and coached games: play on again from just before a mistake (the ply). */
+  onPlayFrom?: (ply: number) => void
+  game: GameRecord
+  onContinue: () => void
+  /** Opened from Past games: the way out goes back to the list. */
+  fromHistory?: boolean
+  /** For rated games: the player's rating before and after this result. */
+  ratingChange?: { from: number; to: number } | null
+}
+
+const RATING_ORDER: MoveRating[] = ['best', 'good', 'inaccuracy', 'mistake', 'blunder']
+
+const COUNT_LABELS: Record<MoveRating, [one: string, many: string]> = {
+  best: ['Best move', 'Best moves'],
+  good: ['Good move', 'Good moves'],
+  inaccuracy: ['Inaccuracy', 'Inaccuracies'],
+  mistake: ['Mistake', 'Mistakes'],
+  blunder: ['Blunder', 'Blunders'],
+}
+
+/** The opponent's move just before `ply`, named for the player ("Nf6" or "the knight move to f6"). */
+function theirMoveName(moves: readonly string[], ply: number): string {
+  const move = replay(moves.slice(0, ply)).history({ verbose: true }).at(-1)
+  return move ? moveName(move) : 'their move'
+}
+
+export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChange = null, focus = null, onPlayFrom }: Props) {
+  const [evals, setEvals] = useState<PositionEval[] | null>(null)
+  const [progress, setProgress] = useState({ done: 0, total: game.moves.length + 1 })
+  const [failed, setFailed] = useState(false)
+  // Bumped by "Try again" to run the analysis afresh.
+  const [attempt, setAttempt] = useState(0)
+  // 0 = summary, 1…n = the moments, n + 1 = best move of the game
+  const [step, setStep] = useState(0)
+  const [momentDone, setMomentDone] = useState(false)
+  const [fullGame, setFullGame] = useState(false)
+  // The step-through comes first; opened again from the end, it leads on to Home.
+  const [fullGameAtEnd, setFullGameAtEnd] = useState(false)
+
+  // Use saved analysis if this game was reviewed before; otherwise run it.
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      const saved = await getArchivedGame(game.id)
+      // Analysed before Sep 2026 (no engine lines saved): analyse again, once,
+      // so the coach's explanations can follow the real lines.
+      const hasLines = saved?.evals?.some((e) => e.pv?.length)
+      if (saved?.evals?.length === game.moves.length + 1 && hasLines) {
+        if (!cancelled) setEvals(saved.evals)
+        return
+      }
+      const result = await analyseGame(
+        game.moves,
+        (done, total) => !cancelled && setProgress({ done, total }),
+        () => cancelled,
+      )
+      if (!result || cancelled) return
+      setEvals(result)
+      await saveGameAnalysis(game.id, result)
+    })().catch(() => !cancelled && setFailed(true))
+    return () => {
+      cancelled = true
+    }
+  }, [game.id, game.moves, attempt])
+
+  const player = game.playerColour
+  const opponent: Colour = player === 'w' ? 'b' : 'w'
+  const outcome = outcomeOf(game)
+  const reviewed = useMemo(() => (evals ? reviewMoves(game.moves, evals) : null), [evals, game.moves])
+  const moments = useMemo(
+    // (A retry: only what happened from the retried move on.)
+    () => (evals ? gameMoments(game.moves, evals, player).filter((m) => m.ply >= (game.startPly ?? 0)) : []),
+    [evals, game.moves, player, game.startPly],
+  )
+  // The one to play again from: the costliest mistake (Joseph, Sep 2026: retry the moment).
+  const retryFrom = useMemo(() => {
+    const cost = (m: (typeof moments)[number]) => (m.rating === 'blunder' ? 1000 : 0) + m.bestCp - (m.playedCp ?? m.bestCp)
+    return moments.length ? [...moments].sort((a, b) => cost(b) - cost(a))[0].ply : null
+  }, [moments])
+  const canRetry =
+    !fromHistory && !!onPlayFrom && retryFrom !== null && (game.path?.kind === 'friendly' || game.path?.kind === 'coaching')
+  const best = useMemo(() => {
+    const b = reviewed ? bestMoveOfGame(reviewed, player) : null
+    // (Not one of a retry's copied moves.)
+    return b && b.move.ply >= (game.startPly ?? 0) ? b : null
+  }, [reviewed, player, game.startPly])
+  // The moves actually played in this game (a retry's first moves were the original game's).
+  const played = useMemo(() => reviewed?.filter((m) => m.ply >= (game.startPly ?? 0)) ?? [], [reviewed, game.startPly])
+
+  // Pemberton's notes: what this game meant, and any habit it shares with
+  // your last few reviewed games (Joseph, Sep 2026).
+  const [recentKinds, setRecentKinds] = useState<ErrorKind[][] | null>(null)
+  useEffect(() => {
+    let cancelled = false
+    listArchivedGames()
+      .then((games) => {
+        const earlier = games
+          .filter((g) => g.id !== game.id && g.evals?.length === g.moves.length + 1)
+          .slice(0, 4)
+          .map((g) => gameErrorKinds(g.moves, g.evals!, g.playerColour))
+        if (!cancelled) setRecentKinds(earlier)
+      })
+      .catch(() => !cancelled && setRecentKinds([]))
+    return () => {
+      cancelled = true
+    }
+  }, [game.id])
+  // The week's focus, for games played since Pemberton set it (not past games).
+  const focusOn = !fromHistory && focus && game.startedAt >= focus.setAt && game.moves.length >= 16 ? focus : null
+  const focusNote = useMemo(
+    () => (evals && focusOn ? focusCheck(focusOn, gameErrors(game.moves, evals, player).filter((e) => e.ply >= (game.startPly ?? 0))) : null),
+    [evals, focusOn, game.moves, game.startPly, player],
+  )
+  const coachNotesOnly = useMemo(
+    () =>
+      evals && recentKinds
+        ? coachNotes({
+            moves: game.moves,
+            evals,
+            player,
+            won: outcome ? (outcome.winner === null ? null : outcome.winner === player) : null,
+            recent: recentKinds,
+            focusKinds: focusOn ? findFocus(focusOn.id).kinds : [],
+          })
+        : [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- outcome follows the moves
+    [evals, recentKinds, game.moves, player, focusOn],
+  )
+  // A retry gets one note on how the second go went, not the whole game's notes again.
+  const retryNote = game.startPly !== undefined && outcome ? retryVerdict(game.startPly, outcome.winner === null ? null : outcome.winner === player) : null
+  const notes = [...(focusNote ? [focusNote] : []), ...(retryNote ? [retryNote] : game.startPly !== undefined ? [] : coachNotesOnly)]
+
+  // Real errors (mistakes and blunders) become Tuesday warm-ups. Done as soon
+  // as the analysis is in, so they're kept even if the review is skipped.
+  useEffect(() => {
+    const cards = cardsFromMoments(game, moments)
+    if (cards.length) addCardsIfNew(cards).catch((err) => console.error('Deck save failed', err))
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per game's moments
+  }, [moments, game.id])
+
+  const resultLine = outcome
+    ? outcome.winner === null
+      ? fromHistory || !game.path || drawRule(game.path.kind) !== 'replay'
+        ? 'Drawn.'
+        : 'Drawn: replayed next.'
+      : outcome.winner === player
+        ? 'You won.'
+        : 'You lost.'
+    : ''
+  const stampKind = !outcome ? '' : outcome.winner === null ? 'drawn' : outcome.winner === player ? 'won' : 'lost'
+  const finalLabel = fromHistory ? 'Back to past games' : outcome?.winner === null ? 'Replay' : 'Continue'
+  const momentsLabel =
+    moments.length > 0 ? `Your biggest moment${moments.length === 1 ? '' : 's'} (${moments.length})` : 'Best move of the game'
+  const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
+
+  function goTo(next: number) {
+    setStep(next)
+    setMomentDone(false)
+    window.scrollTo({ top: 0 })
+  }
+
+  // --- The steps -----------------------------------------------------------
+
+  if (fullGame && reviewed && evals) {
+    return (
+      <FullGameView
+        moves={game.moves}
+        evals={evals}
+        reviewed={reviewed}
+        playerColour={player}
+        onBack={() => {
+          setFullGame(false)
+          window.scrollTo({ top: 0 })
+        }}
+        // First the whole game, then your biggest moments (Joseph, Sep 2026);
+        // opened again from the end of the review, it leads on to Home.
+        onDone={() => {
+          if (fullGameAtEnd) return onContinue()
+          setFullGame(false)
+          goTo(1)
+        }}
+        doneLabel={fullGameAtEnd ? finalLabel : momentsLabel}
+      />
+    )
+  }
+
+  // The review is optional (Joseph's decision, Sep 2026): skip straight on.
+  const skipButton = (
+    <button type="button" className="review-skip" onClick={onContinue}>
+      {fromHistory ? 'Back' : 'Skip'}
+    </button>
+  )
+
+  if (reviewed && step >= 1 && step <= moments.length) {
+    const moment = moments[step - 1]
+    return (
+      <main className="review-screen with-board">
+        <header>
+          <div className="review-topline">
+            <p className="review-kicker">
+              Biggest moment {step} of {moments.length}
+            </p>
+            {skipButton}
+          </div>
+          <h1>
+            {moveLabel({ fenBefore: moment.fenBefore, uci: moment.played, ply: moment.ply, rating: moment.rating })}{' '}
+            <span className={`review-pill rating-${moment.rating}`}>
+              {moment.kind === 'missed' ? 'Missed chance' : RATING_LABELS[moment.rating]}
+            </span>
+          </h1>
+        </header>
+        <MomentTrainer
+          key={step}
+          moment={moment}
+          onFinished={() => {
+            setMomentDone(true)
+            // Retried here, so it won't come back as a warm-up: warm-ups are
+            // always a first look (Joseph, Sep 2026).
+            retireCardById(cardId(game.id, moment.ply)).catch(() => undefined)
+          }}
+        />
+        <button
+          type="button"
+          className="review-continue"
+          disabled={!momentDone}
+          onClick={() => goTo(step + 1)}
+        >
+          {step < moments.length ? 'Next moment' : 'Best move of the game'}
+        </button>
+      </main>
+    )
+  }
+
+  if (reviewed && step === moments.length + 1) {
+    return (
+      <main className="review-screen with-board">
+        <header>
+          <p className="review-kicker">Best move of the game</p>
+          {best && <h1>{moveLabel(best.move)}</h1>}
+        </header>
+        {best ? (
+          <>
+            <MoveReplay moves={game.moves} ply={best.move.ply} orientation={player === 'w' ? 'white' : 'black'} />
+            <p className="review-explanation">
+              {best.move.ply > 0 && <>They played {theirMoveName(game.moves, best.move.ply)}. </>}
+              {explainGoodMove(best.move.fenBefore, best.move.uci, best.punished, evals?.[best.move.ply]?.pv, game.moves.slice(best.move.ply))}
+            </p>
+          </>
+        ) : (
+          <p className="review-note">No standout move this time. Next game.</p>
+        )}
+        <button type="button" className="review-continue" onClick={onContinue}>
+          {finalLabel}
+        </button>
+        <button
+          type="button"
+          className="review-secondary"
+          onClick={() => {
+            setFullGameAtEnd(true)
+            setFullGame(true)
+            window.scrollTo({ top: 0 })
+          }}
+        >
+          See the whole game again
+        </button>
+      </main>
+    )
+  }
+
+  // A game over in a handful of moves (a resignation, a four-move mate) has
+  // nothing worth grading: say so, rather than showing empty numbers.
+  if (game.moves.length < SHORTEST_REVIEW) {
+    return (
+      <main className="review-screen">
+        <header>
+          <div className="review-topline">
+            <h1>Review</h1>
+          </div>
+          <p className="review-result">
+            {resultLine} {outcome && <span>{describeOutcome(outcome)}</span>}
+          </p>
+        </header>
+        <p className="review-note">Too short to review: only {Math.ceil(game.moves.length / 2)} moves.</p>
+        <button type="button" className="review-continue" onClick={onContinue}>
+          {finalLabel}
+        </button>
+      </main>
+    )
+  }
+
+  // Summary (and the progress bar while analysing).
+  return (
+    <main className="review-screen">
+      <header>
+        <div className="review-topline">
+          <h1>Review</h1>
+          {skipButton}
+        </div>
+        <p className="review-result">
+          {/* The result, stamped as on the club's results sheet. */}
+          <strong className={`result-stamp ${stampKind}`}>{resultLine}</strong>{' '}
+          {outcome && <span>{describeOutcome(outcome)}</span>}
+        </p>
+        {ratingChange && (
+          <p className={`review-rating ${ratingChange.to >= ratingChange.from ? 'up' : 'down'}`}>
+            Rating {Math.round(ratingChange.from)} → {Math.round(ratingChange.to)} (
+            {ratingChange.to >= ratingChange.from ? '+' : '−'}
+            {Math.abs(Math.round(ratingChange.to) - Math.round(ratingChange.from))})
+          </p>
+        )}
+      </header>
+
+      {failed ? (
+        <section className="review-progress">
+          <p className="review-note">The analysis stopped part way (phones sometimes pause it). Your game is still saved.</p>
+          <button
+            type="button"
+            className="review-secondary"
+            onClick={() => {
+              setFailed(false)
+              setProgress({ done: 0, total: game.moves.length + 1 })
+              setAttempt((a) => a + 1)
+            }}
+          >
+            Try again
+          </button>
+        </section>
+      ) : !reviewed ? (
+        <section className="review-progress" aria-live="polite">
+          <p>Checking every move…</p>
+          <div className="progress-track">
+            <div
+              className="progress-fill"
+              style={{ width: `${Math.round((progress.done / progress.total) * 100)}%` }}
+            />
+          </div>
+          <p className="review-note">
+            {progress.done} of {progress.total} positions
+          </p>
+        </section>
+      ) : (
+        <section className="review-summary">
+          <div className="accuracy">
+            <span className="accuracy-value">{gameAccuracy(played, player) ?? '–'}%</span>
+            <span className="accuracy-label">your accuracy</span>
+            <span className="accuracy-opponent">Opponent: {gameAccuracy(played, opponent) ?? '–'}%</span>
+          </div>
+
+          <ul className="rating-counts">
+            {RATING_ORDER.map((rating) => {
+              const count = ratingCounts(played, player)[rating]
+              return (
+                <li key={rating} className={`rating-${rating}`}>
+                  <span className="dot" />
+                  <span className="count">{count}</span>
+                  <span className="label">{COUNT_LABELS[rating][count === 1 ? 0 : 1]}</span>
+                </li>
+              )
+            })}
+          </ul>
+
+          {moments.length === 0 && <p className="review-note">No big mistakes this game.</p>}
+
+          {notes.length > 0 && (
+            <div className="moment-coach review-coach-notes">
+              <Portrait who="coach" size={40} />
+              <div>
+                <p className="moment-coach-name">Coach</p>
+                {notes.map((n) => (
+                  <p key={n} className="moment-explanation">
+                    {n}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
+      {reviewed ? (
+        <>
+          {/* The whole game first, then the moments (Joseph, Sep 2026). */}
+          <button
+            type="button"
+            className="review-continue"
+            onClick={() => {
+              setFullGameAtEnd(false)
+              setFullGame(true)
+              window.scrollTo({ top: 0 })
+            }}
+          >
+            Step through the game
+          </button>
+          <button type="button" className="review-secondary" onClick={() => goTo(1)}>
+            Skip to {lower(momentsLabel)}
+          </button>
+          {canRetry && (
+            <button type="button" className="review-secondary" onClick={() => onPlayFrom!(retryFrom!)}>
+              Play on from before your mistake (move {Math.floor(retryFrom! / 2) + 1})
+            </button>
+          )}
+        </>
+      ) : (
+        failed && (
+          <button type="button" className="review-continue" onClick={onContinue}>
+            {finalLabel}
+          </button>
+        )
+      )}
+    </main>
+  )
+}
+
+
+/** Pemberton on a retried game: how the second go went. */
+function retryVerdict(startPly: number, won: boolean | null): string {
+  const from = `From move ${Math.floor(startPly / 2) + 1} again`
+  if (won === true) return `${from}, and this time you won it. Remember what you did differently. That’s the lesson.`
+  if (won === null) return `${from}, and a draw this time. Better than last time. Look at where it levelled out.`
+  return `${from}. Still not easy, is it. Look at where it went this time: it won’t be the same place.`
+}

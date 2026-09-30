@@ -1,0 +1,50 @@
+/* Drills in lessons (openings, finishing): the board, then Pemberton underneath. */
+.coach-drill {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.coach-drill-say {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 16px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.coach-drill-say p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* The rules walkthrough's buttons */
+.rules-next,
+.rules-skip {
+  min-height: 48px;
+  margin: 0 16px;
+  border-radius: var(--radius);
+  font: inherit;
+  cursor: pointer;
+}
+
+.rules-next {
+  border: none;
+  background: var(--brass);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.rules-skip {
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--muted);
+}
+
+.coach-drill-progress {
+  margin: 0 16px;
+  font-size: 13px;
+  color: var(--muted);
+}

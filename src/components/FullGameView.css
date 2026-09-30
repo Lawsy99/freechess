@@ -1,0 +1,133 @@
+.full-game {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 0 24px;
+}
+
+.full-game header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+}
+
+.full-game h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.full-game .back {
+  min-height: 44px;
+  padding: 0 10px;
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.full-game-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 16px;
+}
+
+.info-pill {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--rating);
+  color: var(--rating-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.info-eval {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.full-game-controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.full-game-controls button {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.full-game-controls button svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.full-game-controls button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.move-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0 16px;
+  list-style: none;
+}
+
+.move-list button {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.move-list .num {
+  margin-right: 3px;
+  color: var(--muted);
+}
+
+/* The player's errors: coloured underline plus the ?!/?/?? mark */
+.move-list button.flagged {
+  text-decoration: underline;
+  text-decoration-color: var(--rating);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+.move-list button.current {
+  border-color: var(--brass);
+  background: var(--panel);
+}
+
+/* "Try it again": back to the position before this move, to find a better one. */
+.try-again {
+  align-self: center;
+  min-height: 44px;
+  margin: 0 16px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 999px;
+  background: var(--buff);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}

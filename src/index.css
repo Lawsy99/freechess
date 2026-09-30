@@ -1,0 +1,104 @@
+/* App-wide base styles. Designed for iPhone first (390 × 844).
+ *
+ * FreeChess's look: clean and modern, dark slate with a friendly blue for
+ * everything you can press, gold for stars, and Nunito (a rounded, easy to
+ * read typeface) throughout. Inspired by the clarity of the big chess sites,
+ * with its own colours and identity.
+ *
+ * Token names come from Club Night: --buff is "the feature surface" (the blue
+ * of a main button or highlighted card) and --ink is the text on it.
+ */
+:root {
+  /* Surfaces, darkest to lightest */
+  --bg: #16181d;
+  --card: #21242b;
+  --panel: #2a2e36;
+  --line-soft: #2f343d;
+  --line: #3d434e;
+  /* The feature surface: FreeChess blue, and the text on it */
+  --buff: #4f86f7;
+  --buff-pressed: #3f73e0;
+  --ink: #ffffff;
+  --ink-muted: rgba(255, 255, 255, 0.8);
+  --ink-line: rgba(255, 255, 255, 0.35);
+  /* The accent: the same blue, for highlights, rings and what's current */
+  --brass: #6f9bff;
+  /* Text */
+  --text: #eef1f6;
+  --muted: #a3abb7;
+  --muted-dim: #6d7582;
+  /* Results, grades and stars */
+  --good: #5fd38d;
+  --bad: #ff7a6b;
+  --stamp: #ff7a6b;
+  --star: #ffcb45;
+
+  --sans: 'Nunito Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* (Older components ask for these; in FreeChess everything is Nunito.) */
+  --serif: var(--sans);
+  --mono: var(--sans);
+  --radius: 14px;
+  --lift: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 6px 16px rgba(0, 0, 0, 0.28);
+
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  /* Stop iOS enlarging text when the phone is turned sideways */
+  -webkit-text-size-adjust: 100%;
+  font-variant-numeric: tabular-nums;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+h1,
+h2 {
+  font-family: var(--sans);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 19px;
+}
+
+section > h2:first-child {
+  margin: 0 0 10px;
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+button {
+  border-radius: var(--radius);
+  font-family: var(--sans);
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  /* Keep content clear of the notch and home bar when opened full screen */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  box-sizing: border-box;
+}
+
+/* What bots and the coach say: light chat bubbles with dark text, like a
+   message. Redefining the feature-surface colours here means everything
+   inside (buttons, pointers) follows. The doubled class outranks each
+   component's own rule, whatever order the files load in. */
+:root :is(.talk-bubble, .speech-bubble, .scouting-card, .demo-caption, .story-study-page) {
+  --buff: #f4f6fa;
+  --ink: #1b1e24;
+  --ink-muted: #5a6270;
+  --ink-line: #c9cfd9;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+:root :is(.talk-bubble, .speech-bubble) {
+  font-size: 16px;
+}

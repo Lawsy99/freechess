@@ -1,0 +1,170 @@
+.settings-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px 16px 32px;
+}
+
+.settings-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.settings-back {
+  min-height: 44px;
+  padding: 0 4px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.settings-screen h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.settings-screen h2 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.settings-note {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.settings-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.settings-options button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 52px;
+  /* A ruled form: a box to tick on the left, then the choice */
+  padding: 10px 0 10px 34px;
+  border: none;
+  border-bottom: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-options button span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.settings-options button.selected {
+  font-weight: 600;
+}
+
+.settings-options button.settings-board {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+/* A two-by-two corner of the board */
+.board-swatch {
+  display: grid;
+  grid-template-columns: 14px 14px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.board-swatch i {
+  width: 14px;
+  height: 14px;
+}
+
+.settings-action {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.settings-action.primary {
+  border: none;
+  background: var(--brass);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.settings-action:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* 16 px text stops iOS Safari zooming in on focus */
+.settings-feedback {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  resize: vertical;
+}
+
+.settings-feedback:focus {
+  outline: none;
+  border-color: var(--brass);
+}
+
+.settings-message {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.settings-options button::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 14px;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--text);
+  border-radius: 2px;
+}
+
+.settings-options button.selected::before {
+  content: '✓';
+  display: grid;
+  place-items: center;
+  background: var(--buff);
+  border-color: var(--buff);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}

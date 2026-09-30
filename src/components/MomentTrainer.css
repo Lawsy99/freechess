@@ -1,0 +1,74 @@
+.moment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.moment p {
+  margin: 0;
+  padding: 0 16px;
+}
+
+.moment-prompt {
+  font-weight: 500;
+}
+
+.moment-tries {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.moment-replay {
+  min-height: 44px;
+  padding: 0 4px;
+  border: none;
+  background: none;
+  color: var(--brass);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.moment-verdict {
+  font-weight: 600;
+}
+
+.moment-verdict.solved {
+  color: var(--good);
+}
+
+.moment-verdict.revealed {
+  color: var(--brass);
+}
+
+.moment-explanation {
+  line-height: 1.45;
+}
+
+/* Pemberton's explanation after each position */
+.moment-coach {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0 16px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.moment .moment-coach p {
+  padding: 0;
+}
+
+.moment-coach p + p {
+  margin-top: 6px;
+}
+
+.moment-coach-name {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--brass);
+  font-style: italic;
+  font-family: var(--serif);
+  letter-spacing: 0;
+}
