@@ -23,8 +23,11 @@ import { GameScreen } from '../screens/GameScreen'
 import { PastGamesScreen } from '../screens/PastGamesScreen'
 import { ReviewScreen } from '../screens/ReviewScreen'
 import { SettingsScreen } from '../screens/SettingsScreen'
+import { MistakesDeckScreen } from '../screens/MistakesDeckScreen'
+import { dueCards } from '../logic/mistakesDeck'
 import {
   archiveGame,
+  loadCards,
   loadCurrentGame,
   loadProfile,
   loadSettings,
@@ -81,6 +84,15 @@ export function FreeChessApp() {
   const [last, setLast] = useState<LastResult | null>(null)
   const [pastGame, setPastGame] = useState<ArchivedGame | null>(null)
   const [puzzleMode, setPuzzleMode] = useState<PuzzleMode | null>(null)
+  // Your own mistakes waiting to be practised (FreeChess, Sep 2026: the deck
+  // was filling up from reviews with nowhere to play it). Checked on the tabs.
+  const [mistakesDue, setMistakesDue] = useState(0)
+  useEffect(() => {
+    if (view !== 'tabs') return
+    loadCards()
+      .then((cards) => setMistakesDue(dueCards(cards).length))
+      .catch(() => undefined)
+  }, [view])
   const [lesson, setLesson] = useState<Lesson | null>(null)
 
   useEffect(() => {
@@ -288,7 +300,9 @@ export function FreeChessApp() {
     }
     return (
       <BoardThemeContext.Provider value={settings.board}>
-        {puzzleMode.kind === 'vision' ? (
+        {puzzleMode.kind === 'mistakes' ? (
+          <MistakesDeckScreen onBack={back} />
+        ) : puzzleMode.kind === 'vision' ? (
           <VisionTrainer best={profile.visionBest ?? 0} onFinished={(score) => updateProfile(withVisionScore(profile, score))} onBack={back} />
         ) : puzzleMode.kind === 'rush' ? (
           <PuzzleRush best={profile.rushBest ?? 0} onFinished={(score) => updateProfile(withRushScore(profile, score))} onBack={back} />
@@ -378,6 +392,7 @@ export function FreeChessApp() {
       {tab === 'puzzles' && (
         <PuzzlesTab
           profile={profile}
+          mistakesDue={mistakesDue}
           onStart={(mode) => {
             setPuzzleMode(mode)
             setView('puzzle')
@@ -394,7 +409,7 @@ export function FreeChessApp() {
         />
       )}
       {tab === 'profile' && <ProfileTab profile={profile} onPastGames={() => setView('past')} onSettings={() => setView('settings')} onInsights={() => setView('insights')} onAchievements={() => setView('badges')} />}
-      <TabBar tab={tab} onChange={setTab} />
+      <TabBar tab={tab} onChange={setTab} badges={{ puzzles: mistakesDue }} />
     </div>
   )
 }

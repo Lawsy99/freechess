@@ -6,14 +6,16 @@ import { dayKey, type Profile } from '../logic/profile'
 import { loadPuzzleProgress } from '../storage/db'
 import { CheckIcon, ChevronIcon, PuzzleIcon } from './icons'
 
-export type PuzzleMode = { kind: 'rated' } | { kind: 'daily' } | { kind: 'theme'; theme: string; label: string } | { kind: 'rush' } | { kind: 'vision' }
+export type PuzzleMode = { kind: 'rated' } | { kind: 'daily' } | { kind: 'theme'; theme: string; label: string } | { kind: 'rush' } | { kind: 'vision' } | { kind: 'mistakes' }
 
 type Props = {
   profile: Profile
+  /** Positions from your own games waiting to be practised. */
+  mistakesDue: number
   onStart: (mode: PuzzleMode) => void
 }
 
-export function PuzzlesTab({ profile, onStart }: Props) {
+export function PuzzlesTab({ profile, mistakesDue, onStart }: Props) {
   const [rating, setRating] = useState<number | null>(null)
   useEffect(() => {
     loadPuzzleProgress()
@@ -49,6 +51,20 @@ export function PuzzlesTab({ profile, onStart }: Props) {
         <span>
           <strong>Solve puzzles</strong>
           <span>Rated, at your level, as many as you like.</span>
+        </span>
+        <ChevronIcon size={20} />
+      </button>
+
+      {/* Your own mistakes, brought back on a schedule (spaced repetition). */}
+      <button type="button" className={`fc-card fc-mode ${mistakesDue > 0 ? 'due' : ''}`} onClick={() => onStart({ kind: 'mistakes' })}>
+        <span className="fc-mode-badge mistakes">{mistakesDue > 0 ? mistakesDue : <CheckIcon size={18} />}</span>
+        <span>
+          <strong>Your mistakes</strong>
+          <span>
+            {mistakesDue > 0
+              ? `${mistakesDue} position${mistakesDue === 1 ? '' : 's'} from your games to try again.`
+              : 'Positions from your games come back here to try again.'}
+          </span>
         </span>
         <ChevronIcon size={20} />
       </button>

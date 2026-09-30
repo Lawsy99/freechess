@@ -11,12 +11,16 @@ const TABS: { id: Tab; label: string; Icon: typeof HomeIcon }[] = [
   { id: 'profile', label: 'Profile', Icon: ProfileIcon },
 ]
 
-export function TabBar({ tab, onChange }: { tab: Tab; onChange: (t: Tab) => void }) {
+/** `badges`: a small number on a tab (e.g. mistakes waiting on Puzzles). */
+export function TabBar({ tab, onChange, badges = {} }: { tab: Tab; onChange: (t: Tab) => void; badges?: Partial<Record<Tab, number>> }) {
   return (
     <nav className="fc-tabbar" aria-label="Main">
       {TABS.map(({ id, label, Icon }) => (
         <button key={id} type="button" className={tab === id ? 'active' : undefined} aria-current={tab === id ? 'page' : undefined} onClick={() => onChange(id)}>
-          <Icon size={24} />
+          <span className="fc-tab-icon">
+            <Icon size={24} />
+            {(badges[id] ?? 0) > 0 && <i className="fc-tab-badge">{badges[id]}</i>}
+          </span>
           <span>{label}</span>
         </button>
       ))}

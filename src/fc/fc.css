@@ -1792,3 +1792,36 @@
   color: var(--muted);
   font-size: 14px;
 }
+
+/* Your mistakes (Sep 2026): a count on the Puzzles tab and its card. */
+.fc-tab-icon {
+  position: relative;
+  display: inline-grid;
+}
+
+.fc-tab-badge {
+  position: absolute;
+  top: -4px;
+  right: -10px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: var(--bad);
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 18px;
+  text-align: center;
+}
+
+.fc-mode-badge.mistakes {
+  background: var(--panel);
+}
+
+.fc-mode.due .fc-mode-badge.mistakes {
+  background: var(--bad);
+  color: #fff;
+}

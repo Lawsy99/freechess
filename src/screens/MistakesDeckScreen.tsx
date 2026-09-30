@@ -101,7 +101,7 @@ export function MistakesDeckScreen({ onBack, warmup = false, onDone }: Props) {
     return (
       <main className="review-screen">
         <header>
-          <h1>Mistakes deck</h1>
+          <h1>Your mistakes</h1>
         </header>
         <p className="review-note">
           {allCards.length === 0
