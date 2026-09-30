@@ -1,7 +1,7 @@
 // The game screen: opponent and player bars around the board, status, and
 // whatever help the stage allows. The opponent is a club character or a
 // practice level.
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { BUILD_LABEL } from '../buildInfo'
 import { Board, type BoardArrow } from '../components/Board'
 import { EvalBar } from '../components/EvalBar'
@@ -16,6 +16,8 @@ import { SCOUTING } from '../data/scouting'
 import { SCOUTING_DEMOS } from '../data/scoutingDemos'
 import { buildDemo } from '../logic/demo'
 import { PlayerStrip } from '../components/PlayerStrip'
+import { ClockChip } from '../components/ClockChip'
+import { botPauseCap } from '../logic/clock'
 import { Portrait } from '../components/Portrait'
 import { playEndSound, playMoveSound } from '../components/moveSound'
 import { BulbIcon, FlagIcon, HalfIcon, NextIcon, PauseIcon, PrevIcon, UndoIcon } from '../components/GameIcons'
@@ -45,8 +47,9 @@ import {
   outcomeOf,
   takebacksLeft,
   withDrawAgreed,
-  withMove,
+  withFlag,
   withOpponentEval,
+  withTimedMove,
   ratingAt,
   withResignation,
   withTakeback,
@@ -167,6 +170,20 @@ export function GameScreen({
   const showScouting = !!game.scouting?.length && !game.scoutingSeen && !outcome
   const opponentToMove = !outcome && !playersTurn && !showScouting
   const opponentColour = game.playerColour === 'w' ? 'b' : 'w'
+
+  // Clocks (FreeChess, Sep 2026): the side to move's time runs from when the
+  // turn began on this screen (time away from the app never counts). The chips
+  // tick by themselves; the time is charged to the saved clock with each move.
+  const turnStarted = useRef(performance.now())
+  // (Before the screen is drawn, so a new turn never shows the last one's time used.)
+  useLayoutEffect(() => {
+    turnStarted.current = performance.now()
+  }, [game.moves.length])
+  const clockRunning = !!game.clock && !outcome && !showScouting
+  const usedThisTurn = useCallback(() => performance.now() - turnStarted.current, [])
+  const flag = useCallback(() => setGame((g) => (g ? withFlag(g, replay(g.moves).turn()) : g)), [setGame])
+  const clockFor = (side: 'w' | 'b') =>
+    game.clock ? <ClockChip ms={game.clock[side]} running={clockRunning && chess.turn() === side} used={usedThisTurn} onFlag={flag} /> : undefined
 
   // Engine analysis of the current position. On the player's turn it always
   // runs quietly in the background, so their move can be rated straight
@@ -375,7 +392,8 @@ export function GameScreen({
     // Playing on declines any offer on the table, as over the board.
     setBubble(null)
     dialogue.dismiss()
-    setGame((g) => (g ? withMove(g, uci) : g))
+    const used = usedThisTurn()
+    setGame((g) => (g ? withTimedMove(g, uci, used) : g))
   }
 
   // When it's the opponent's turn (including straight after resuming): it
@@ -398,6 +416,8 @@ export function GameScreen({
         opponent,
         game.rivalPrefer,
         trap ? scenarioMove(trap, game.moves) : null,
+        // (Short of time, the bot hurries.)
+        botPauseCap(game.clock ? game.clock[opponentColour] - usedThisTurn() : undefined),
       )
       if (cancelled || !move) return
       if (failedAttempts.current > 0) {
@@ -463,7 +483,7 @@ export function GameScreen({
       const talkAfter = spoke ? { ...talk, lines: talk.lines + 1, lastLineMove: moveNumber } : talk
       setGame((g) => {
         if (!g) return g
-        let next = withMove(withOpponentEval(g, cp), move)
+        let next = withTimedMove(withOpponentEval(g, cp), move, usedThisTurn())
         if (offer) next = { ...next, opponentLastOfferMove: moveNumber }
         if (spoke) next = { ...next, talk: talkAfter }
         return next
@@ -777,6 +797,7 @@ export function GameScreen({
         fen={fen}
         side={opponentColour}
         thinking={opponentToMove && !downloading}
+        right={clockFor(opponentColour)}
       />
 
       <div className="board-row">
@@ -817,7 +838,13 @@ export function GameScreen({
         rating={playerRating}
         fen={fen}
         side={game.playerColour}
-        right={<span className={outcome ? 'game-status game-over' : 'game-status'}>{viewing ? 'Looking back' : status}</span>}
+        right={
+          game.clock && !outcome ? (
+            clockFor(game.playerColour)
+          ) : (
+            <span className={outcome ? 'game-status game-over' : 'game-status'}>{viewing ? 'Looking back' : status}</span>
+          )
+        }
       />
 
       {/* The message panel: whatever room is left, never over the board. What's

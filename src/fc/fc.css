@@ -1404,3 +1404,17 @@
   background: linear-gradient(160deg, #6c9bff, #3d6fe0);
   color: #fff;
 }
+
+.fc-game-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fc-segmented.four {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.fc-segmented.four button {
+  font-size: 14px;
+}

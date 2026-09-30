@@ -12,7 +12,7 @@ export type PromotionPiece = 'q' | 'r' | 'b' | 'n'
 
 export type DrawReason = 'stalemate' | 'threefold' | 'insufficient' | 'fifty-move' | 'agreement'
 export type GameOutcome =
-  | { winner: Colour; reason: 'checkmate' | 'resignation' }
+  | { winner: Colour; reason: 'checkmate' | 'resignation' | 'timeout' }
   | { winner: null; reason: DrawReason }
 
 /** Rebuilds a chess.js game from a list of UCI moves. Throws if any is illegal. */
@@ -99,6 +99,8 @@ export function describeOutcome(outcome: GameOutcome): string {
       return `Checkmate. ${side(outcome.winner)} wins.`
     case 'resignation':
       return `${side(outcome.winner === 'w' ? 'b' : 'w')} resigned. ${side(outcome.winner)} wins.`
+    case 'timeout':
+      return `${side(outcome.winner === 'w' ? 'b' : 'w')} ran out of time. ${side(outcome.winner)} wins.`
     case 'stalemate':
       return 'Stalemate. Draw.'
     case 'insufficient':

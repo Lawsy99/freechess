@@ -9,19 +9,24 @@ import { groupFor, STYLE_LABELS } from '../logic/botPicks'
 import type { Bot } from '../data/bots'
 import type { Profile } from '../logic/profile'
 import type { ColourChoice } from './BotSheet'
+import type { TimeControlId } from '../logic/clock'
+import { GameOptions } from './GameOptions'
 import { BackIcon } from './icons'
 
 type Props = {
   profile: Profile
   onBack: () => void
-  onPlay: (bot: Bot, colour: ColourChoice) => void
+  onPlay: (bot: Bot, colour: ColourChoice, time: TimeControlId) => void
+  /** The clock chosen last time. */
+  timeControl: TimeControlId
 }
 
-export function CustomBotSheet({ profile, onBack, onPlay }: Props) {
+export function CustomBotSheet({ profile, onBack, onPlay, timeControl }: Props) {
   const yours = Math.round(profile.rating?.rating ?? 800)
   const [rating, setRating] = useState(profile.customBot?.rating ?? Math.round(yours / CUSTOM_STEP) * CUSTOM_STEP)
   const [style, setStyle] = useState<Style>(profile.customBot?.style ?? 'adaptive')
   const [colour, setColour] = useState<ColourChoice>('random')
+  const [time, setTime] = useState<TimeControlId>(timeControl)
   const bot = customBot(rating, style)
   const group = BOT_GROUPS.find((g) => g.id === groupFor(bot.rating))
   const nudge = (by: number) => setRating((r) => Math.max(CUSTOM_MIN, Math.min(CUSTOM_MAX, r + by)))
@@ -77,21 +82,8 @@ export function CustomBotSheet({ profile, onBack, onPlay }: Props) {
         <p className="fc-style-detail">{STYLE_LABELS[style].detail}</p>
       </section>
 
-      <div className="fc-segmented" role="radiogroup" aria-label="Your colour">
-        {(
-          [
-            ['w', 'White'],
-            ['random', 'Random'],
-            ['b', 'Black'],
-          ] as const
-        ).map(([value, label]) => (
-          <button key={value} type="button" role="radio" aria-checked={colour === value} className={colour === value ? 'selected' : undefined} onClick={() => setColour(value)}>
-            <span className={`fc-colour-dot ${value}`} aria-hidden="true" />
-            {label}
-          </button>
-        ))}
-      </div>
-      <button type="button" className="fc-primary" onClick={() => onPlay(bot, colour)}>
+      <GameOptions colour={colour} onColour={setColour} time={time} onTime={setTime} />
+      <button type="button" className="fc-primary" onClick={() => onPlay(bot, colour, time)}>
         Play
       </button>
       <p className="fc-muted fc-custom-note">Counts for your rating. No stars: those are for the named bots.</p>

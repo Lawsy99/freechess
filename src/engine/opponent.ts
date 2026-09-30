@@ -32,6 +32,8 @@ export async function chooseOpponentMove(
   preferOpening?: string,
   /** A move that must be played (Pemberton's announced trap, while the game follows it). */
   forced?: string | null,
+  /** The longest the bot may take (in a timed game, less when it's short of time). */
+  maxPauseMs = Infinity,
 ): Promise<OpponentChoice> {
   const started = Date.now()
   const colour = new Chess(fen).turn()
@@ -64,7 +66,7 @@ export async function chooseOpponentMove(
   const pause = opponent.character
     ? thinkTime(kind, opponent.character.thinkSpeed)
     : TEST_THINK_TIME.min + Math.random() * (TEST_THINK_TIME.max - TEST_THINK_TIME.min)
-  const remaining = pause - (Date.now() - started)
+  const remaining = Math.min(pause, maxPauseMs) - (Date.now() - started)
   if (remaining > 0) await new Promise((r) => setTimeout(r, remaining))
   return choice
 }

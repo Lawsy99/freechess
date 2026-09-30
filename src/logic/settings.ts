@@ -1,3 +1,5 @@
+import type { TimeControlId } from './clock'
+
 // The player's settings (design document, "Chatter setting" and "Screens").
 
 /**
@@ -23,6 +25,8 @@ export type Settings = {
   confirmMoves?: boolean
   /** Dots on the squares a piece can move to (FreeChess, Sep 2026). On unless turned off. */
   showMoves?: boolean
+  /** The clock picked last time for bot games (logic/clock.ts); none unless chosen. */
+  timeControl?: TimeControlId
 }
 
 export const DEFAULT_SETTINGS: Settings = { chatter: 'full', sound: true, board: 'club', unlimitedHelp: false, confirmMoves: true }

@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Portrait } from '../components/Portrait'
 import { BOT_GROUPS, type Bot } from '../data/bots'
 import type { Profile } from '../logic/profile'
+import type { TimeControlId } from '../logic/clock'
+import { GameOptions } from './GameOptions'
 import { BackIcon, Stars } from './icons'
 import { STYLE_LABELS } from '../logic/botPicks'
 
@@ -13,11 +15,14 @@ type Props = {
   bot: Bot
   profile: Profile
   onBack: () => void
-  onPlay: (colour: ColourChoice) => void
+  onPlay: (colour: ColourChoice, time: TimeControlId) => void
+  /** The clock chosen last time. */
+  timeControl: TimeControlId
 }
 
-export function BotSheet({ bot, profile, onBack, onPlay }: Props) {
+export function BotSheet({ bot, profile, onBack, onPlay, timeControl }: Props) {
   const [colour, setColour] = useState<ColourChoice>('random')
+  const [time, setTime] = useState<TimeControlId>(timeControl)
   const record = profile.results[bot.id]
   const style = STYLE_LABELS[bot.style]
   const group = BOT_GROUPS.find((g) => g.id === bot.group)
@@ -46,21 +51,8 @@ export function BotSheet({ bot, profile, onBack, onPlay }: Props) {
           You: {record.wins} won · {record.losses} lost{record.draws ? ` · ${record.draws} drawn` : ''}
         </p>
       )}
-      <div className="fc-segmented" role="radiogroup" aria-label="Your colour">
-        {(
-          [
-            ['w', 'White'],
-            ['random', 'Random'],
-            ['b', 'Black'],
-          ] as const
-        ).map(([value, label]) => (
-          <button key={value} type="button" role="radio" aria-checked={colour === value} className={colour === value ? 'selected' : undefined} onClick={() => setColour(value)}>
-            <span className={`fc-colour-dot ${value}`} aria-hidden="true" />
-            {label}
-          </button>
-        ))}
-      </div>
-      <button type="button" className="fc-primary" onClick={() => onPlay(colour)}>
+      <GameOptions colour={colour} onColour={setColour} time={time} onTime={setTime} />
+      <button type="button" className="fc-primary" onClick={() => onPlay(colour, time)}>
         Play {bot.name}
       </button>
     </main>

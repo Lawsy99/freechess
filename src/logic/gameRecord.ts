@@ -5,6 +5,7 @@ import { applyUci, getOutcome, replay, type Colour, type GameOutcome } from './g
 import type { MoveRating } from './moveRating'
 import type { PathGame } from './path'
 import type { Repertoire } from '../data/repertoire'
+import { afterMove, type Clock } from './clock'
 
 export type GameRecord = {
   id: string
@@ -34,6 +35,10 @@ export type GameRecord = {
   /** A trap Pemberton announced for this coached game, and how it went once known. */
   scenario?: { id: string; result?: 'avoided' | 'escaped' | 'fell' }
   startedAt: number
+  /** The clock, in a timed game (logic/clock.ts); none in untimed games. */
+  clock?: Clock
+  /** Who ran out of time. */
+  flaggedBy?: Colour
   /** Set when the game ends in a way the board can't show (resignation). */
   resignedBy?: Colour
   /** Both sides agreed a draw (replayed, like any draw). */
@@ -155,7 +160,16 @@ export function outcomeOf(game: GameRecord): GameOutcome | null {
     return { winner: opposite(game.resignedBy), reason: 'resignation' }
   }
   if (game.drawAgreed) return { winner: null, reason: 'agreement' }
-  return getOutcome(replay(game.moves))
+  const chess = replay(game.moves)
+  const onBoard = getOutcome(chess)
+  if (onBoard) return onBoard
+  if (game.flaggedBy) {
+    // Out of time loses, unless the other side has only a king left: then it's a draw.
+    const winner = opposite(game.flaggedBy)
+    const bare = !chess.board().some((row) => row.some((p) => p && p.color === winner && p.type !== 'k'))
+    return bare ? { winner: null, reason: 'insufficient' } : { winner, reason: 'timeout' }
+  }
+  return null
 }
 
 /**
@@ -185,4 +199,18 @@ export function nextPlayerColour(previous: GameRecord | null): Colour {
 
 export function opposite(colour: Colour): Colour {
   return colour === 'w' ? 'b' : 'w'
+}
+
+/** A move in a timed game: the move, and the mover's clock charged for `usedMs` (untimed: just the move). */
+export function withTimedMove(game: GameRecord, uci: string, usedMs: number): GameRecord {
+  const next = withMove(game, uci)
+  if (next === game || !game.clock) return next
+  const mover: Colour = game.moves.length % 2 === 0 ? 'w' : 'b'
+  return { ...next, clock: afterMove(game.clock, mover, usedMs) }
+}
+
+/** Out of time: the side to move has lost (or drawn, if the other has only a king). */
+export function withFlag(game: GameRecord, side: Colour): GameRecord {
+  if (outcomeOf(game) || !game.clock) return game
+  return { ...game, flaggedBy: side, clock: { ...game.clock, [side]: 0 } }
 }

@@ -97,3 +97,30 @@
     opacity: 0.8;
   }
 }
+
+/* Clocks (FreeChess, Sep 2026): a chip on the right of each name bar. */
+.clock-chip {
+  min-width: 64px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 800;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-chip.running {
+  background: #eef1f6;
+  color: #16181d;
+}
+
+.clock-chip.low {
+  color: var(--bad);
+}
+
+.clock-chip.running.low {
+  background: var(--bad);
+  color: #fff;
+}

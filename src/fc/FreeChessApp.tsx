@@ -35,6 +35,7 @@ import {
 import { BotSheet, type ColourChoice } from './BotSheet'
 import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
+import { startClock, type TimeControlId } from '../logic/clock'
 import { CustomBotSheet } from './CustomBotSheet'
 import { customBot, customStyle, isCustomBot } from '../data/customBot'
 import { AnalysisBoard } from '../components/AnalysisBoard'
@@ -124,7 +125,8 @@ export function FreeChessApp() {
     saveSettings(next).catch((err) => console.error('Save failed', err))
   }
 
-  const startBotGame = (b: Bot, choice: ColourChoice) => {
+  const startBotGame = (b: Bot, choice: ColourChoice, time: TimeControlId = settings.timeControl ?? 'none') => {
+    if (time !== (settings.timeControl ?? 'none')) updateSettings({ ...settings, timeControl: time })
     const colour = choice === 'random' ? (Math.random() < 0.5 ? 'w' : 'b') : choice
     const group = BOT_GROUPS.find((g) => g.id === b.group)
     const path: PathGame = {
@@ -135,7 +137,7 @@ export function FreeChessApp() {
       label: `${b.name} ${b.flag}`,
       location: `${group?.label ?? ''} · ${b.rating}`,
     }
-    setGame({ ...newGameRecord(colour, characterOpponentId(b.id), 'bot', b.rating), path })
+    setGame({ ...newGameRecord(colour, characterOpponentId(b.id), 'bot', b.rating), path, clock: startClock(time) })
     setBot(b)
     setView('game')
   }
@@ -323,16 +325,17 @@ export function FreeChessApp() {
       <CustomBotSheet
         profile={profile}
         onBack={() => setView('tabs')}
-        onPlay={(b, c) => {
+        timeControl={settings.timeControl ?? 'none'}
+        onPlay={(b, c, t) => {
           updateProfile({ ...profile, customBot: { rating: b.rating, style: b.style } })
-          startBotGame(b, c)
+          startBotGame(b, c, t)
         }}
       />
     )
   }
 
   if (view === 'bot' && bot) {
-    return <BotSheet bot={bot} profile={profile} onBack={() => setView('tabs')} onPlay={(c) => startBotGame(bot, c)} />
+    return <BotSheet bot={bot} profile={profile} onBack={() => setView('tabs')} onPlay={(c, t) => startBotGame(bot, c, t)} timeControl={settings.timeControl ?? 'none'} />
   }
 
   // A game left with Pause: Home offers a way back to it.
