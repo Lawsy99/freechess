@@ -1,4 +1,5 @@
 import type { TimeControlId } from './clock'
+import type { BoardThemeId } from '../components/boardTheme'
 
 // The player's settings (design document, "Chatter setting" and "Screens").
 
@@ -13,7 +14,7 @@ export type Settings = {
   /** A click for each move. */
   sound: boolean
   /** Board colours: see components/boardTheme.ts. */
-  board: 'club' | 'wood' | 'slate'
+  board: BoardThemeId
   /**
    * Full help in every game (Joseph, Sep 2026): unlimited hints and takebacks,
    * the evaluation bar and move ratings. Before each must-win game Pemberton

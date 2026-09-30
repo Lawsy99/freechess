@@ -241,3 +241,38 @@
     transition: none;
   }
 }
+
+/* Board colours as a grid of swatches (Sep 2026: seven of them now). */
+.settings-options.settings-boards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.settings-options.settings-boards button.settings-board {
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 4px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--card);
+  font-size: 12px;
+  text-align: center;
+}
+
+.settings-options.settings-boards button.settings-board.selected {
+  border-color: var(--buff);
+}
+
+.settings-options.settings-boards button::before {
+  display: none;
+}
+
+.settings-boards .board-swatch {
+  grid-template-columns: 20px 20px;
+}
+
+.settings-boards .board-swatch i {
+  width: 20px;
+  height: 20px;
+}

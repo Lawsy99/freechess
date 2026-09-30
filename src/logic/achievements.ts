@@ -58,6 +58,8 @@ export const BADGES: Badge[] = [
   groupBadge('advanced', 'Expert'),
   groupBadge('master', 'Master slayer'),
 
+  count('upset-200', 'Giant killer', 'Beat a bot rated 200 or more above you.', 'play', 200, (p) => Math.max(0, p.bestUpset ?? 0)),
+  count('upset-400', 'David and Goliath', 'Beat a bot rated 400 or more above you.', 'play', 400, (p) => Math.max(0, p.bestUpset ?? 0)),
   count('three-stars', 'Clean win', 'Win three stars against any bot.', 'stars', 1, (p) => Object.values(p.stars).filter((s) => s >= 3).length),
   count('stars-50', 'Star collector', 'Collect 50 stars.', 'stars', 50, stars),
   count('stars-all', 'Every star', 'Collect every star from every bot.', 'stars', BOTS.length * 3, stars),
@@ -71,6 +73,7 @@ export const BADGES: Badge[] = [
   count('rush-10', 'Quick eyes', 'Score 10 in Puzzle Rush.', 'puzzles', 10, (p) => p.rushBest ?? 0),
   count('rush-20', 'Lightning', 'Score 20 in Puzzle Rush.', 'puzzles', 20, (p) => p.rushBest ?? 0),
 
+  count('vision-15', 'Sharp eyes', 'Find 15 squares in one Vision round.', 'puzzles', 15, (p) => p.visionBest ?? 0),
   count('lesson-1', 'First lesson', 'Finish a lesson.', 'learn', 1, (p) => p.lessonsDone?.length ?? 0),
   count('lessons-half', 'Halfway', 'Finish half the Learn path.', 'learn', Math.ceil(ALL_LESSONS.length / 2), (p) => p.lessonsDone?.length ?? 0),
   count('lessons-all', 'Graduate', 'Finish the whole Learn path.', 'learn', ALL_LESSONS.length, (p) => p.lessonsDone?.length ?? 0),

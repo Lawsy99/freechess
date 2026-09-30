@@ -42,6 +42,8 @@ export type Profile = {
   dailySolvedOn?: string
   /** Learn: lessons passed, by id (data/learnPath.ts). */
   lessonsDone?: string[]
+  /** The most rating points above you of a bot you've beaten (for the Giant killer badges). */
+  bestUpset?: number
   /** Days with at least one goal done ("2026-09-30"), the last 60, for the week on Home. */
   activeDays?: string[]
   /** The custom bot you last set up (strength and style), to start from next time. */
@@ -171,6 +173,7 @@ export function recordBotGame(
     rating: after,
     ratingHistory: [...p.ratingHistory, { at: now.getTime(), rating: Math.round(after.rating) }].slice(-200),
     stars: keepRecord ? { ...p.stars, [bot.id]: Math.max(p.stars[bot.id] ?? 0, stars) } : p.stars,
+    bestUpset: result === 'win' ? Math.max(p.bestUpset ?? 0, Math.round(bot.rating - before.rating)) : p.bestUpset,
     results: keepRecord ? results : p.results,
   }
   return {

@@ -14,8 +14,10 @@ import { outcomeOf, type GameRecord } from '../logic/gameRecord'
 import { RATING_LABELS, type MoveRating } from '../logic/moveRating'
 import { moveName } from '../logic/notation'
 import { bestMoveOfGame, gameAccuracy, ratingCounts, reviewMoves, settleEvals, SHORTEST_REVIEW, type PositionEval } from '../logic/review'
-import { PHASE_LABELS, PHASES, phaseAccuracy, playedLike, SPECIAL_LABELS, specialMoves, winPoints, type Special } from '../logic/reviewExtras'
+import { bookLength, PHASE_LABELS, PHASES, phaseAccuracy, playedLike, SPECIAL_LABELS, specialMoves, winPoints, type Special } from '../logic/reviewExtras'
 import { coachTip } from '../logic/stepExplain'
+import { detectOpening } from '../logic/openings'
+import { OPENING_NAMES } from '../data/scouting'
 import { ALL_LESSONS } from '../data/learnPath'
 import { Portrait } from '../components/Portrait'
 import { cardId, cardsFromMoments, gameMoments, moveLabel } from '../logic/mistakeCards'
@@ -134,6 +136,13 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
     [reviewed, evals, game.moves, player, game.startPly],
   )
   const tipLesson = tip ? ALL_LESSONS.find((l) => l.id === tip.lesson) : undefined
+  // The opening, by name, and how long the game followed known theory.
+  const opening = useMemo(() => {
+    const key = detectOpening(replay(game.moves.slice(0, 12)).history())
+    const name = key ? (OPENING_NAMES[key] ?? key).replace(/^the /, '') : null
+    const book = bookLength(game.moves)
+    return { name: name ? name.charAt(0).toUpperCase() + name.slice(1) : null, bookMoves: Math.ceil(book / 2) }
+  }, [game.moves])
   // Key moments for the summary: your biggest mistake, a chance you missed,
   // and your best move. Each opens the step-through there (FreeChess).
   const keyMoments = useMemo(() => {
@@ -322,6 +331,12 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
           <strong className={`result-stamp ${stampKind}`}>{resultLine}</strong>{' '}
           {outcome && <span>{describeOutcome(outcome)}</span>}
         </p>
+        {(opening.name || opening.bookMoves > 0) && (
+          <p className="review-opening">
+            {opening.name ?? 'Opening'}
+            {opening.bookMoves > 0 ? ` · ${opening.bookMoves} ${opening.bookMoves === 1 ? 'move' : 'moves'} of known theory` : ''}
+          </p>
+        )}
         {ratingChange && (
           <p className={`review-rating ${ratingChange.to >= ratingChange.from ? 'up' : 'down'}`}>
             Rating {Math.round(ratingChange.from)} → {Math.round(ratingChange.to)} (

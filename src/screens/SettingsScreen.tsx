@@ -122,7 +122,7 @@ export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Pro
 
       <section>
         <h2>Board</h2>
-        <div className="settings-options" role="radiogroup" aria-label="Board style">
+        <div className="settings-options settings-boards" role="radiogroup" aria-label="Board style">
           {(Object.keys(BOARD_THEMES) as BoardThemeId[]).map((id) => (
             <button
               key={id}
