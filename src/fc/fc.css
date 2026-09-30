@@ -709,11 +709,6 @@
   color: var(--muted);
 }
 
-.fc-rating-change strong {
-  color: var(--text);
-  font-size: 22px;
-}
-
 .fc-rating-change.up {
   color: var(--good);
 }
