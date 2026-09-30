@@ -35,6 +35,9 @@ import {
 import { BotSheet, type ColourChoice } from './BotSheet'
 import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
+import { InsightsScreen } from './InsightsScreen'
+import { AchievementsScreen } from './AchievementsScreen'
+import { newlyEarned } from '../logic/achievements'
 import { startClock, type TimeControlId } from '../logic/clock'
 import { CustomBotSheet } from './CustomBotSheet'
 import { customBot, customStyle, isCustomBot } from '../data/customBot'
@@ -45,7 +48,7 @@ import { ResultScreen, type LastResult } from './ResultScreen'
 import { TabBar, type Tab } from './TabBar'
 import './fc.css'
 
-type View = 'tabs' | 'bot' | 'custom' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis'
+type View = 'tabs' | 'bot' | 'custom' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis' | 'insights' | 'badges'
 
 const CHARACTER_PREFIX = 'char:'
 
@@ -178,7 +181,16 @@ export function FreeChessApp() {
       const recorded = recordBotGame(profile, b, result, aidsUsed, new Date(), !isCustomBot(b.id))
       updateProfile(recorded.profile)
       setGame({ ...g, resultRecorded: true })
-      setLast({ bot: b, result, stars: recorded.stars, aidsUsed, ratingChange: recorded.ratingChange, newBest: recorded.stars > bestBefore, custom: isCustomBot(b.id) })
+      setLast({
+        bot: b,
+        result,
+        stars: recorded.stars,
+        aidsUsed,
+        ratingChange: recorded.ratingChange,
+        newBest: recorded.stars > bestBefore,
+        custom: isCustomBot(b.id),
+        badges: newlyEarned(profile, recorded.profile).map((x) => x.title),
+      })
     }
     setView('result')
   }
@@ -291,6 +303,9 @@ export function FreeChessApp() {
     )
   }
 
+  if (view === 'insights') return <InsightsScreen onBack={() => setView('tabs')} />
+  if (view === 'badges') return <AchievementsScreen profile={profile} onBack={() => setView('tabs')} />
+
   if (view === 'analysis') {
     return (
       <BoardThemeContext.Provider value={settings.board}>
@@ -374,7 +389,7 @@ export function FreeChessApp() {
           }}
         />
       )}
-      {tab === 'profile' && <ProfileTab profile={profile} onPastGames={() => setView('past')} onSettings={() => setView('settings')} />}
+      {tab === 'profile' && <ProfileTab profile={profile} onPastGames={() => setView('past')} onSettings={() => setView('settings')} onInsights={() => setView('insights')} onAchievements={() => setView('badges')} />}
       <TabBar tab={tab} onChange={setTab} />
     </div>
   )

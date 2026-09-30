@@ -1418,3 +1418,170 @@
 .fc-segmented.four button {
   font-size: 14px;
 }
+
+/* Insights (Sep 2026): one card per question, a line of plain words under each. */
+.fc-insight {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+}
+
+.fc-insight h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.fc-insight-line {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.fc-insight-big {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.fc-insight-big span {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.fc-insight-empty {
+  padding: 16px;
+  color: var(--muted);
+}
+
+.fc-insight-pair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 15px;
+}
+
+.fc-insight-pair span,
+.fc-openings li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fc-result-bar {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--panel);
+}
+
+.fc-result-bar .won {
+  background: var(--good);
+}
+
+.fc-result-bar .drawn {
+  background: var(--muted-dim);
+}
+
+.fc-result-bar .lost {
+  background: var(--bad);
+}
+
+.fc-insight .phase {
+  background: var(--panel);
+}
+
+.fc-insight .phase.weakest {
+  box-shadow: inset 0 0 0 2px var(--bad);
+}
+
+.fc-openings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fc-opening-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+}
+
+.fc-openings strong {
+  min-width: 44px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Achievements (Sep 2026): two badges a row. */
+.fc-badges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fc-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 12px;
+}
+
+.fc-badge strong {
+  font-size: 15px;
+}
+
+.fc-badge > span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.fc-badge:not(.earned) strong {
+  color: var(--muted);
+}
+
+.fc-badge-progress {
+  display: block;
+  height: 5px;
+  margin-top: 4px;
+  border-radius: 3px;
+  background: var(--panel);
+  overflow: hidden;
+}
+
+.fc-badge-progress i {
+  display: block;
+  height: 100%;
+  background: var(--buff);
+}
+
+.fc-new-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fc-new-badges li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 6px;
+  border-radius: 999px;
+  background: var(--card);
+  font-weight: 800;
+  font-size: 14px;
+}

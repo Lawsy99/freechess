@@ -8,15 +8,25 @@ const W = 340
 const H = 150
 const PAD = { top: 14, right: 12, bottom: 22, left: 40 }
 
-export function RatingGraph({ points }: { points: readonly RatingPoint[] }) {
+type Props = {
+  points: readonly RatingPoint[]
+  /** A fixed scale (e.g. 0 to 100 for accuracy) instead of one fitted to the rating. */
+  scale?: { lo: number; hi: number }
+  /** After each value ("%"), and what the values are, for screen readers. */
+  suffix?: string
+  name?: string
+  empty?: string
+}
+
+export function RatingGraph({ points, scale, suffix = '', name = 'Rating', empty = 'The graph starts after your next rated game.' }: Props) {
   const [active, setActive] = useState<number | null>(null)
   if (points.length < 2) {
-    return <p className="graph-empty">The graph starts after your next rated game.</p>
+    return <p className="graph-empty">{empty}</p>
   }
   const ratings = points.map((p) => p.rating)
   // A little room above and below, and never flatter than 100 points tall.
-  const lo = Math.floor((Math.min(...ratings) - 10) / 50) * 50
-  const hi = Math.max(lo + 100, Math.ceil((Math.max(...ratings) + 10) / 50) * 50)
+  const lo = scale?.lo ?? Math.floor((Math.min(...ratings) - 10) / 50) * 50
+  const hi = scale?.hi ?? Math.max(lo + 100, Math.ceil((Math.max(...ratings) + 10) / 50) * 50)
   const x = (i: number) => PAD.left + (i / (points.length - 1)) * (W - PAD.left - PAD.right)
   const y = (r: number) => PAD.top + (1 - (r - lo) / (hi - lo)) * (H - PAD.top - PAD.bottom)
   const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(p.rating).toFixed(1)}`).join(' ')
@@ -34,7 +44,7 @@ export function RatingGraph({ points }: { points: readonly RatingPoint[] }) {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         role="img"
-        aria-label={`Rating from ${ratings[0]} to ${ratings.at(-1)} over ${points.length - 1} rated games`}
+        aria-label={`${name} from ${ratings[0]}${suffix} to ${ratings.at(-1)}${suffix} over ${points.length} games`}
         onPointerMove={(e) => pick(e.clientX, e.currentTarget.getBoundingClientRect())}
         onPointerDown={(e) => pick(e.clientX, e.currentTarget.getBoundingClientRect())}
         onPointerLeave={() => setActive(null)}
@@ -44,6 +54,7 @@ export function RatingGraph({ points }: { points: readonly RatingPoint[] }) {
             <line className="graph-grid" x1={PAD.left} x2={W - PAD.right} y1={y(v)} y2={y(v)} />
             <text className="graph-axis" x={PAD.left - 6} y={y(v) + 4} textAnchor="end">
               {Math.round(v)}
+              {suffix}
             </text>
           </g>
         ))}
@@ -58,7 +69,11 @@ export function RatingGraph({ points }: { points: readonly RatingPoint[] }) {
         </text>
       </svg>
       <figcaption>
-        <strong>{points[shown].rating}</strong> {active === null ? 'now' : `on ${formatDay(points[shown].at)}`}
+        <strong>
+          {points[shown].rating}
+          {suffix}
+        </strong>{' '}
+        {active === null ? (suffix ? 'last game' : 'now') : `on ${formatDay(points[shown].at)}`}
       </figcaption>
     </figure>
   )

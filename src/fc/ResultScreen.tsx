@@ -4,6 +4,7 @@ import { Portrait } from '../components/Portrait'
 import type { Bot } from '../data/bots'
 import type { BotResult } from '../logic/profile'
 import { StarIcon } from './icons'
+import { MedalIcon } from './AchievementsScreen'
 
 export type LastResult = {
   bot: Bot
@@ -18,6 +19,8 @@ export type LastResult = {
   coach?: boolean
   /** The custom bot: rated, but no stars. */
   custom?: boolean
+  /** Badges this game earned. */
+  badges?: string[]
 }
 
 type Props = LastResult & {
@@ -29,7 +32,7 @@ type Props = LastResult & {
 const TITLES: Record<BotResult, string> = { win: 'You won!', loss: 'You lost', draw: 'Draw' }
 const COACH_TITLES: Record<BotResult, string> = { win: 'You beat the Coach!', loss: 'Good game!', draw: 'A draw with the Coach' }
 
-export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBest, coach = false, custom = false, onReview, onRematch, onDone }: Props) {
+export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBest, coach = false, custom = false, badges = [], onReview, onRematch, onDone }: Props) {
   const diff = ratingChange ? ratingChange.to - ratingChange.from : 0
   // (The Coach is pleased whatever happened: a good game is a good game.)
   const expression = coach ? 'pleased' : result === 'win' ? 'annoyed' : result === 'loss' ? 'pleased' : 'neutral'
@@ -68,6 +71,15 @@ export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBe
           <strong>{ratingChange.to}</strong> rating ({diff >= 0 ? '+' : ''}
           {diff})
         </p>
+      )}
+      {badges.length > 0 && (
+        <ul className="fc-new-badges" aria-label="New badges">
+          {badges.map((b) => (
+            <li key={b}>
+              <MedalIcon earned size={24} /> {b}
+            </li>
+          ))}
+        </ul>
       )}
       <div className="fc-result-actions">
         <button type="button" className="fc-primary" onClick={onReview}>

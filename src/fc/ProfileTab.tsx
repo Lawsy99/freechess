@@ -4,15 +4,19 @@ import { Portrait } from '../components/Portrait'
 import { RatingGraph } from '../components/RatingGraph'
 import { BOTS } from '../data/bots'
 import { totalStars, type Profile } from '../logic/profile'
-import { ChevronIcon, FlameIcon, SettingsIcon, StarIcon } from './icons'
+import { earned, BADGES } from '../logic/achievements'
+import { FlameIcon, SettingsIcon, StarIcon } from './icons'
+import { MenuList } from './MenuList'
 
 type Props = {
   profile: Profile
   onPastGames: () => void
   onSettings: () => void
+  onInsights: () => void
+  onAchievements: () => void
 }
 
-export function ProfileTab({ profile, onPastGames, onSettings }: Props) {
+export function ProfileTab({ profile, onPastGames, onSettings, onInsights, onAchievements }: Props) {
   const rating = profile.rating ? Math.round(profile.rating.rating) : null
   const played = BOTS.map((b) => ({ bot: b, r: profile.results[b.id] }))
     .filter((x) => x.r && x.r.wins + x.r.losses + x.r.draws > 0)
@@ -58,11 +62,13 @@ export function ProfileTab({ profile, onPastGames, onSettings }: Props) {
         </div>
       </div>
 
-      <button type="button" className="fc-card fc-link-row" onClick={onPastGames}>
-        <strong>Past games</strong>
-        <span>Review any game</span>
-        <ChevronIcon size={20} />
-      </button>
+      <MenuList
+        items={[
+          { id: 'past', title: 'Past games', detail: 'Review any game', onClick: onPastGames },
+          { id: 'insights', title: 'Insights', detail: 'Accuracy, phases and openings', onClick: onInsights },
+          { id: 'badges', title: 'Achievements', detail: `${earned(profile).size} of ${BADGES.length} earned`, onClick: onAchievements },
+        ]}
+      />
 
       {played.length > 0 && (
         <section>
