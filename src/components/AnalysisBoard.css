@@ -271,3 +271,21 @@
 .editor-paste .editor-chip {
   flex: 0 0 auto;
 }
+
+.analysis-board-cell {
+  position: relative;
+}
+
+/* Over the board while the pencil is on: takes every touch, no scrolling. */
+.draw-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.analysis-tool.on {
+  background: #f59628;
+  color: #1c1204;
+}

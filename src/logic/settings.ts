@@ -21,6 +21,8 @@ export type Settings = {
   unlimitedHelp?: boolean
   /** A tick and a cross before each move is played (Joseph, Sep 2026, as on chess.com). On unless turned off. */
   confirmMoves?: boolean
+  /** Dots on the squares a piece can move to (FreeChess, Sep 2026). On unless turned off. */
+  showMoves?: boolean
 }
 
 export const DEFAULT_SETTINGS: Settings = { chatter: 'full', sound: true, board: 'club', unlimitedHelp: false, confirmMoves: true }

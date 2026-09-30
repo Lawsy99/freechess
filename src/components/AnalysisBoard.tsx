@@ -5,10 +5,11 @@
 import { Chess } from 'chess.js'
 import { useMemo, useState } from 'react'
 import { useEngineLines } from '../engine/useEngineLines'
-import { fenAt, lineSans, playMove, START_FEN, stepTo, type AnalysisLine } from '../logic/analysisLine'
+import { fenAt, lineSans, playMove, START_FEN, stepTo, toggle, type AnalysisLine } from '../logic/analysisLine'
 import { formatScore } from '../logic/evaluation'
 import { formatLine } from '../logic/game'
-import { Board } from './Board'
+import { Board, DRAW_COLOUR } from './Board'
+import { DrawLayer } from './DrawLayer'
 import { EvalBar } from './EvalBar'
 import { PositionEditor } from './PositionEditor'
 import { SkipIcon, StepIcon } from './StepIcons'
@@ -29,12 +30,16 @@ export function AnalysisBoard({ initial, orientation = 'white', onBack, canSetUp
   const [line, setLine] = useState<AnalysisLine>(initial ?? { startFen: START_FEN, moves: [], cursor: 0 })
   const [flipped, setFlipped] = useState(orientation === 'black')
   const [editing, setEditing] = useState(false)
+  // Your own arrows and circles: for this position only (a new move clears them).
+  const [drawing, setDrawing] = useState(false)
+  const [drawn, setDrawn] = useState<{ at: string; arrows: { from: string; to: string }[]; circles: string[] }>({ at: '', arrows: [], circles: [] })
   const fen = useMemo(() => fenAt(line), [line])
   const sans = useMemo(() => lineSans(line), [line])
   const { current, latest } = useEngineLines(fen, !editing)
   const turn = new Chess(fen).turn()
   const lastUci = line.cursor > 0 ? line.moves[line.cursor - 1] : null
   const bottom = flipped ? 'b' : 'w'
+  const mine = drawn.at === fen ? drawn : { at: fen, arrows: [], circles: [] }
 
   if (editing) {
     return (
@@ -67,6 +72,15 @@ export function AnalysisBoard({ initial, orientation = 'white', onBack, canSetUp
           ‹ Back
         </button>
         <h1>Analysis</h1>
+        <button
+          type="button"
+          className={`analysis-tool ${drawing ? 'on' : ''}`}
+          onClick={() => setDrawing(!drawing)}
+          aria-pressed={drawing}
+          aria-label="Draw arrows and circles"
+        >
+          <PencilIcon />
+        </button>
         <button type="button" className="analysis-tool" onClick={() => setFlipped(!flipped)} aria-label="Turn the board round">
           <FlipIcon />
         </button>
@@ -86,8 +100,18 @@ export function AnalysisBoard({ initial, orientation = 'white', onBack, canSetUp
             movableColour={turn}
             lastMove={lastUci ? { from: lastUci.slice(0, 2), to: lastUci.slice(2, 4) } : null}
             onMove={(uci) => setLine((l) => playMove(l, uci))}
-            arrows={best ? [{ from: best.slice(0, 2), to: best.slice(2, 4), colour: ARROW }] : []}
+            arrows={[
+              ...(best ? [{ from: best.slice(0, 2), to: best.slice(2, 4), colour: ARROW }] : []),
+              ...mine.arrows.map((a) => ({ ...a, colour: DRAW_COLOUR })),
+            ]}
+            circles={mine.circles}
           />
+          {drawing && (
+            <DrawLayer
+              onArrow={(from, to) => setDrawn({ ...mine, arrows: toggle(mine.arrows, { from, to }, (a, b) => a.from === b.from && a.to === b.to) })}
+              onCircle={(sq) => setDrawn({ ...mine, circles: toggle(mine.circles, sq, (a, b) => a === b) })}
+            />
+          )}
         </div>
       </div>
 
@@ -144,6 +168,14 @@ function moveNumberAt(startFen: string, index: number): string {
   const number = Number(full || 1) + Math.floor(plyFromWhite / 2)
   if (plyFromWhite % 2 === 0) return `${number}. `
   return index === 0 ? `${number}… ` : ''
+}
+
+function PencilIcon() {
+  return (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 20l4-1 11-11-3-3L5 16l-1 4zM14 6l3 3" />
+    </svg>
+  )
 }
 
 function FlipIcon() {

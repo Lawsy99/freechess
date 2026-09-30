@@ -36,6 +36,7 @@ import { BotSheet, type ColourChoice } from './BotSheet'
 import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
 import { AnalysisBoard } from '../components/AnalysisBoard'
+import { setShowLegalMoves } from '../components/boardPrefs'
 import { ProfileTab } from './ProfileTab'
 import { ResultScreen, type LastResult } from './ResultScreen'
 import { TabBar, type Tab } from './TabBar'
@@ -90,6 +91,7 @@ export function FreeChessApp() {
   useEffect(() => {
     setSoundEnabled(settings.sound)
   }, [settings.sound])
+  setShowLegalMoves(settings.showMoves ?? true)
 
   // Save the game after every move; finished games also go into the archive.
   useEffect(() => {

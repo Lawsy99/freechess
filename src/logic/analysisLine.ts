@@ -100,3 +100,8 @@ export function checkSetup(placement: Placement, turn: 'w' | 'b'): { fen: string
   if (flipped.inCheck()) return { problem: `${turn === 'w' ? 'Black' : 'White'}’s king is in check, but it’s ${turn === 'w' ? 'White' : 'Black'} to move.` }
   return { fen }
 }
+
+/** Adds a drawing (an arrow, a circle), or takes it away if it is already there. */
+export function toggle<T>(list: readonly T[], item: T, same: (a: T, b: T) => boolean): T[] {
+  return list.some((x) => same(x, item)) ? list.filter((x) => !same(x, item)) : [...list, item]
+}

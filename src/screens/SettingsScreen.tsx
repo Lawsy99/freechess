@@ -144,44 +144,29 @@ export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Pro
         </div>
       </section>
 
+      {/* On/off choices as switches in one card (Sep 2026), so Settings stays short. */}
       <section>
-        <h2>Sound</h2>
-        <div className="settings-options" role="radiogroup" aria-label="Sound">
-          {[true, false].map((on) => (
-            <button
-              key={String(on)}
-              type="button"
-              role="radio"
-              aria-checked={settings.sound === on}
-              className={settings.sound === on ? 'selected' : undefined}
-              onClick={() => onChange({ ...settings, sound: on })}
-            >
-              <strong>{on ? 'On' : 'Off'}</strong>
-              <span>{on ? 'A soft click for each move.' : 'Silent.'}</span>
-            </button>
-          ))}
-        </div>
-
-      </section>
-
-      {/* Confirm moves (Joseph, Sep 2026): no more moves played by a slip of the thumb. */}
-      <section>
-        <h2>Confirm moves</h2>
-        <div className="settings-options" role="radiogroup" aria-label="Confirm moves">
-          {[true, false].map((on) => (
-            <button
-              key={String(on)}
-              type="button"
-              role="radio"
-              aria-checked={(settings.confirmMoves ?? true) === on}
-              className={(settings.confirmMoves ?? true) === on ? 'selected' : undefined}
-              onClick={() => onChange({ ...settings, confirmMoves: on })}
-            >
-              <strong>{on ? 'On' : 'Off'}</strong>
-              <span>{on ? 'Each move waits for a tick (play it) or a cross (put it back).' : 'Moves are played as soon as you make them.'}</span>
-            </button>
-          ))}
-        </div>
+        <h2>Playing</h2>
+        <ul className="settings-switches">
+          <Switch
+            label="Sound"
+            detail="A soft click for each move."
+            on={settings.sound}
+            onChange={(on) => onChange({ ...settings, sound: on })}
+          />
+          <Switch
+            label="Confirm moves"
+            detail="Each move waits for a tick (play it) or a cross (put it back)."
+            on={settings.confirmMoves ?? true}
+            onChange={(on) => onChange({ ...settings, confirmMoves: on })}
+          />
+          <Switch
+            label="Show legal moves"
+            detail="Dots show where a piece can go."
+            on={settings.showMoves ?? true}
+            onChange={(on) => onChange({ ...settings, showMoves: on })}
+          />
+        </ul>
       </section>
 
       <section>
@@ -245,5 +230,22 @@ export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Pro
 
       <p className="build-stamp">Version: {BUILD_LABEL}</p>
     </main>
+  )
+}
+
+/** One on/off row: the name and what it does, and a switch. */
+function Switch({ label, detail, on, onChange }: { label: string; detail: string; on: boolean; onChange: (on: boolean) => void }) {
+  return (
+    <li>
+      <button type="button" role="switch" aria-checked={on} className="settings-switch" onClick={() => onChange(!on)}>
+        <span className="settings-switch-text">
+          <strong>{label}</strong>
+          <span>{detail}</span>
+        </span>
+        <span className={`switch-track ${on ? 'on' : ''}`} aria-hidden="true">
+          <span className="switch-knob" />
+        </span>
+      </button>
+    </li>
   )
 }
