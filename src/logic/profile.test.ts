@@ -58,3 +58,18 @@ describe('a game with the Coach', () => {
     expect(after.coachGames).toBe(1)
   })
 })
+
+describe('the week on Home', () => {
+  it('marks the days you practised, Monday first', async () => {
+    const { thisWeek, completeGoal, NEW_PROFILE } = await import('./profile')
+    // Wednesday 30 September 2026.
+    const wed = new Date('2026-09-30T12:00:00')
+    let p = completeGoal(NEW_PROFILE, 'bot', '2026-09-28')
+    p = completeGoal(p, 'lesson', '2026-09-30')
+    const week = thisWeek(p, wed)
+    expect(week.map((d) => d.label).join('')).toBe('MTWTFSS')
+    expect(week.map((d) => d.active)).toEqual([true, false, true, false, false, false, false])
+    expect(week[2].today).toBe(true)
+    expect(week[3].future).toBe(true)
+  })
+})

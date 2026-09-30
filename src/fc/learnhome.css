@@ -147,3 +147,59 @@
 .fc-today .fc-goals li:first-child {
   border-top: none;
 }
+
+/* The greeting card: the hello on top, this week below (Sep 2026). */
+.fc-hello {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.fc-hello-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fc-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin: 2px 0 0;
+  padding: 10px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  list-style: none;
+}
+
+.fc-week li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.fc-week-dot {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.fc-week li.active .fc-week-dot {
+  background: #fff;
+}
+
+.fc-week li.today .fc-week-dot {
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.fc-week li.future .fc-week-dot {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.fc-week-label {
+  font-size: 12px;
+  font-weight: 800;
+  opacity: 0.85;
+}

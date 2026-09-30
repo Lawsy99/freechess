@@ -42,6 +42,8 @@ export type Profile = {
   dailySolvedOn?: string
   /** Learn: lessons passed, by id (data/learnPath.ts). */
   lessonsDone?: string[]
+  /** Days with at least one goal done ("2026-09-30"), the last 60, for the week on Home. */
+  activeDays?: string[]
   /** The custom bot you last set up (strength and style), to start from next time. */
   customBot?: { rating: number; style: Style }
 }
@@ -104,7 +106,30 @@ export function completeGoal(p: Profile, goal: Goal, today: string): Profile {
     const count = streak.lastDay === previousDay(today) ? streak.count + 1 : 1
     streak = { count, lastDay: today, best: Math.max(streak.best, count) }
   }
-  return { ...p, daily, streak }
+  const days = p.activeDays ?? []
+  const activeDays = days.includes(today) ? days : [...days, today].slice(-60)
+  return { ...p, daily, streak, activeDays }
+}
+
+export type WeekDay = { day: string; label: string; active: boolean; today: boolean; future: boolean }
+
+/**
+ * This week, Monday to Sunday, with the days you practised (Sep 2026, as
+ * Duolingo shows it). Days inside the current streak count too, for players
+ * from before the days were kept.
+ */
+export function thisWeek(p: Profile, now: Date): WeekDay[] {
+  const today = dayKey(now)
+  const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7))
+  const streakDays = new Set<string>()
+  if (p.streak.lastDay) {
+    const [y, m, d] = p.streak.lastDay.split('-').map(Number)
+    for (let i = 0; i < p.streak.count; i++) streakDays.add(dayKey(new Date(y, m - 1, d - i)))
+  }
+  return ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((label, i) => {
+    const day = dayKey(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i))
+    return { day, label, active: (p.activeDays ?? []).includes(day) || streakDays.has(day), today: day === today, future: day > today }
+  })
 }
 
 export type BotResult = 'win' | 'loss' | 'draw'

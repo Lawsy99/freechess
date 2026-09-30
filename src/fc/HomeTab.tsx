@@ -3,7 +3,7 @@
 // if one is paused, and a suggested bot at about your level.
 import { Portrait } from '../components/Portrait'
 import type { Bot } from '../data/bots'
-import { currentStreak, dayKey, todaysGoals, totalStars, type Goal, type Profile } from '../logic/profile'
+import { currentStreak, dayKey, thisWeek, todaysGoals, totalStars, type Goal, type Profile } from '../logic/profile'
 import { CheckIcon, ChevronIcon, FlameIcon, Stars, StarIcon } from './icons'
 import { Logo } from './Logo'
 import './learnhome.css'
@@ -46,6 +46,7 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
 
       {/* A hello from the Coach (Sep 2026), with how today is going. */}
       <section className="fc-hello">
+        <div className="fc-hello-top">
         <Portrait who="coach" size={60} expression="pleased" className="fc-face" />
         <span className="fc-hello-text">
           <strong>{greeting(new Date())}</strong>
@@ -60,6 +61,16 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
           </span>
         </span>
         <GoalRing done={done.length} total={3} />
+        </div>
+        {/* This week, Duolingo style: a flame for each day you practised. */}
+        <ol className="fc-week" aria-label="This week">
+          {thisWeek(profile, new Date()).map((d) => (
+            <li key={d.day} className={[d.active ? 'active' : '', d.today ? 'today' : '', d.future ? 'future' : ''].join(' ').trim()}>
+              <span className="fc-week-dot">{d.active ? <FlameIcon size={16} lit /> : null}</span>
+              <span className="fc-week-label">{d.label}</span>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="fc-card fc-today">
