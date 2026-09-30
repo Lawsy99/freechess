@@ -18,11 +18,7 @@ export function useEngineLines(fen: string, enabled = true): { current: EngineLi
 
   useEffect(() => {
     if (!enabled || new Chess(fen).isGameOver()) return
-    const known = cache.get(fen)
-    if (known) {
-      setResult({ fen, lines: known })
-      return
-    }
+    if (cache.has(fen)) return // (read straight from the cache below)
     let cancelled = false
     const timer = setTimeout(() => {
       getEngine()
@@ -40,5 +36,7 @@ export function useEngineLines(fen: string, enabled = true): { current: EngineLi
     }
   }, [fen, enabled])
 
-  return { current: result?.fen === fen ? result : null, latest: result }
+  const known = cache.get(fen)
+  const current = known ? { fen, lines: known } : result?.fen === fen ? result : null
+  return { current, latest: current ?? result }
 }
