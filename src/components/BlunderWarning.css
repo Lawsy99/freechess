@@ -53,3 +53,29 @@
   color: var(--ink);
   font-weight: 600;
 }
+
+/* In the game's message panel (FreeChess): the question and its two buttons,
+   below the board rather than over it. */
+.blunder-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.blunder-inline .blunder-card {
+  max-width: none;
+  padding: 10px 12px;
+  background: var(--card);
+  box-shadow: none;
+}
+
+.blunder-inline .blunder-message {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.blunder-inline .blunder-actions button {
+  min-height: 42px;
+  border: none;
+  font-weight: 700;
+}

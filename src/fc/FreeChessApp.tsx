@@ -42,6 +42,14 @@ type View = 'tabs' | 'bot' | 'game' | 'result' | 'review' | 'past' | 'past-revie
 const CHARACTER_PREFIX = 'char:'
 
 /** The bot a game is against (bot games are saved with "char:<id>"). */
+/** Who a game is against, as a Bot (the Coach included), for the carry-on card. */
+function opponentOf(game: GameRecord): Bot | undefined {
+  if (game.levelId === characterOpponentId(COACH_ID)) {
+    return { id: COACH_ID, name: 'the Coach', group: 'beginner', rating: game.opponentRating ?? 800, flag: '', country: '', bio: '', style: 'adaptive' }
+  }
+  return botOf(game)
+}
+
 function botOf(game: GameRecord): Bot | undefined {
   return game.levelId.startsWith(CHARACTER_PREFIX) ? findBot(game.levelId.slice(CHARACTER_PREFIX.length)) : undefined
 }
@@ -63,7 +71,12 @@ export function FreeChessApp() {
       .then(([p, s, g]) => {
         if (p) setProfile({ ...NEW_PROFILE, ...p })
         setSettings(s)
-        if (g) setGame(upgradeGameRecord(g))
+        if (g) {
+          const saved = upgradeGameRecord(g)
+          setGame(saved)
+          // A game left unfinished (the app closed mid-game): straight back into it.
+          if (!outcomeOf(saved)) setView('game')
+        }
       })
       .catch(() => undefined)
       .finally(() => setLoaded(true))
@@ -269,7 +282,7 @@ export function FreeChessApp() {
   }
 
   // A game left with Pause: Home offers a way back to it.
-  const paused = game && !outcomeOf(game) ? (botOf(game) ?? null) : null
+  const paused = game && !outcomeOf(game) ? (opponentOf(game) ?? null) : null
   const pick = (b: Bot) => {
     // (A paused game comes first: carry on with it rather than starting another.)
     if (paused) {

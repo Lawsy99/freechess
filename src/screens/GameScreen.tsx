@@ -762,30 +762,24 @@ export function GameScreen({
   }
 
   return (
+    // The match screen (redesigned, Joseph, Sep 2026): everything fits on one
+    // screen, nothing moves, and nothing ever covers the board. Top to bottom:
+    // a slim top bar, the opponent, the board (as big as the screen allows),
+    // you, one fixed-size message panel, the moves, and the toolbar.
     <main className="game-screen">
-      <header className="game-header">
-        {game.path && (
-          <p className="game-title">
-            {game.path.label} <span>· {game.path.location}</span>
-          </p>
-        )}
-        <p className={outcome ? 'game-status game-over' : 'game-status'}>{status}</p>
+      <header className="game-topbar">
+        {game.path && <span className="game-title">{game.path.label}</span>}
+        <span className={outcome ? 'game-status game-over' : 'game-status'}>{status}</span>
       </header>
 
-      {/* The opponent, and what they say floating just below (over the top of
-          the board), so a line never pushes the board down (Joseph, Sep 2026). */}
-      <div className="opponent-area">
       <PlayerStrip
-        portrait={opponent.character ? <Portrait who={opponent.character.id} size={36} expression={opponentFace} /> : undefined}
+        portrait={opponent.character ? <Portrait who={opponent.character.id} size={32} expression={opponentFace} /> : undefined}
         name={opponent.name}
-        // Trial night shows names only (ratings would differ from the ladder later).
         rating={opponent.unrated || game.path?.kind === 'trial' ? undefined : opponent.rating}
         fen={fen}
         side={opponentColour}
         thinking={opponentToMove && !downloading}
       />
-
-      </div>
 
       <div className="board-row">
         {stage.evalBar && <EvalBar analysis={barAnalysis} playerColour={game.playerColour} />}
@@ -817,52 +811,17 @@ export function GameScreen({
                   : arrows
             }
           />
-          {pending?.warning && (
-            <BlunderWarning
-              message={pending.warning}
-              coach={coachVoice ? opponent.character!.id : undefined}
-              takebacksLeft={takebacksLeft(game)}
-              onPlayAnyway={() => resolveWarning(true)}
-              onTakeBack={() => resolveWarning(false)}
-            />
-          )}
         </div>
       </div>
 
       <PlayerStrip name={playerName ?? 'You'} rating={playerRating} fen={fen} side={game.playerColour} />
 
-      <div className="move-row">
-        <MoveStrip sans={viewing ? sans.slice(0, viewPly!) : sans} />
-        {/* Look back through the moves (any game; the board is locked while looking). */}
-        <div className="look-back" aria-label="Look through the moves">
-          <button
-            type="button"
-            aria-label="Previous move"
-            disabled={game.moves.length === 0 || viewPly === 0}
-            onClick={() => setViewPly((v) => Math.max(0, (v ?? game.moves.length) - 1))}
-          >
-            ‹
-          </button>
-          <button
-            type="button"
-            aria-label="Next move"
-            disabled={!viewing}
-            onClick={() => setViewPly((v) => (v === null || v + 1 >= game.moves.length ? null : v + 1))}
-          >
-            ›
-          </button>
-          {viewing && (
-            <button type="button" className="back-to-live" onClick={() => setViewPly(null)}>
-              Live
-            </button>
-          )}
-        </div>
-      </div>
-      {/* How your move rated (games that show it). The line keeps its space
-          even when empty, so nothing below jumps (Joseph, Sep 2026). */}
-      {!competitive && (
-        <div className="move-info-slot">
-          {viewedRating && viewedBefore ? (
+      {/* The message panel: always the same size. The Coach's warning (with
+          its buttons), a draw offer, what's said, and how your move rated all
+          appear here, never over the board. Long tips scroll inside it. */}
+      <section className="game-panel" aria-live="polite">
+        {!competitive &&
+          (viewedRating && viewedBefore ? (
             <div className="move-info">
               <span className={`move-rating rating-${viewedRating.rating}`}>
                 Move {Math.floor(viewedRating.ply / 2) + 1}: {shortName(viewedBefore, viewedRating.uci, viewedSan(viewedRating.uci) ?? '')}
@@ -886,56 +845,81 @@ export function GameScreen({
                 </button>
               )}
             </div>
-          ) : bookNote ? (
-            <p className="book-note">
-              {bookNote.label}: next, <strong>{sanInWords(bookNote.san)}</strong>
-            </p>
-          ) : null}
-        </div>
-      )}
+          ) : null)}
 
-      {/* What the opponent or the Coach says: in its own fixed-size area below
-          the board, so it never covers the board and never moves it (Joseph,
-          Sep 2026). Long tips scroll inside it. */}
-      <div className="speech-slot" aria-live="polite">
-      {dialogue.line && !bubble && (
-        <button type="button" className="talk-bubble" onClick={dialogue.dismiss} key={dialogue.line.key}>
-          {/* Someone else speaking (e.g. Neil): their small face beside the words. */}
-          {dialogue.line.face !== opponent.character?.id && (
+        {pending?.warning ? (
+          <BlunderWarning
+            inline
+            message={pending.warning}
+            coach={coachVoice ? opponent.character!.id : undefined}
+            takebacksLeft={Number.isFinite(takebacksLeft(game)) ? takebacksLeft(game) : undefined}
+            onPlayAnyway={() => resolveWarning(true)}
+            onTakeBack={() => resolveWarning(false)}
+          />
+        ) : bubble && !outcome ? (
+          <div className="speech-bubble" role="status">
+            {bubble.kind === 'offer' ? (
+              <>
+                <span className="speech">“Draw?”</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBubble(null)
+                    setGame((g) => (g ? withDrawAgreed(g) : g))
+                  }}
+                >
+                  Accept
+                </button>
+                <button type="button" onClick={() => setBubble(null)}>
+                  Decline
+                </button>
+              </>
+            ) : bubble.kind === 'thinking' ? (
+              <span className="speech">…</span>
+            ) : (
+              <span className="speech">“I'll play on.”</span>
+            )}
+          </div>
+        ) : dialogue.line ? (
+          <button type="button" className="talk-bubble" onClick={dialogue.dismiss} key={dialogue.line.key}>
             <Portrait who={dialogue.line.face} size={28} expression={dialogue.line.expression} />
-          )}
-          <span className="talk-words">
-            {dialogue.line.speaker && <span className="talk-speaker">{dialogue.line.speaker}</span>}
-            <span>{dialogue.line.text.startsWith('(') ? dialogue.line.text : `“${dialogue.line.text}”`}</span>
-          </span>
-        </button>
-      )}
+            <span className="talk-words">
+              {dialogue.line.speaker && <span className="talk-speaker">{dialogue.line.speaker}</span>}
+              <span>{dialogue.line.text.startsWith('(') ? dialogue.line.text : `“${dialogue.line.text}”`}</span>
+            </span>
+          </button>
+        ) : bookNote ? (
+          <p className="book-note">
+            {bookNote.label}: next, <strong>{sanInWords(bookNote.san)}</strong>
+          </p>
+        ) : null}
+      </section>
 
-      {bubble && !outcome && (
-        <div className="speech-bubble" role="status">
-          {bubble.kind === 'offer' ? (
-            <>
-              <span className="speech">“Draw?”</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setBubble(null)
-                  setGame((g) => (g ? withDrawAgreed(g) : g))
-                }}
-              >
-                Accept
-              </button>
-              <button type="button" onClick={() => setBubble(null)}>
-                Decline
-              </button>
-            </>
-          ) : bubble.kind === 'thinking' ? (
-            <span className="speech">…</span>
-          ) : (
-            <span className="speech">“I'll play on.”</span>
+      <div className="move-row">
+        <MoveStrip sans={viewing ? sans.slice(0, viewPly!) : sans} />
+        <div className="look-back" aria-label="Look through the moves">
+          <button
+            type="button"
+            aria-label="Previous move"
+            disabled={game.moves.length === 0 || viewPly === 0}
+            onClick={() => setViewPly((v) => Math.max(0, (v ?? game.moves.length) - 1))}
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            aria-label="Next move"
+            disabled={!viewing}
+            onClick={() => setViewPly((v) => (v === null || v + 1 >= game.moves.length ? null : v + 1))}
+          >
+            ›
+          </button>
+          {viewing && (
+            <button type="button" className="back-to-live" onClick={() => setViewPly(null)}>
+              Live
+            </button>
           )}
         </div>
-      )}
       </div>
 
       {/* One toolbar at the bottom. Confirming a move takes its place, in the

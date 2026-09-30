@@ -11,16 +11,18 @@ type Props = {
   coach?: string
   /** Shown on the button, since thinking again uses a takeback. */
   takebacksLeft?: number
+  /** In the game's message panel, below the board (FreeChess): no cover over the board. */
+  inline?: boolean
 }
 
-export function BlunderWarning({ message, onPlayAnyway, onTakeBack, coach, takebacksLeft }: Props) {
+export function BlunderWarning({ message, onPlayAnyway, onTakeBack, coach, takebacksLeft, inline = false }: Props) {
   return (
-    <div className="blunder-backdrop" role="alertdialog" aria-label="Blunder warning">
+    <div className={inline ? 'blunder-inline' : 'blunder-backdrop'} role="alertdialog" aria-label="Blunder warning">
       <div className="blunder-card">
         {coach ? (
           // The coach asking, in his words: he doesn't say what's wrong.
           <p className="blunder-message blunder-coach">
-            <Portrait who={coach} size={36} expression="annoyed" />
+            <Portrait who={coach} size={32} expression={inline ? 'neutral' : 'annoyed'} />
             <span>“{message}”</span>
           </p>
         ) : (
@@ -32,7 +34,7 @@ export function BlunderWarning({ message, onPlayAnyway, onTakeBack, coach, takeb
           <button type="button" className="take-back" onClick={onTakeBack}>
             {takebacksLeft !== undefined
               ? `Think again (${takebacksLeft} takeback${takebacksLeft === 1 ? '' : 's'} left)`
-              : 'Take it back'}
+              : 'Think again'}
           </button>
           <button type="button" onClick={onPlayAnyway}>
             Play it
