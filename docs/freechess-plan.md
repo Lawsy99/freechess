@@ -23,6 +23,21 @@
 - More fun, interesting dialogue for every bot (they no longer react to your
   good or bad moves): stories about themselves, reactions to the game's big
   moments (queens off, a sacrifice, an endgame).
-- Settings: remove Club Night-only options (chatter wording, backup naming).
-- Ideas that add a lot: a daily puzzle, puzzle rush, an opening explorer for
-  your own games, achievements, analysis board (set up any position).
+- Done (30 Sep 2026): Club Night's club taken out of the bots' lines and bios,
+  settings, backups, feedback and game labels.
+
+### From a look at chess.com (30 Sep 2026), waiting for Joseph to pick
+
+1. Review upgrade: an evaluation graph of the whole game, "you played like about
+   1200", accuracy for opening, middlegame and endgame, and Brilliant / Great / Book
+   labels on moves.
+2. Analysis board: set up or paste any position and explore it with the engine;
+   open it from any move in a review.
+3. Clocks: optional timed games against bots (for example 10 minutes, 5 minutes).
+4. Insights in Profile: accuracy over time, how your openings score, results with
+   White and Black, which phase of the game costs you most.
+5. Achievements: badges for first win, beating each group, streaks, puzzle scores.
+6. Vision trainer: name the square in 30 seconds (quick, great for beginners).
+7. Pass and play: two people on one phone.
+8. Board options: draw arrows and circles, legal-move dots on or off, piece sets.
+9. A custom bot: pick any strength and style yourself.
