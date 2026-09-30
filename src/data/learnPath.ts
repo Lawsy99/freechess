@@ -120,6 +120,38 @@ export const LEARN_PATH: Unit[] = [
           { kind: 'opening', drill: 'black-d4' },
         ],
       },
+      {
+        id: 'queens-gambit',
+        title: 'The Queen’s Gambit (White)',
+        steps: [
+          { kind: 'idea', text: 'After d4 d5, play c4: it attacks their centre pawn from the side. If they take, you win the pawn back. Then develop and castle.' },
+          { kind: 'opening', drill: 'queens-gambit' },
+        ],
+      },
+      {
+        id: 'ruy-lopez',
+        title: 'The Ruy Lopez (White)',
+        steps: [
+          { kind: 'idea', text: 'Like the Italian, but the bishop goes to b5, attacking the knight that guards e5. Castle, Re1, c3, then d4 for a big centre.' },
+          { kind: 'opening', drill: 'ruy-lopez' },
+        ],
+      },
+      {
+        id: 'caro-kann',
+        title: 'The Caro-Kann (Black)',
+        steps: [
+          { kind: 'idea', text: 'Against e4: c6, then d5. Bring your light bishop out before playing e6, so it isn’t shut in. Solid and safe.' },
+          { kind: 'opening', drill: 'caro-kann' },
+        ],
+      },
+      {
+        id: 'sicilian',
+        title: 'The Sicilian (Black)',
+        steps: [
+          { kind: 'idea', text: 'Against e4: c5. When White plays d4, swap your c-pawn for their centre pawn, then develop fast. Sharp and full of chances.' },
+          { kind: 'opening', drill: 'sicilian' },
+        ],
+      },
       tactic('opening-traps', 'Opening tricks', 'opening', 'Games are often decided in the first ten moves by a loose piece or a trap. Find the winning idea in each of these openings.'),
     ],
   },
