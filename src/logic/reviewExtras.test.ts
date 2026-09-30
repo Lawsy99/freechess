@@ -32,13 +32,15 @@ describe('review extras', () => {
     expect(acc.endgame).toBeNull()
   })
 
-  it('guesses a rating from accuracy, only for a real game', () => {
-    expect(playedLike(80, 20)).toBe(1450)
-    expect(playedLike(72.5, 20)).toBe(1100)
-    expect(playedLike(99, 20)).toBe(2700)
-    expect(playedLike(10, 20)).toBe(250)
-    expect(playedLike(80, 4)).toBeNull()
-    expect(playedLike(null, 20)).toBeNull()
+  it('guesses a rating from the opponent, the accuracy gap and the result', () => {
+    const g = { opponentRating: 800, yourMoves: 20 }
+    // Joseph's case: high accuracy against an 800 bot no longer says 2400.
+    expect(playedLike({ ...g, yours: 92, theirs: 70, result: 'win' })).toBe(1150)
+    expect(playedLike({ ...g, yours: 75, theirs: 75, result: 'draw' })).toBe(800)
+    expect(playedLike({ ...g, yours: 60, theirs: 80, result: 'loss' })).toBe(500)
+    expect(playedLike({ ...g, yours: 99, theirs: 20, result: 'win' })).toBe(1200)
+    expect(playedLike({ ...g, yours: 80, theirs: 70, result: 'win', yourMoves: 4 })).toBeNull()
+    expect(playedLike({ ...g, yours: 80, theirs: 70, result: 'win', opponentRating: undefined })).toBeNull()
   })
 })
 

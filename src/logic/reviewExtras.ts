@@ -131,34 +131,36 @@ export function phaseAccuracy(moves: readonly ReviewedMove[], side: Colour): Rec
 
 // --- Played like ---------------------------------------------------------------
 
-/** Accuracy → a rough rating, from how players at each level usually score. */
-const ACCURACY_TO_RATING: [accuracy: number, rating: number][] = [
-  [30, 250],
-  [50, 450],
-  [60, 700],
-  [70, 1000],
-  [75, 1200],
-  [80, 1450],
-  [85, 1700],
-  [90, 2000],
-  [95, 2400],
-  [98, 2700],
-]
-
 /** Fewer of your moves than this and there's too little to go on. */
 export const PLAYED_LIKE_MOVES = 10
+/** Rating points for each point of accuracy you played above (or below) your opponent. */
+const POINTS_PER_ACCURACY = 12
+/** How far from the opponent's rating accuracy alone can take it. */
+const ACCURACY_REACH = 300
+const RESULT_POINTS = { win: 75, draw: 0, loss: -75 }
+/** Never more than this far from the opponent's rating: one game only says so much. */
+const MAX_FROM_OPPONENT = 400
 
-/** A rough rating for how you played this game, to the nearest 50; null when the game was too short. */
-export function playedLike(accuracy: number | null, yourMoves: number): number | null {
-  if (accuracy === null || yourMoves < PLAYED_LIKE_MOVES) return null
-  const t = ACCURACY_TO_RATING
-  if (accuracy <= t[0][0]) return t[0][1]
-  for (let i = 1; i < t.length; i++) {
-    const [a1, r1] = t[i]
-    const [a0, r0] = t[i - 1]
-    if (accuracy <= a1) return Math.round((r0 + ((accuracy - a0) / (a1 - a0)) * (r1 - r0)) / 50) * 50
-  }
-  return t.at(-1)![1]
+/**
+ * A rough rating for how you played this game (Joseph, Sep 2026: from accuracy
+ * alone it said 2400 for an 800 player, because accuracy runs high against weak
+ * opponents who hand you easy positions). So it starts from the opponent's
+ * rating and moves with how much more (or less) accurately you played than
+ * them, and the result, never more than 400 away. To the nearest 50; null for
+ * a game too short to judge, or with no rating to start from.
+ */
+export function playedLike(g: {
+  yours: number | null
+  theirs: number | null
+  opponentRating: number | undefined
+  result: 'win' | 'draw' | 'loss'
+  yourMoves: number
+}): number | null {
+  if (g.yours === null || g.theirs === null || g.opponentRating === undefined || g.yourMoves < PLAYED_LIKE_MOVES) return null
+  const fromAccuracy = Math.max(-ACCURACY_REACH, Math.min(ACCURACY_REACH, (g.yours - g.theirs) * POINTS_PER_ACCURACY))
+  const raw = g.opponentRating + fromAccuracy + RESULT_POINTS[g.result]
+  const kept = Math.max(g.opponentRating - MAX_FROM_OPPONENT, Math.min(g.opponentRating + MAX_FROM_OPPONENT, raw))
+  return Math.max(100, Math.min(2800, Math.round(kept / 50) * 50))
 }
 
 // --- The graph -------------------------------------------------------------------

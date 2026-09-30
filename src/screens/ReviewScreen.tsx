@@ -358,7 +358,13 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
             </div>
             {/* A rough rating for this one game, as chess.com does. */}
             {(() => {
-              const like = playedLike(gameAccuracy(played, player), played.filter((m) => m.mover === player).length)
+              const like = playedLike({
+                yours: gameAccuracy(played, player),
+                theirs: gameAccuracy(played, opponent),
+                opponentRating: game.opponentRating,
+                result: !outcome || outcome.winner === null ? 'draw' : outcome.winner === player ? 'win' : 'loss',
+                yourMoves: played.filter((m) => m.mover === player).length,
+              })
               return like ? (
                 <div className="played-like">
                   <span className="played-like-value">{like}</span>
