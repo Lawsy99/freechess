@@ -20,6 +20,8 @@ export type LearnStep =
   | { kind: 'endgame'; drill: string }
   /** Play an opening's moves yourself (openingLessons.ts). */
   | { kind: 'opening'; drill: string }
+  /** How the pieces move, hands on (data/rulesTutorial.ts), for complete beginners. */
+  | { kind: 'rules' }
 
 export type Lesson = { id: string; title: string; steps: LearnStep[] }
 export type Unit = { id: string; title: string; about: string; colour: string; lessons: Lesson[] }
@@ -44,6 +46,8 @@ export const LEARN_PATH: Unit[] = [
     about: 'Win material, give mate, keep your pieces safe.',
     colour: '#5fd38d',
     lessons: [
+      // (Sep 2026: for friends who've never played. One tap skips it.)
+      { id: 'rules', title: 'How the pieces move', steps: [{ kind: 'rules' }] },
       tactic('free-pieces', 'Take the free piece', 'hangingPiece', 'Before anything else, look at every capture you have. If a piece is left undefended, take it. Then check nothing of yours is left the same way.'),
       tactic('mate-in-one', 'Checkmate in one', 'mateIn1', 'Checkmate: the king is in check and has no way out. Look at every check you have, and for each one count the king’s escape squares.'),
       {

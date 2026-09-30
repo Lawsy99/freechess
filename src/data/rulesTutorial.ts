@@ -22,7 +22,7 @@ export const RULES_STEPS: RulesStep[] = [
     say: 'Rooks move in straight lines, as far as they like: up, down, or sideways. Take that pawn with yours.',
     fen: '4k3/p7/8/8/8/8/8/R3K3 w - - 0 1',
     target: 'a7',
-    nudge: 'Straight up the file, love. All the way.',
+    nudge: 'Straight up the file. All the way.',
     done: 'That’s it. You take a piece by moving onto its square.',
   },
   {

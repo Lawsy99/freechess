@@ -1,5 +1,6 @@
-// The moves, hands on, with Marjorie (for players who've never played). One
-// task per piece; a wrong try gets a nudge and the position resets.
+// The moves, hands on (for players who've never played). One task per piece;
+// a wrong try gets a nudge and the position resets. Marjorie in Club Night;
+// the Coach in FreeChess's first lesson.
 import { Chess } from 'chess.js'
 import { useState } from 'react'
 import { RULES_STEPS } from '../data/rulesTutorial'
@@ -11,9 +12,13 @@ import './CoachDrill.css'
 type Props = {
   onDone: () => void
   onSkip: () => void
+  /** Who talks you through it. */
+  speaker?: string
+  /** The last button. */
+  doneLabel?: string
 }
 
-export function RulesTutorial({ onDone, onSkip }: Props) {
+export function RulesTutorial({ onDone, onSkip, speaker = 'marjorie', doneLabel = 'On to trial night' }: Props) {
   const [index, setIndex] = useState(0)
   const [fen, setFen] = useState(RULES_STEPS[0].fen)
   const [last, setLast] = useState<{ from: string; to: string } | null>(null)
@@ -58,12 +63,12 @@ export function RulesTutorial({ onDone, onSkip }: Props) {
       </p>
       <Board fen={fen} orientation="white" movableColour={solved ? null : 'w'} lastMove={last} onMove={play} />
       <div className="coach-drill-say">
-        <Portrait who="marjorie" size={40} expression={solved ? 'pleased' : 'neutral'} />
+        <Portrait who={speaker} size={40} expression={solved ? 'pleased' : 'neutral'} />
         <p>{message}</p>
       </div>
       {solved ? (
         <button type="button" className="rules-next" onClick={next}>
-          {index + 1 < RULES_STEPS.length ? 'Next' : 'On to trial night'}
+          {index + 1 < RULES_STEPS.length ? 'Next' : doneLabel}
         </button>
       ) : (
         <button type="button" className="rules-skip" onClick={onSkip}>

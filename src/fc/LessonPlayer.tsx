@@ -4,6 +4,7 @@
 // A puzzle round passes with enough solved cleanly; if not, a fresh set.
 import { useEffect, useState } from 'react'
 import { EndgameDrill } from '../components/EndgameDrill'
+import { RulesTutorial } from '../components/RulesTutorial'
 import { OpeningDrill } from '../components/OpeningDrill'
 import { Portrait } from '../components/Portrait'
 import { PuzzleTrainer } from '../components/PuzzleTrainer'
@@ -87,6 +88,7 @@ function StepView({ step, playerRating, onDone }: { step: LearnStep; playerRatin
     if (!position) return <SkipStep onDone={onDone} />
     return <EndgameDrill position={position} onDone={onDone} noSkip />
   }
+  if (step.kind === 'rules') return <RulesTutorial speaker="coach" doneLabel="Finish" onDone={onDone} onSkip={onDone} />
   if (step.kind === 'opening') {
     const drill = OPENING_DRILLS[step.drill]
     if (!drill) return <SkipStep onDone={onDone} />
