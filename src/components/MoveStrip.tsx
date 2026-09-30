@@ -5,16 +5,17 @@ import './MoveStrip.css'
 
 /**
  * `wrap`: a scoresheet that wraps onto several lines (FreeChess's message
- * panel, Sep 2026), scrolled down (inside its box) to the newest move.
+ * panel, Sep 2026), scrolled down inside itself to the newest move.
  */
 export function MoveStrip({ sans, wrap = false }: { sans: readonly string[]; wrap?: boolean }) {
   const ref = useRef<HTMLOListElement>(null)
   useEffect(() => {
     // Scroll the strip itself (not the page) to show the newest move.
     const el = ref.current
-    if (el) el.scrollLeft = el.scrollWidth
-    const box = wrap ? el?.closest('.game-panel') : null
-    if (box) box.scrollTop = box.scrollHeight
+    if (!el) return
+    // (The scoresheet scrolls inside itself, never the messages above it.)
+    if (wrap) el.scrollTop = el.scrollHeight
+    else el.scrollLeft = el.scrollWidth
   }, [sans.length, wrap])
 
   if (sans.length === 0) {

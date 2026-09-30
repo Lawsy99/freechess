@@ -829,3 +829,20 @@
 .game-panel .move-strip.empty {
   color: var(--muted);
 }
+
+/* Only the scoresheet scrolls; what's said and the move rating stay pinned at
+   the top of the card, so a new move never hides them (Joseph, Sep 2026). */
+.game-screen .game-panel {
+  overflow: hidden;
+}
+
+.game-panel > :not(.move-strip) {
+  flex: none;
+}
+
+.game-panel .move-strip.wrap {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  align-content: start;
+}
