@@ -8,7 +8,10 @@ import { BOT_GROUPS, findBot, type Bot } from '../data/bots'
 import { characterOpponentId } from '../data/opponents'
 import { newGameRecord, outcomeOf, upgradeGameRecord, type GameRecord } from '../logic/gameRecord'
 import type { PathGame } from '../logic/path'
-import { NEW_PROFILE, recordBotGame, recordCoachGame, type Profile } from '../logic/profile'
+import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordCoachGame, withRushScore, type Profile } from '../logic/profile'
+import { PuzzleRun } from './PuzzleRun'
+import { PuzzleRush } from './PuzzleRush'
+import { PuzzlesTab, type PuzzleMode } from './PuzzlesTab'
 import { COACH_ID } from '../data/coach'
 import { setNotationStyle, styleForRating } from '../logic/notation'
 import { DEFAULT_SETTINGS, type Settings } from '../logic/settings'
@@ -34,7 +37,7 @@ import { ResultScreen, type LastResult } from './ResultScreen'
 import { SoonTab, TabBar, type Tab } from './TabBar'
 import './fc.css'
 
-type View = 'tabs' | 'bot' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings'
+type View = 'tabs' | 'bot' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle'
 
 const CHARACTER_PREFIX = 'char:'
 
@@ -53,6 +56,7 @@ export function FreeChessApp() {
   const [bot, setBot] = useState<Bot | null>(null)
   const [last, setLast] = useState<LastResult | null>(null)
   const [pastGame, setPastGame] = useState<ArchivedGame | null>(null)
+  const [puzzleMode, setPuzzleMode] = useState<PuzzleMode | null>(null)
 
   useEffect(() => {
     Promise.all([loadProfile(), loadSettings(), loadCurrentGame()])
@@ -236,6 +240,30 @@ export function FreeChessApp() {
     )
   }
 
+  if (view === 'puzzle' && puzzleMode) {
+    const back = () => {
+      setView('tabs')
+      setTab('puzzles')
+    }
+    return (
+      <BoardThemeContext.Provider value={settings.board}>
+        {puzzleMode.kind === 'rush' ? (
+          <PuzzleRush best={profile.rushBest ?? 0} onFinished={(score) => updateProfile(withRushScore(profile, score))} onBack={back} />
+        ) : (
+          <PuzzleRun
+            mode={puzzleMode}
+            playerRating={Math.round(profile.rating?.rating ?? 800)}
+            onSolved={(solved, daily) => {
+              const counted = countPuzzle(profile, solved)
+              updateProfile(daily && solved ? { ...counted, dailySolvedOn: dayKey(new Date()) } : counted)
+            }}
+            onBack={back}
+          />
+        )}
+      </BoardThemeContext.Provider>
+    )
+  }
+
   if (view === 'bot' && bot) {
     return <BotSheet bot={bot} profile={profile} onBack={() => setView('tabs')} onPlay={(c) => startBotGame(bot, c)} />
   }
@@ -258,7 +286,15 @@ export function FreeChessApp() {
         <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} />
       )}
       {tab === 'play' && <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} />}
-      {tab === 'puzzles' && <SoonTab title="Puzzles" text="Unlimited puzzles, rated to your level, with their own puzzle rating. Next on the list." />}
+      {tab === 'puzzles' && (
+        <PuzzlesTab
+          profile={profile}
+          onStart={(mode) => {
+            setPuzzleMode(mode)
+            setView('puzzle')
+          }}
+        />
+      )}
       {tab === 'learn' && <SoonTab title="Learn" text="A step-by-step path: short lessons, puzzles and positions to play out. Complete each to unlock the next." />}
       {tab === 'profile' && <ProfileTab profile={profile} onPastGames={() => setView('past')} onSettings={() => setView('settings')} />}
       <TabBar tab={tab} onChange={setTab} />

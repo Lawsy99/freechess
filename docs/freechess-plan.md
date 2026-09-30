@@ -8,7 +8,7 @@
 2. **Coach (built, Sep 2026).** Games against the Coach at your rating: encouraging, very useful,
    feedback as you go and after (what to look out for). Not rated. Ticks the
    "Play the Coach" goal.
-3. **Puzzles.** Unlimited, rated to your level, their own puzzle rating
+3. **Puzzles (built, Sep 2026).** Unlimited, rated to your level, their own puzzle rating
    (Lichess puzzle set, as in Club Night). Maybe a daily puzzle and a timed
    rush mode.
 4. **Learn.** A Duolingo-style path of units: a short explanation, puzzles,

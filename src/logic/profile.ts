@@ -33,6 +33,10 @@ export type Profile = {
   streak: { count: number; lastDay: string | null; best: number }
   /** Games played with the Coach (not rated). */
   coachGames?: number
+  /** Puzzles: how many solved in all, the best Puzzle Rush score, and the last day the daily puzzle was solved. */
+  puzzlesSolved?: number
+  rushBest?: number
+  dailySolvedOn?: string
 }
 
 export const NEW_PROFILE: Profile = {
@@ -153,4 +157,14 @@ export function totalStars(p: Profile): number {
  */
 export function recordCoachGame(p: Profile, now: Date): Profile {
   return completeGoal({ ...p, coachGames: (p.coachGames ?? 0) + 1 }, 'coach', dayKey(now))
+}
+
+/** A puzzle finished (the puzzle rating itself is kept with the puzzles). */
+export function countPuzzle(p: Profile, solved: boolean): Profile {
+  return solved ? { ...p, puzzlesSolved: (p.puzzlesSolved ?? 0) + 1 } : p
+}
+
+/** A Puzzle Rush finished: keeps the best score. */
+export function withRushScore(p: Profile, score: number): Profile {
+  return { ...p, rushBest: Math.max(p.rushBest ?? 0, score) }
 }
