@@ -23,16 +23,20 @@ type Props = {
   /** The way on at the bottom (Joseph, Sep 2026: the review ends here, then Home). */
   onDone?: () => void
   doneLabel?: string
+  /** Open at this position (0 = the start), e.g. a key moment from the summary. */
+  startAt?: number
+  /** Open straight into Try it again on this move (its ply). */
+  retryAt?: number | null
 }
 
 const isError = (m: ReviewedMove) => ['inaccuracy', 'mistake', 'blunder'].includes(m.rating)
 
-export function FullGameView({ moves, evals, reviewed, playerColour, onBack, onDone, doneLabel = 'Continue' }: Props) {
+export function FullGameView({ moves, evals, reviewed, playerColour, onBack, onDone, doneLabel = 'Continue', startAt = 0, retryAt = null }: Props) {
   // Position index: 0 = start, i = after the i-th move.
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(startAt)
   // "Try it again" (Joseph, Sep 2026): the position before one of your moves,
   // to look for a better one, then back to the step-through at the same place.
-  const [retryPly, setRetryPly] = useState<number | null>(null)
+  const [retryPly, setRetryPly] = useState<number | null>(retryAt)
   const retry = useMemo(() => (retryPly === null ? null : momentAt(moves, evals, retryPly, playerColour)), [retryPly, moves, evals, playerColour])
   const last = moves.length
   const fen = useMemo(() => replay(moves.slice(0, index)).fen(), [moves, index])

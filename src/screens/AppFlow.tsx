@@ -498,7 +498,6 @@ function Flow({ settings, onChangeSettings }: { settings: Settings; onChangeSett
         key={game.id}
         game={game}
         ratingChange={preview}
-        focus={progress.focus}
         onContinue={() => void finishGame(game)}
         onPlayFrom={(ply) => void finishGame(game).then(() => startRetry(game, ply))}
       />

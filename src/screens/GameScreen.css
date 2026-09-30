@@ -447,20 +447,26 @@
   font-size: 14px;
 }
 
-/* What the opponent says floats just under their name, over the top of the
-   board: it never pushes anything down. Tap it to dismiss. */
-.opponent-area {
-  position: relative;
+/* What the opponent or the Coach says: a fixed-size area below the board. */
+.speech-slot {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 92px;
+  flex: 0 0 92px;
+  overflow-y: auto;
+  padding: 0 16px;
 }
 
-.opponent-area .talk-bubble,
-.opponent-area .speech-bubble {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 16px;
-  right: 16px;
-  z-index: 15;
+.speech-slot .talk-bubble,
+.speech-slot .speech-bubble {
   margin: 0;
+}
+
+/* (No pointer: the words sit in their own place, not by the name.) */
+.speech-slot .talk-bubble::before,
+.speech-slot .speech-bubble::before {
+  display: none;
 }
 
 /* The rating line keeps its height even when empty. */

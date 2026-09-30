@@ -785,44 +785,6 @@ export function GameScreen({
         thinking={opponentToMove && !downloading}
       />
 
-      {dialogue.line && !bubble && (
-        <button type="button" className="talk-bubble" onClick={dialogue.dismiss} key={dialogue.line.key}>
-          {/* Someone else speaking (e.g. Neil): their small face beside the words. */}
-          {dialogue.line.face !== opponent.character?.id && (
-            <Portrait who={dialogue.line.face} size={28} expression={dialogue.line.expression} />
-          )}
-          <span className="talk-words">
-            {dialogue.line.speaker && <span className="talk-speaker">{dialogue.line.speaker}</span>}
-            <span>{dialogue.line.text.startsWith('(') ? dialogue.line.text : `“${dialogue.line.text}”`}</span>
-          </span>
-        </button>
-      )}
-
-      {bubble && !outcome && (
-        <div className="speech-bubble" role="status">
-          {bubble.kind === 'offer' ? (
-            <>
-              <span className="speech">“Draw?”</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setBubble(null)
-                  setGame((g) => (g ? withDrawAgreed(g) : g))
-                }}
-              >
-                Accept
-              </button>
-              <button type="button" onClick={() => setBubble(null)}>
-                Decline
-              </button>
-            </>
-          ) : bubble.kind === 'thinking' ? (
-            <span className="speech">…</span>
-          ) : (
-            <span className="speech">“I'll play on.”</span>
-          )}
-        </div>
-      )}
       </div>
 
       <div className="board-row">
@@ -931,6 +893,50 @@ export function GameScreen({
           ) : null}
         </div>
       )}
+
+      {/* What the opponent or the Coach says: in its own fixed-size area below
+          the board, so it never covers the board and never moves it (Joseph,
+          Sep 2026). Long tips scroll inside it. */}
+      <div className="speech-slot" aria-live="polite">
+      {dialogue.line && !bubble && (
+        <button type="button" className="talk-bubble" onClick={dialogue.dismiss} key={dialogue.line.key}>
+          {/* Someone else speaking (e.g. Neil): their small face beside the words. */}
+          {dialogue.line.face !== opponent.character?.id && (
+            <Portrait who={dialogue.line.face} size={28} expression={dialogue.line.expression} />
+          )}
+          <span className="talk-words">
+            {dialogue.line.speaker && <span className="talk-speaker">{dialogue.line.speaker}</span>}
+            <span>{dialogue.line.text.startsWith('(') ? dialogue.line.text : `“${dialogue.line.text}”`}</span>
+          </span>
+        </button>
+      )}
+
+      {bubble && !outcome && (
+        <div className="speech-bubble" role="status">
+          {bubble.kind === 'offer' ? (
+            <>
+              <span className="speech">“Draw?”</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setBubble(null)
+                  setGame((g) => (g ? withDrawAgreed(g) : g))
+                }}
+              >
+                Accept
+              </button>
+              <button type="button" onClick={() => setBubble(null)}>
+                Decline
+              </button>
+            </>
+          ) : bubble.kind === 'thinking' ? (
+            <span className="speech">…</span>
+          ) : (
+            <span className="speech">“I'll play on.”</span>
+          )}
+        </div>
+      )}
+      </div>
 
       {/* One toolbar at the bottom. Confirming a move takes its place, in the
           same spot, so the screen never moves under your thumb. */}
