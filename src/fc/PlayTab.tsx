@@ -11,9 +11,10 @@ import { groupFor } from '../logic/botPicks'
 type Props = {
   profile: Profile
   onPick: (bot: Bot) => void
+  onPlayCoach: () => void
 }
 
-export function PlayTab({ profile, onPick }: Props) {
+export function PlayTab({ profile, onPick, onPlayCoach }: Props) {
   const rating = profile.rating ? Math.round(profile.rating.rating) : 800
   const [open, setOpen] = useState<BotGroup[]>([groupFor(rating)])
   const toggle = (g: BotGroup) => setOpen((o) => (o.includes(g) ? o.filter((x) => x !== g) : [...o, g]))
@@ -24,6 +25,15 @@ export function PlayTab({ profile, onPick }: Props) {
         <h1>Play bots</h1>
         <p>Win without takebacks or hints for all three stars.</p>
       </header>
+      {/* The Coach first: a game at your level with tips as you go (not rated). */}
+      <button type="button" className="fc-card fc-coach-card" onClick={onPlayCoach}>
+        <Portrait who="coach" size={56} expression="pleased" className="fc-face" />
+        <span className="fc-bot-main">
+          <strong>Play the Coach</strong>
+          <span className="fc-bot-bio">At your level, with tips as you go and a full review after. Not rated.</span>
+        </span>
+        <span className="fc-chip-button">Play</span>
+      </button>
       {BOT_GROUPS.map((group) => {
         const bots = botsIn(group.id)
         const stars = bots.reduce((sum, b) => sum + (profile.stars[b.id] ?? 0), 0)

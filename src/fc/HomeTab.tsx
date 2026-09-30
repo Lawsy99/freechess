@@ -15,15 +15,16 @@ type Props = {
   onResume: () => void
   onPickBot: (bot: Bot) => void
   onOpenPlay: () => void
+  onPlayCoach: () => void
 }
 
 const GOAL_TEXT: Record<Goal, { title: string; detail: string; ready: boolean }> = {
   bot: { title: 'Play a bot', detail: 'Any bot, any result.', ready: true },
-  coach: { title: 'Play the Coach', detail: 'Coming soon: games with feedback as you go.', ready: false },
+  coach: { title: 'Play the Coach', detail: 'At your level, with tips as you go.', ready: true },
   lesson: { title: 'Do a lesson', detail: 'Coming soon: the Learn path.', ready: false },
 }
 
-export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay }: Props) {
+export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPlayCoach }: Props) {
   const today = dayKey(new Date())
   const done = todaysGoals(profile, today)
   const streak = currentStreak(profile, today)
@@ -72,6 +73,11 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay }: Pr
                 </span>
                 {goal === 'bot' && !isDone && (
                   <button type="button" className="fc-chip-button" onClick={onOpenPlay}>
+                    Play
+                  </button>
+                )}
+                {goal === 'coach' && !isDone && (
+                  <button type="button" className="fc-chip-button" onClick={onPlayCoach}>
                     Play
                   </button>
                 )}

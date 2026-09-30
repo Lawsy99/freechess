@@ -9275,5 +9275,115 @@
   "conditions": {},
   "weight": 1,
   "once": false
+ },
+ {
+  "id": "coach-start-01",
+  "character": "coach",
+  "trigger": "game_start",
+  "text": "Hi! I'll play at your level and give you tips as we go. Ask for a hint whenever you like.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-start-02",
+  "character": "coach",
+  "trigger": "game_start",
+  "text": "Let's have a good game. Take your time, and don't worry about mistakes: that's what I'm here for.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-start-03",
+  "character": "coach",
+  "trigger": "game_start",
+  "text": "Ready when you are. Before each move, a quick look at what I'm threatening goes a long way.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-start-04",
+  "character": "coach",
+  "trigger": "game_start",
+  "text": "Today, try to get all your pieces out before you attack. I'll help you along.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-win-01",
+  "character": "coach",
+  "trigger": "game_win",
+  "text": "Good game! You're getting better every time. Have a look at the review, there's a lot to learn from this one.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-win-02",
+  "character": "coach",
+  "trigger": "game_win",
+  "text": "That was a proper fight. The review will show you where it turned.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-loss-01",
+  "character": "coach",
+  "trigger": "game_loss",
+  "text": "Brilliant, you beat me! Let's see in the review what you did well, so you can do it again.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-loss-02",
+  "character": "coach",
+  "trigger": "game_loss",
+  "text": "Well played! That's a real sign of progress.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-key-01",
+  "character": "coach",
+  "trigger": "key_moment",
+  "text": "This is an important moment. Most moves here go wrong, so take your time.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-key-02",
+  "character": "coach",
+  "trigger": "key_moment",
+  "text": "Slow down here. Look at every check and capture, for both of us.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "coach-key-03",
+  "character": "coach",
+  "trigger": "key_moment",
+  "text": "Big moment. There's one good idea here. Can you find it?",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
  }
 ]

@@ -31,6 +31,8 @@ export type Profile = {
   daily: { day: string; done: Goal[] }
   /** Days in a row with at least one goal done. */
   streak: { count: number; lastDay: string | null; best: number }
+  /** Games played with the Coach (not rated). */
+  coachGames?: number
 }
 
 export const NEW_PROFILE: Profile = {
@@ -143,4 +145,12 @@ export function recordBotGame(
 /** Stars collected across all bots, out of three per bot. */
 export function totalStars(p: Profile): number {
   return Object.values(p.stars).reduce((a, b) => a + b, 0)
+}
+
+/**
+ * After a game with the Coach: not rated (it's a lesson), but it counts for
+ * today's coach goal and the streak.
+ */
+export function recordCoachGame(p: Profile, now: Date): Profile {
+  return completeGoal({ ...p, coachGames: (p.coachGames ?? 0) + 1 }, 'coach', dayKey(now))
 }

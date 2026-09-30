@@ -8,7 +8,8 @@ import { BOT_GROUPS, findBot, type Bot } from '../data/bots'
 import { characterOpponentId } from '../data/opponents'
 import { newGameRecord, outcomeOf, upgradeGameRecord, type GameRecord } from '../logic/gameRecord'
 import type { PathGame } from '../logic/path'
-import { NEW_PROFILE, recordBotGame, type Profile } from '../logic/profile'
+import { NEW_PROFILE, recordBotGame, recordCoachGame, type Profile } from '../logic/profile'
+import { COACH_ID } from '../data/coach'
 import { setNotationStyle, styleForRating } from '../logic/notation'
 import { DEFAULT_SETTINGS, type Settings } from '../logic/settings'
 import { GameScreen } from '../screens/GameScreen'
@@ -111,8 +112,29 @@ export function FreeChessApp() {
   }
 
   // The game is over: record it once (rating, stars, goals), then the result.
+  // A game with the Coach (Joseph, Sep 2026): at your rating, full help
+  // (hints, takebacks, "are you sure?", tips as you go), never rated.
+  const startCoachGame = (choice: ColourChoice = 'random') => {
+    const colour = choice === 'random' ? (Math.random() < 0.5 ? 'w' : 'b') : choice
+    const rating = Math.round(profile.rating?.rating ?? 800)
+    const path: PathGame = { kind: 'coaching', opponent: COACH_ID, rating, stage: 'assisted', label: 'Coach', location: 'Lesson game · not rated' }
+    setGame({ ...newGameRecord(colour, characterOpponentId(COACH_ID), 'assisted', rating), unlimited: true, path })
+    setView('game')
+  }
+
   const finishGame = (g: GameRecord) => {
     const outcome = outcomeOf(g)
+    if (outcome && g.levelId === characterOpponentId(COACH_ID)) {
+      if (!g.resultRecorded) {
+        updateProfile(recordCoachGame(profile, new Date()))
+        setGame({ ...g, resultRecorded: true })
+        const result = outcome.winner === null ? 'draw' : outcome.winner === g.playerColour ? 'win' : 'loss'
+        const coachAsBot: Bot = { id: COACH_ID, name: 'Coach', group: 'beginner', rating: g.opponentRating ?? 800, flag: '', country: '', bio: '', style: 'adaptive' }
+        setLast({ bot: coachAsBot, result, stars: 0, aidsUsed: 0, ratingChange: null, newBest: false, coach: true })
+      }
+      setView('result')
+      return
+    }
     const b = botOf(g)
     if (!outcome || !b) {
       setView('tabs')
@@ -157,7 +179,7 @@ export function FreeChessApp() {
       <ResultScreen
         {...last}
         onReview={() => setView('review')}
-        onRematch={() => startBotGame(last.bot, game?.playerColour === 'w' ? 'b' : 'w')}
+        onRematch={() => (last.coach ? startCoachGame(game?.playerColour === 'w' ? 'b' : 'w') : startBotGame(last.bot, game?.playerColour === 'w' ? 'b' : 'w'))}
         onDone={() => {
           setView('tabs')
           setTab('play')
@@ -232,8 +254,10 @@ export function FreeChessApp() {
 
   return (
     <div className="fc-shell">
-      {tab === 'home' && <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} />}
-      {tab === 'play' && <PlayTab profile={profile} onPick={pick} />}
+      {tab === 'home' && (
+        <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} />
+      )}
+      {tab === 'play' && <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} />}
       {tab === 'puzzles' && <SoonTab title="Puzzles" text="Unlimited puzzles, rated to your level, with their own puzzle rating. Next on the list." />}
       {tab === 'learn' && <SoonTab title="Learn" text="A step-by-step path: short lessons, puzzles and positions to play out. Complete each to unlock the next." />}
       {tab === 'profile' && <ProfileTab profile={profile} onPastGames={() => setView('past')} onSettings={() => setView('settings')} />}

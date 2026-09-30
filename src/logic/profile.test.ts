@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { completeGoal, currentStreak, NEW_PROFILE, recordBotGame, starsFor, todaysGoals, withLevel } from './profile'
+import { completeGoal, currentStreak, NEW_PROFILE, recordBotGame, recordCoachGame, starsFor, todaysGoals, withLevel } from './profile'
 
 describe('stars', () => {
   it('gives three for a clean win, one fewer per takeback or hint, none for a draw or loss', () => {
@@ -46,5 +46,15 @@ describe('a game against a bot', () => {
     const loss = recordBotGame(win.profile, { id: 'kofi', rating: 300 }, 'loss', 0, now)
     expect(loss.profile.stars.kofi).toBe(2)
     expect(loss.profile.rating!.rating).toBeLessThan(win.profile.rating!.rating)
+  })
+})
+
+describe('a game with the Coach', () => {
+  it('ticks the coach goal and keeps the streak, without touching the rating', () => {
+    const start = recordBotGame(NEW_PROFILE, { id: 'kofi', rating: 300 }, 'win', 0, new Date(2026, 8, 30, 9)).profile
+    const after = recordCoachGame(start, new Date(2026, 8, 30, 18))
+    expect(todaysGoals(after, '2026-09-30')).toEqual(['bot', 'coach'])
+    expect(after.rating).toEqual(start.rating)
+    expect(after.coachGames).toBe(1)
   })
 })

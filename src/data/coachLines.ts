@@ -10,9 +10,39 @@ export type CoachVoice = {
   afterMistake: readonly string[]
   /** Leading into a hint. */
   hintOpeners: readonly string[]
+  /** Now and then after a strong move, leading into why it works (FreeChess's Coach). */
+  afterGood?: readonly string[]
 }
 
 export const COACH_VOICES: Record<string, CoachVoice> = {
+  // FreeChess's Coach (Joseph, Sep 2026): encouraging and very useful. Warm,
+  // specific, never sarcastic; mistakes are how you learn.
+  coach: {
+    areYouSure: [
+      'Hold on. Check this one first.',
+      'Before you commit: what does their next move do?',
+      'Quick check: is everything still defended after this?',
+      'Take another look. I think there’s a trap here.',
+      'Worth a second look before you play it.',
+      'Checks, captures, threats. Theirs too. Then decide.',
+      'You might want to think about this one again.',
+    ],
+    afterMistake: [
+      'Good try, but here’s what happened.',
+      'No problem, this is how you learn.',
+      'Let’s look at that one together.',
+      'Easy to miss. Here’s the idea.',
+      'That’s a common one. Here’s why.',
+    ],
+    hintOpeners: ['Here’s a clue.', 'Try this.', 'Look here.', 'A hint:'],
+    afterGood: [
+      'Nice! That’s the move.',
+      'Great find.',
+      'Exactly right.',
+      'Yes! Well played.',
+      'Lovely move.',
+    ],
+  },
   pemberton: {
     areYouSure: [
       'Are you sure?',

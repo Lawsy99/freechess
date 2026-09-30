@@ -39,7 +39,6 @@ import { applyUci, describeOutcome, getOutcome, replay, type GameOutcome } from 
 import { moveStep, nameOf, notationStyle, startWith } from '../logic/notation'
 import { drawRule } from '../logic/path'
 import { playtestOn } from '../logic/playtest'
-import { gameKindLabel } from '../logic/gameLabels'
 import { SHORTEST_REVIEW } from '../logic/review'
 import {
   canTakeBack,
@@ -105,6 +104,10 @@ const MATCH_MOMENT_CHANCE = 0.4
 
 /** How long the finished game stays on screen before the review opens. */
 const REVIEW_DELAY_MS = 3500
+
+/** FreeChess's Coach praises a strong move this often, after the opening. */
+const PRAISE_CHANCE = 0.35
+const PRAISE_FROM_PLY = 10
 
 /** Arrow colour for "the move you played" when showing a better one. */
 const PLAYED_ARROW_COLOUR = 'rgba(208, 59, 59, 0.75)'
@@ -629,6 +632,14 @@ export function GameScreen({
   // was better (Joseph, Sep 2026). Coached game only; practice games don't advise.
   useEffect(() => {
     if (!ratedMove || stage.id !== 'assisted' || !coachVoice || outcome) return
+    // FreeChess's Coach also says so when you find a strong move, now and
+    // then, with why it works: you learn from good moves too (Sep 2026).
+    if (ratedMove.rating === 'best' && coachVoice.afterGood && game.moves.length >= PRAISE_FROM_PLY && Math.random() < PRAISE_CHANCE) {
+      const why = explainBestMove(ratedMove.fenBefore, ratedMove.played, ratedMove.cpBefore ?? 0, undefined, ratedMove.bestLine ?? undefined)
+      // (Only when there's something worth saying about it.)
+      if (!/keeps the game level.$|strongest move (on the board|in the position).$/.test(why)) dialogue.say(`${pickLine(coachVoice.afterGood, null)} ${why}`, 'pleased')
+      return
+    }
     if (ratedMove.rating !== 'mistake' && ratedMove.rating !== 'blunder') return
     if (ratedMove.cpBefore === null || ratedMove.cpAfter === null) return
     // Their move just before, so a missed recapture reads as one.
@@ -649,7 +660,7 @@ export function GameScreen({
     // The week's focus (Joseph, Sep 2026): when it's the very mistake you're
     // working on, he says so instead of his usual opener.
     const onFocus = focusKinds.includes(errorKind(facts))
-    dialogue.say(`${onFocus ? 'That’s the one we’re working on this week.' : pickLine(coachVoice.afterMistake, null)} ${comment}`, 'annoyed')
+    dialogue.say(`${onFocus ? 'That’s the one we’re working on this week.' : pickLine(coachVoice.afterMistake, null)} ${comment}`, coachVoice.afterGood ? 'neutral' : 'annoyed')
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once per rated move
   }, [ratedKey])
 
@@ -686,14 +697,6 @@ export function GameScreen({
             : opponentToMove
               ? `${opponent.name} is thinking…`
               : `Your move${chess.inCheck() ? ' · check' : ''}`
-
-  // Games without help say what they are, not "Real" (an internal name).
-  const stageLabel =
-    stage.takebacks > 0 && Number.isFinite(stage.takebacks)
-      ? `${stage.label} · ${takebacksLeft(game)} takeback${takebacksLeft(game) === 1 ? '' : 's'} left`
-      : stage.id === 'real'
-        ? `${gameKindLabel(game)} · no help`
-        : `${stage.label} · ${stage.summary}`
 
   // Full-help games only (the game with Pemberton): the next move of the
   // opening the player usually plays, while the game is still following it.
@@ -766,10 +769,12 @@ export function GameScreen({
             {game.path.label} <span>· {game.path.location}</span>
           </p>
         )}
-        <p className="stage-label">{stageLabel}</p>
         <p className={outcome ? 'game-status game-over' : 'game-status'}>{status}</p>
       </header>
 
+      {/* The opponent, and what they say floating just below (over the top of
+          the board), so a line never pushes the board down (Joseph, Sep 2026). */}
+      <div className="opponent-area">
       <PlayerStrip
         portrait={opponent.character ? <Portrait who={opponent.character.id} size={36} expression={opponentFace} /> : undefined}
         name={opponent.name}
@@ -818,6 +823,7 @@ export function GameScreen({
           )}
         </div>
       )}
+      </div>
 
       <div className="board-row">
         {stage.evalBar && <EvalBar analysis={barAnalysis} playerColour={game.playerColour} />}
@@ -863,26 +869,6 @@ export function GameScreen({
 
       <PlayerStrip name={playerName ?? 'You'} rating={playerRating} fen={fen} side={game.playerColour} />
 
-      {proposed && !viewing && (
-        <div className="confirm-move" role="group" aria-label="Confirm your move">
-          <button type="button" className="confirm-no" aria-label="Cancel the move" onClick={() => setProposed(null)}>
-            ✕
-          </button>
-          <button
-            type="button"
-            className="confirm-yes"
-            aria-label="Play the move"
-            onClick={() => {
-              const uci = proposed.uci
-              setProposed(null)
-              handlePlayerMove(uci)
-            }}
-          >
-            ✓
-          </button>
-        </div>
-      )}
-
       <div className="move-row">
         <MoveStrip sans={viewing ? sans.slice(0, viewPly!) : sans} />
         {/* Look back through the moves (any game; the board is locked while looking). */}
@@ -903,79 +889,52 @@ export function GameScreen({
           >
             ›
           </button>
+          {viewing && (
+            <button type="button" className="back-to-live" onClick={() => setViewPly(null)}>
+              Live
+            </button>
+          )}
         </div>
       </div>
-      {/* Looking back: how your move there rated, next to the moves. */}
-      {viewedRating && viewedBefore && (
-        <div className="move-info">
-          <span className={`move-rating rating-${viewedRating.rating}`}>
-            Move {Math.floor(viewedRating.ply / 2) + 1}: {shortName(viewedBefore, viewedRating.uci, viewedSan(viewedRating.uci) ?? '')}
-            {RATING_GLYPHS[viewedRating.rating]} · {RATING_LABELS[viewedRating.rating]}
-          </span>
-          {canViewPeek && (
-            <button type="button" className="peek-button" onClick={() => setViewPeekPly(viewPeeking ? null : viewedRating.ply)}>
-              {viewPeeking ? 'Hide better move' : 'See better move'}
-            </button>
-          )}
-        </div>
-      )}
-      {viewing && (
-        <button type="button" className="back-to-game" onClick={() => setViewPly(null)}>
-          Back to the game
-        </button>
-      )}
-
-      {bookNote && (
-        <p className="book-note">
-          {bookNote.label}: next, <strong>{sanInWords(bookNote.san)}</strong>
-        </p>
-      )}
-
-      {ratedMove && !competitive && !viewing && (
-        <div className="move-info">
-          <span className={`move-rating rating-${ratedMove.rating}`}>
-            {shortName(ratedMove.fenBefore, ratedMove.played, ratedMove.san)}
-            {RATING_GLYPHS[ratedMove.rating]} · {RATING_LABELS[ratedMove.rating]}
-          </span>
-          {canPeek && (
-            <button
-              type="button"
-              className="peek-button"
-              onClick={() => setPeekKey(peeking ? null : ratedMove.fenBefore)}
-            >
-              {peeking ? 'Back to the game' : 'See better move'}
-            </button>
-          )}
+      {/* How your move rated (games that show it). The line keeps its space
+          even when empty, so nothing below jumps (Joseph, Sep 2026). */}
+      {!competitive && (
+        <div className="move-info-slot">
+          {viewedRating && viewedBefore ? (
+            <div className="move-info">
+              <span className={`move-rating rating-${viewedRating.rating}`}>
+                Move {Math.floor(viewedRating.ply / 2) + 1}: {shortName(viewedBefore, viewedRating.uci, viewedSan(viewedRating.uci) ?? '')}
+                {RATING_GLYPHS[viewedRating.rating]} · {RATING_LABELS[viewedRating.rating]}
+              </span>
+              {canViewPeek && (
+                <button type="button" className="peek-button" onClick={() => setViewPeekPly(viewPeeking ? null : viewedRating.ply)}>
+                  {viewPeeking ? 'Hide better move' : 'See better move'}
+                </button>
+              )}
+            </div>
+          ) : ratedMove && !viewing ? (
+            <div className="move-info">
+              <span className={`move-rating rating-${ratedMove.rating}`}>
+                {shortName(ratedMove.fenBefore, ratedMove.played, ratedMove.san)}
+                {RATING_GLYPHS[ratedMove.rating]} · {RATING_LABELS[ratedMove.rating]}
+              </span>
+              {canPeek && (
+                <button type="button" className="peek-button" onClick={() => setPeekKey(peeking ? null : ratedMove.fenBefore)}>
+                  {peeking ? 'Back to the game' : 'See better move'}
+                </button>
+              )}
+            </div>
+          ) : bookNote ? (
+            <p className="book-note">
+              {bookNote.label}: next, <strong>{sanInWords(bookNote.san)}</strong>
+            </p>
+          ) : null}
         </div>
       )}
 
-      {!outcome && (stage.hints > 0 || stage.takebacks > 0) && (
-        <div className="game-actions help-actions">
-          {stage.hints > 0 && (
-            <button
-              type="button"
-              disabled={!hintMove || hintsLeft === 0 || pending !== null || peeking || !!hintedHere?.shown}
-              onClick={askForHint}
-            >
-              {hintedHere && !hintedHere.shown ? `Show me the move${countLeft(hintsLeft)}` : `Hint${countLeft(hintsLeft)}`}
-            </button>
-          )}
-          {stage.takebacks > 0 && (
-            <button
-              type="button"
-              disabled={!canTakeBack(game) || pending !== null}
-              onClick={() => {
-                setPeekKey(null)
-                setGame((g) => (g ? withTakeback(g) : g))
-              }}
-            >
-              Take back{countLeft(takebacksLeft(game))}
-            </button>
-          )}
-        </div>
-      )}
-
-      <div className="game-actions">
+      {/* One toolbar at the bottom. Confirming a move takes its place, in the
+          same spot, so the screen never moves under your thumb. */}
+      <div className="game-toolbar">
         {outcome ? (
           reviewNext ? (
             <button type="button" className="primary" onClick={onReview}>
@@ -991,6 +950,24 @@ export function GameScreen({
               </button>
             </>
           )
+        ) : proposed && !viewing ? (
+          <div className="confirm-move" role="group" aria-label="Confirm your move">
+            <button type="button" className="confirm-no" aria-label="Cancel the move" onClick={() => setProposed(null)}>
+              ✕
+            </button>
+            <button
+              type="button"
+              className="confirm-yes"
+              aria-label="Play the move"
+              onClick={() => {
+                const uci = proposed.uci
+                setProposed(null)
+                handlePlayerMove(uci)
+              }}
+            >
+              ✓
+            </button>
+          </div>
         ) : (
           <>
             <ResignButton onResign={() => setGame((g) => (g ? withResignation(g, g.playerColour) : g))} />
@@ -1004,8 +981,29 @@ export function GameScreen({
               }
               onClick={offerDraw}
             >
-              Offer draw
+              Draw
             </button>
+            {stage.hints > 0 && (
+              <button
+                type="button"
+                disabled={!hintMove || hintsLeft === 0 || pending !== null || peeking || !!hintedHere?.shown}
+                onClick={askForHint}
+              >
+                {hintedHere && !hintedHere.shown ? 'Show me' : 'Hint'}
+              </button>
+            )}
+            {stage.takebacks > 0 && (
+              <button
+                type="button"
+                disabled={!canTakeBack(game) || pending !== null}
+                onClick={() => {
+                  setPeekKey(null)
+                  setGame((g) => (g ? withTakeback(g) : g))
+                }}
+              >
+                Undo
+              </button>
+            )}
             {onPause && (
               <button type="button" disabled={pending !== null} onClick={onPause}>
                 Pause
@@ -1015,18 +1013,10 @@ export function GameScreen({
         )}
       </div>
 
-      <p className="build-stamp">
-        Version: {BUILD_LABEL}
-        {/* Engine timing, for testing on a phone: only with the playtest tools on. */}
-        {maiaMs !== null && playtestOn() && ` · opponent model ${maiaMs} ms`}
-      </p>
+      {/* Engine timing, for testing on a phone: only with the playtest tools on. */}
+      {maiaMs !== null && playtestOn() && <p className="build-stamp">Version: {BUILD_LABEL} · opponent model {maiaMs} ms</p>}
     </main>
   )
-}
-
-/** " (3 left)" on a help button; nothing when it's unlimited (Full help setting). */
-function countLeft(n: number): string {
-  return Number.isFinite(n) ? ` (${n} left)` : ''
 }
 
 /** The move-rating chip: "Nd3", or "Knight to d3" below 1500 (notation.ts). */
@@ -1095,7 +1085,7 @@ function ResignButton({ onResign }: { onResign: () => void }) {
 
   return (
     <button type="button" className={armed ? 'danger' : undefined} onClick={handleClick}>
-      {armed ? 'Tap again to resign' : 'Resign'}
+      {armed ? 'Resign?' : 'Resign'}
     </button>
   )
 }

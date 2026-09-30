@@ -796,3 +796,29 @@
   color: var(--muted);
   line-height: 1.45;
 }
+
+/* The Coach's card, at the top of Play */
+.fc-coach-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 76px;
+  padding: 12px 14px;
+  border: none;
+  background: linear-gradient(135deg, rgba(79, 134, 247, 0.28), rgba(79, 134, 247, 0.08)), var(--card);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.fc-coach-card .fc-chip-button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.fc-coach-note {
+  max-width: 320px;
+  margin-top: 14px;
+  line-height: 1.5;
+}

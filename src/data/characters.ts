@@ -2,6 +2,7 @@
 // "Draw offers, accepting and resigning"; Character Tone Guide for who they
 // are). Vera, Felix and Derek join with Acts 2–3.
 import { botCharacter, findBot } from './bots'
+import { FC_COACH } from './coach'
 
 export type Style = 'aggressive' | 'solid' | 'simplifying' | 'grinding' | 'theoretical' | 'adaptive'
 
@@ -262,6 +263,7 @@ export function findCharacter(id: string): Character | undefined {
     LEAGUE_ONLY.find((c) => c.id === id) ??
     (id === COACH.id ? COACH : undefined)
   if (own) return own
+  if (id === FC_COACH.id) return FC_COACH
   const bot = findBot(id)
   return bot ? botCharacter(bot) : undefined
 }

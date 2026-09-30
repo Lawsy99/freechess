@@ -5,7 +5,7 @@
 1. **Play (built, Sep 2026).** Bots in drop-down groups, bot pages, colour
    choice, stars, rating, results, the review with "Try it again", the board's
    weight (lift, shadow, sounds), Home with daily goals and streak, Profile.
-2. **Coach.** Games against the Coach at your rating: encouraging, very useful,
+2. **Coach (built, Sep 2026).** Games against the Coach at your rating: encouraging, very useful,
    feedback as you go and after (what to look out for). Not rated. Ticks the
    "Play the Coach" goal.
 3. **Puzzles.** Unlimited, rated to your level, their own puzzle rating
