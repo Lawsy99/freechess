@@ -8,6 +8,8 @@ import { FACES } from '../data/faces'
 import type { BotResult } from '../logic/profile'
 import { MedalIcon } from './AchievementsScreen'
 import { Confetti } from './Confetti'
+import { ResultTeaser } from './ResultTeaser'
+import type { GameRecord } from '../logic/gameRecord'
 import { StarIcon } from './icons'
 import './result.css'
 
@@ -29,6 +31,8 @@ export type LastResult = {
 }
 
 type Props = LastResult & {
+  /** The game, for a glimpse of the review (accuracy, played like). */
+  game?: GameRecord
   onReview: () => void
   onRematch: () => void
   onDone: () => void
@@ -42,7 +46,7 @@ const LOSS_LINES = [
   'Close games teach the most. See what you’d change.',
 ]
 
-export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBest, coach = false, custom = false, badges = [], onReview, onRematch, onDone }: Props) {
+export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBest, coach = false, custom = false, badges = [], game, onReview, onRematch, onDone }: Props) {
   // The Coach is pleased whatever happened; a bot is put out by losing, pleased by winning.
   const expression = coach ? 'pleased' : result === 'win' ? 'annoyed' : result === 'loss' ? 'pleased' : 'neutral'
   const [lossLine] = useState(() => LOSS_LINES[Math.floor(Math.random() * LOSS_LINES.length)])
@@ -94,6 +98,7 @@ export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBe
           ))}
         </ul>
       )}
+      {game && <ResultTeaser game={game} />}
       <div className="fc-result-actions">
         <button type="button" className="fc-primary" onClick={onReview}>
           Game review

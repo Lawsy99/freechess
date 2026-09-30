@@ -250,6 +250,7 @@ export function FreeChessApp() {
     return (
       <ResultScreen
         {...last}
+        game={game ?? undefined}
         onReview={() => setView('review')}
         onRematch={() => (last.coach ? startCoachGame(game?.playerColour === 'w' ? 'b' : 'w') : startBotGame(last.bot, game?.playerColour === 'w' ? 'b' : 'w'))}
         onDone={() => {

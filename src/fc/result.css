@@ -131,3 +131,39 @@
     animation: none;
   }
 }
+
+/* A glimpse of the review (Sep 2026). */
+.fc-teaser {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.fc-teaser strong {
+  color: var(--text);
+  font-size: 18px;
+}
+
+.fc-teaser-wait {
+  position: relative;
+  display: block;
+  min-width: 200px;
+  padding-bottom: 6px;
+  text-align: center;
+}
+
+.fc-teaser-wait i {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--buff);
+  transition: width 0.3s ease;
+}
