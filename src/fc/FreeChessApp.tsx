@@ -39,6 +39,8 @@ import {
 import { BotSheet, type ColourChoice } from './BotSheet'
 import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
+import { analyseInBackground } from '../engine/reviewJobs'
+import { SHORTEST_REVIEW } from '../logic/review'
 import { VisionTrainer } from './VisionTrainer'
 import { InsightsScreen } from './InsightsScreen'
 import { AchievementsScreen } from './AchievementsScreen'
@@ -120,7 +122,12 @@ export function FreeChessApp() {
   useEffect(() => {
     if (!game) return
     saveCurrentGame(game).catch((err) => console.error('Save failed', err))
-    if (outcomeOf(game)) archiveGame(game).catch((err) => console.error('Archive failed', err))
+    if (outcomeOf(game)) {
+      archiveGame(game)
+        // Start checking the moves straight away, so the review is ready sooner.
+        .then(() => game.moves.length >= SHORTEST_REVIEW && analyseInBackground(game.id, game.moves))
+        .catch((err) => console.error('Archive failed', err))
+    }
   }, [game])
 
   // Every screen starts at the top.

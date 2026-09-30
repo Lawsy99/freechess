@@ -7,7 +7,7 @@ import { FullGameView } from '../components/FullGameView'
 import { MomentTrainer } from '../components/MomentTrainer'
 import { MoveReplay } from '../components/MoveReplay'
 import { drawRule } from '../logic/path'
-import { analyseGame } from '../engine/reviewAnalysis'
+import { analyseInBackground, onProgress } from '../engine/reviewJobs'
 import { explainGoodMove } from '../logic/explain'
 import { describeOutcome, replay, type Colour } from '../logic/game'
 import { outcomeOf, type GameRecord } from '../logic/gameRecord'
@@ -21,7 +21,7 @@ import { OPENING_NAMES } from '../data/scouting'
 import { ALL_LESSONS } from '../data/learnPath'
 import { Portrait } from '../components/Portrait'
 import { cardId, cardsFromMoments, gameMoments, moveLabel } from '../logic/mistakeCards'
-import { addCardsIfNew, getArchivedGame, retireCardById, saveGameAnalysis } from '../storage/db'
+import { addCardsIfNew, getArchivedGame, retireCardById } from '../storage/db'
 import '../components/ratings.css'
 import './ReviewScreen.css'
 
@@ -84,6 +84,7 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
   // Use saved analysis if this game was reviewed before; otherwise run it.
   useEffect(() => {
     let cancelled = false
+    let stopFollowing = () => {}
     ;(async () => {
       const saved = await getArchivedGame(game.id)
       // Analysed before Sep 2026 (no engine lines saved): analyse again, once,
@@ -93,17 +94,16 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
         if (!cancelled) setEvals(settleEvals(game.moves, saved.evals))
         return
       }
-      const result = await analyseGame(
-        game.moves,
-        (done, total) => !cancelled && setProgress({ done, total }),
-        () => cancelled,
-      )
+      // (Usually already under way: it starts when the game ends.)
+      const job = analyseInBackground(game.id, game.moves)
+      stopFollowing = onProgress(job, (p) => !cancelled && setProgress(p))
+      const result = await job.result
       if (!result || cancelled) return
       setEvals(settleEvals(game.moves, result))
-      await saveGameAnalysis(game.id, result)
     })().catch(() => !cancelled && setFailed(true))
     return () => {
       cancelled = true
+      stopFollowing()
     }
   }, [game.id, game.moves, attempt])
 
