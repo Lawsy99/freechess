@@ -19,7 +19,7 @@ describe('the Learn path', () => {
       expect(lesson.steps.length - reading).toBeGreaterThanOrEqual(1)
       expect(reading).toBeLessThanOrEqual(1)
     }
-    expect(LEARN_PATH.length).toBe(6)
+    expect(LEARN_PATH.length).toBe(9)
   })
 
   it('passes a round with enough clean solves, pitched around your level', () => {

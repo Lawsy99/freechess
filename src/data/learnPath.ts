@@ -162,6 +162,44 @@ export const LEARN_PATH: Unit[] = [
       tactic('quiet-moves', 'Quiet moves', 'quietMove', 'Not every winning move is a check or a capture. Sometimes a quiet move sets up a threat they can’t stop.'),
     ],
   },
+  // Three more units (Sep 2026), from puzzle themes the path didn't use yet.
+  {
+    id: 'attack',
+    title: 'Attacking the king',
+    about: 'Open up the king and finish it off.',
+    colour: '#ff6b6b',
+    lessons: [
+      tactic('kingside-attack', 'Attack the castled king', 'kingsideAttack', 'A castled king has pawns in front of it. Bring pieces close, open a line with a pawn push or a sacrifice, then strike. Count your attackers against their defenders first.'),
+      tactic('exposed-king', 'Hunt the open king', 'exposedKing', 'A king with no pawns around it is in danger. Keep checking, bring more pieces in, and don’t let it run to safety.'),
+      tactic('attraction', 'Lure it in', 'attraction', 'Sometimes you give up a piece to drag the king (or another piece) onto a square where it gets caught. Ask: which square would I love their king to be on?'),
+      tactic('remove-defender', 'Take the defender', 'capturingDefender', 'If one piece holds their position together, take it. Whatever it was guarding is then yours.'),
+    ],
+  },
+  {
+    id: 'advanced-tactics',
+    title: 'Advanced tactics',
+    about: 'The ideas that separate club players from beginners.',
+    colour: '#4fd1c5',
+    lessons: [
+      tactic('intermezzo', 'In-between moves', 'intermezzo', 'Before taking back, look for something stronger first: a check or a threat they have to answer. Then take back.'),
+      tactic('clearance', 'Clear the way', 'clearance', 'Your own piece is in the way. Move it with a threat, and the line opens for the piece behind it.'),
+      tactic('interference', 'Get in the way', 'interference', 'Put a piece between two of theirs, so one can no longer guard the other.'),
+      tactic('x-ray', 'X-ray attacks', 'xRayAttack', 'A piece can attack, or defend, straight through another piece on the same line. Look beyond the first piece in the way.'),
+      tactic('zugzwang', 'Zugzwang', 'zugzwang', 'Sometimes the player to move loses just because they must move. Find the quiet move that leaves them only bad choices.'),
+    ],
+  },
+  {
+    id: 'endgame-mastery',
+    title: 'Endgame mastery',
+    about: 'Turn small advantages into wins.',
+    colour: '#a3e635',
+    lessons: [
+      tactic('passed-pawns', 'Passed pawns', 'advancedPawn', 'A pawn with no enemy pawns in front of it is dangerous. Push it, protect it, and use it to pull their pieces away.'),
+      tactic('bishop-endings', 'Bishop endings', 'bishopEndgame', 'Bishops love open boards and long diagonals. Put your pawns on the other colour to your bishop, and use your king.'),
+      tactic('knight-endings', 'Knight endings', 'knightEndgame', 'Knights are slow over long distances but tricky up close. Watch for forks, and keep your king active.'),
+      tactic('queen-endings', 'Queen endings', 'queenEndgame', 'With queens on, checks come from everywhere. Look for forks and for ways to trade queens into a won pawn ending.'),
+    ],
+  },
 ]
 
 /** Every lesson in order, for unlocking one after another. */

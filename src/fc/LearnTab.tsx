@@ -27,6 +27,9 @@ const UNIT_PIECE: Record<string, string> = {
   openings: 'wB',
   endgames: 'wK',
   'winning-ideas': 'wR',
+  attack: 'wQ',
+  'advanced-tactics': 'wN',
+  'endgame-mastery': 'wK',
 }
 
 /** The piece on each lesson's button: the one that does the job (knights fork, rooks mate on the back rank). */
@@ -56,6 +59,19 @@ const LESSON_PIECE: Record<string, string> = {
   deflection: 'wR',
   trapped: 'wB',
   'quiet-moves': 'wN',
+  'kingside-attack': 'wQ',
+  'exposed-king': 'wK',
+  attraction: 'wQ',
+  'remove-defender': 'wB',
+  intermezzo: 'wN',
+  clearance: 'wR',
+  interference: 'wB',
+  'x-ray': 'wR',
+  zugzwang: 'wK',
+  'passed-pawns': 'wP',
+  'bishop-endings': 'wB',
+  'knight-endings': 'wN',
+  'queen-endings': 'wQ',
 }
 
 const piece = (key: string, size: number) => defaultPieces[key]({ svgStyle: { width: size, height: size } })
