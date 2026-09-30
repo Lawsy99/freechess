@@ -48,6 +48,90 @@ const ITALIAN_TWO_KNIGHTS = [
   '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. O-O Nf6 5. d3 d6 6. c3 O-O',
 ]
 
+// --- FreeChess bots (Sep 2026): repertoires that match their bios ---
+
+const ITALIAN = [
+  '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3 d6 6. O-O O-O 7. Re1 a6',
+  '1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 Be7 5. O-O O-O 6. Re1 d6 7. c3',
+  '1. e4 e5 2. Nf3 d6 3. Bc4 Nf6 4. Nc3 Be7 5. d3 O-O 6. O-O c6',
+]
+
+const CARO = [
+  '1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. Nf3 Nd7 7. h4 h6',
+  '1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 c5 6. O-O Nc6',
+  '1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 Bg4',
+]
+
+const NAJDORF = [
+  '1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be2 e5 7. Nb3 Be7 8. O-O O-O',
+  '1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Be7',
+  '1. e4 c5 2. c3 d5 3. exd5 Qxd5 4. d4 Nf6 5. Nf3 e6 6. Be2 Nc6',
+]
+
+const KINGS_INDIAN = ['1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5', '1. d4 Nf6 2. Nf3 g6 3. g3 Bg7 4. Bg2 O-O 5. O-O d6 6. c4 Nbd7']
+
+const KINGS_GAMBIT = [
+  '1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 Nf6 6. Bc4 d5 7. exd5 Bd6',
+  '1. e4 e5 2. f4 exf4 3. Nf3 d6 4. d4 g5 5. h4 g4 6. Ng1',
+  '1. e4 e5 2. f4 Bc5 3. Nf3 d6 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+',
+]
+
+const OPEN_E4 = [
+  '1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. e5 Qe7 7. Qe2 Nd5 8. c4',
+  '1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3',
+  '1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. e5 Nfd7 5. f4 c5 6. Nf3',
+]
+
+const QUEENS_GAMBIT = [
+  '1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 h6 7. Bh4 b6',
+  '1. d4 d5 2. c4 dxc4 3. e3 Nf6 4. Bxc4 e6 5. Nf3 c5 6. O-O a6',
+  '1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. e3 e6 5. Nc3 Nbd7 6. Bd3 dxc4 7. Bxc4 b5',
+]
+
+const CATALAN = [
+  '1. d4 Nf6 2. c4 e6 3. g3 d5 4. Bg2 Be7 5. Nf3 O-O 6. O-O dxc4 7. Qc2 a6 8. Qxc4 b5 9. Qc2 Bb7',
+  '1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. g3 Be7 5. Bg2 O-O 6. O-O c6',
+]
+
+const EXCHANGES = [
+  '1. e4 e6 2. d4 d5 3. exd5 exd5 4. Bd3 Nc6 5. c3 Bd6 6. Nf3 Nge7',
+  '1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 Bg4',
+  '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. O-O f6 6. d4 exd4',
+  '1. d4 d5 2. c4 c6 3. cxd5 cxd5 4. Nc3 Nf6 5. Bf4 Nc6 6. e3 a6',
+]
+
+const PETROFF = ['1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 d5 6. Bd3 Nc6', '1. e4 e5 2. Nf3 Nf6 3. d4 Nxe4 4. Bd3 d5 5. Nxe5 Nd7 6. Nxd7 Bxd7']
+
+const SYMMETRICAL = ['1. c4 c5 2. Nc3 Nc6 3. g3 g6 4. Bg2 Bg7 5. Nf3 Nf6 6. O-O O-O', '1. c4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. g3 d5 5. cxd5 Nxd5 6. Bg2 Nb6']
+
+const EVANS = [
+  '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O',
+  '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bb6 5. a4 a6 6. Nc3',
+  '1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Nxd5 6. Nxf7 Kxf7 7. Qf3+ Ke6 8. Nc3',
+]
+
+const DRAGON = ['1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O']
+const BUDAPEST = ['1. d4 Nf6 2. c4 e5 3. dxe5 Ng4 4. Bf4 Nc6 5. Nf3 Bb4+ 6. Nbd2 Qe7']
+
+const SCOTCH = [
+  '1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 5. Be3 Qf6 6. c3 Nge7',
+  '1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. e5 Qe7 7. Qe2 Nd5 8. c4',
+  '1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. a3',
+]
+
+/** Ravi knows a lot of openings, about half of each: short lines only. */
+const HALF_REMEMBERED = [
+  '1. e4 e5 2. Nf3 Nc6 3. Bb5',
+  '1. e4 e5 2. Nf3 Nc6 3. Bc4',
+  '1. d4 d5 2. c4',
+  '1. d4 Nf6 2. Bf4',
+  '1. e4 c5 2. Nf3 d6',
+  '1. e4 e6 2. d4 d5',
+  '1. e4 c6 2. d4 d5',
+  '1. d4 d5 2. c4 e6',
+  '1. d4 Nf6 2. c4 g6',
+]
+
 export const OPENING_BOOKS: Record<string, OpeningBook> = {
   marjorie: { white: LONDON, black: [...FRENCH, ...QGD] },
   dex: {
@@ -173,4 +257,18 @@ export const OPENING_BOOKS: Record<string, OpeningBook> = {
   },
   malcolm: { white: QGD, black: [...PRIYA_RUY, ...QGD] },
   oscar: { white: ITALIAN_TWO_KNIGHTS, black: ITALIAN_TWO_KNIGHTS },
+  // FreeChess bots (Sep 2026). Beginners below 800 keep no book, so they play like beginners.
+  luca: { white: ITALIAN, black: [...ITALIAN, ...QGD] },
+  sofia: { white: ITALIAN, black: [...ITALIAN, ...QGD] },
+  kenji: { white: PRIYA_RUY, black: [...CARO, ...QGD] },
+  aarav: { white: OPEN_E4, black: [...NAJDORF, ...KINGS_INDIAN] },
+  fatima: { white: KINGS_GAMBIT, black: [...NAJDORF, ...KINGS_INDIAN] },
+  diego: { white: EVANS, black: [...DRAGON, ...BUDAPEST] },
+  tomas: { white: SCOTCH, black: [...ITALIAN, ...QGD] },
+  jonas: { white: QUEENS_GAMBIT, black: [...FRENCH, ...QGD] },
+  olga: { white: LONDON, black: [...CARO, ...QGD] },
+  chloe: { white: CATALAN, black: [...CARO, ...QGD] },
+  lukas: { white: EXCHANGES, black: [...PETROFF, ...EXCHANGES] },
+  hanna: { white: SYMMETRICAL, black: [...PETROFF, ...QGD, ...SYMMETRICAL] },
+  ravi: { white: HALF_REMEMBERED, black: HALF_REMEMBERED },
 }

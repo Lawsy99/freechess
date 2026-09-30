@@ -10,8 +10,9 @@ describe('opening books', () => {
         let moves: string[] = []
         expect(() => (moves = parseLine(line)), `${who}: ${line}`).not.toThrow()
         const fullMoves = Math.ceil(moves.length / 2)
-        // Terry's traps are short because they finish the game.
-        if (!line.endsWith('#')) expect(fullMoves, `${who}: ${line}`).toBeGreaterThanOrEqual(6)
+        // Terry's traps are short because they finish the game; Ravi only
+        // remembers the first half of each opening (FreeChess, Sep 2026).
+        if (!line.endsWith('#') && who !== 'ravi') expect(fullMoves, `${who}: ${line}`).toBeGreaterThanOrEqual(6)
         expect(fullMoves, `${who}: ${line}`).toBeLessThanOrEqual(12)
       }
     }
