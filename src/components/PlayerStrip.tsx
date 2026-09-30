@@ -17,9 +17,11 @@ type Props = {
   thinking?: boolean
   /** The opponent's face (their expression follows what they say). */
   portrait?: ReactNode
+  /** On the right, e.g. "Your move". */
+  right?: ReactNode
 }
 
-export function PlayerStrip({ name, rating, fen, side, thinking = false, portrait }: Props) {
+export function PlayerStrip({ name, rating, fen, side, thinking = false, portrait, right }: Props) {
   const { captured, lead } = materialFor(fen, side)
   return (
     <div className="player-strip">
@@ -43,6 +45,7 @@ export function PlayerStrip({ name, rating, fen, side, thinking = false, portrai
           </span>
         </span>
       )}
+      {right && <span className="player-right">{right}</span>}
     </div>
   )
 }

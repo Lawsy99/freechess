@@ -4,7 +4,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { BUILD_LABEL } from '../buildInfo'
 import { Board, type BoardArrow } from '../components/Board'
-import { BlunderWarning } from '../components/BlunderWarning'
 import { EvalBar } from '../components/EvalBar'
 import { HINT_ARROW_COLOUR } from '../components/lineArrows'
 import { COACH_VOICES, pickLine } from '../data/coachLines'
@@ -19,6 +18,7 @@ import { buildDemo } from '../logic/demo'
 import { PlayerStrip } from '../components/PlayerStrip'
 import { Portrait } from '../components/Portrait'
 import { playEndSound, playMoveSound } from '../components/moveSound'
+import { BulbIcon, FlagIcon, HalfIcon, NextIcon, PauseIcon, PrevIcon, UndoIcon } from '../components/GameIcons'
 import { APPEARANCES } from '../data/appearances'
 import { moodFor } from '../logic/mood'
 import { matchMoment } from '../logic/matchReaction'
@@ -762,18 +762,16 @@ export function GameScreen({
   }
 
   return (
-    // The match screen (redesigned, Joseph, Sep 2026): everything fits on one
-    // screen, nothing moves, and nothing ever covers the board. Top to bottom:
-    // a slim top bar, the opponent, the board (as big as the screen allows),
-    // you, one fixed-size message panel, the moves, and the toolbar.
+    // The match screen (reworked, Joseph, Sep 2026): the board is always as
+    // wide as the screen, and everything else is slim around it. Nothing moves
+    // and nothing covers the board. Top to bottom: the opponent (and whether
+    // they're thinking), the board, you (and "Your move"), one message panel
+    // that takes any spare room, a thin move list, and one toolbar. Questions
+    // (confirm a move, the Coach's warning, a draw offer, the end of the game)
+    // put their buttons in the toolbar, in the same place.
     <main className="game-screen">
-      <header className="game-topbar">
-        {game.path && <span className="game-title">{game.path.label}</span>}
-        <span className={outcome ? 'game-status game-over' : 'game-status'}>{status}</span>
-      </header>
-
       <PlayerStrip
-        portrait={opponent.character ? <Portrait who={opponent.character.id} size={32} expression={opponentFace} /> : undefined}
+        portrait={opponent.character ? <Portrait who={opponent.character.id} size={30} expression={opponentFace} /> : undefined}
         name={opponent.name}
         rating={opponent.unrated || game.path?.kind === 'trial' ? undefined : opponent.rating}
         fen={fen}
@@ -814,11 +812,16 @@ export function GameScreen({
         </div>
       </div>
 
-      <PlayerStrip name={playerName ?? 'You'} rating={playerRating} fen={fen} side={game.playerColour} />
+      <PlayerStrip
+        name={playerName ?? 'You'}
+        rating={playerRating}
+        fen={fen}
+        side={game.playerColour}
+        right={<span className={outcome ? 'game-status game-over' : 'game-status'}>{viewing ? 'Looking back' : status}</span>}
+      />
 
-      {/* The message panel: always the same size. The Coach's warning (with
-          its buttons), a draw offer, what's said, and how your move rated all
-          appear here, never over the board. Long tips scroll inside it. */}
+      {/* The message panel: whatever room is left, never over the board.
+          Long tips scroll inside it. */}
       <section className="game-panel" aria-live="polite">
         {!competitive &&
           (viewedRating && viewedBefore ? (
@@ -848,45 +851,19 @@ export function GameScreen({
           ) : null)}
 
         {pending?.warning ? (
-          <BlunderWarning
-            inline
-            message={pending.warning}
-            coach={coachVoice ? opponent.character!.id : undefined}
-            takebacksLeft={Number.isFinite(takebacksLeft(game)) ? takebacksLeft(game) : undefined}
-            onPlayAnyway={() => resolveWarning(true)}
-            onTakeBack={() => resolveWarning(false)}
-          />
+          <p className="panel-line">
+            {coachVoice && opponent.character && <Portrait who={opponent.character.id} size={28} />}
+            <span>{coachVoice ? `“${pending.warning}”` : `${pending.warning} Play it anyway?`}</span>
+          </p>
         ) : bubble && !outcome ? (
-          <div className="speech-bubble" role="status">
-            {bubble.kind === 'offer' ? (
-              <>
-                <span className="speech">“Draw?”</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setBubble(null)
-                    setGame((g) => (g ? withDrawAgreed(g) : g))
-                  }}
-                >
-                  Accept
-                </button>
-                <button type="button" onClick={() => setBubble(null)}>
-                  Decline
-                </button>
-              </>
-            ) : bubble.kind === 'thinking' ? (
-              <span className="speech">…</span>
-            ) : (
-              <span className="speech">“I'll play on.”</span>
-            )}
-          </div>
+          <p className="panel-line">
+            {opponent.character && <Portrait who={opponent.character.id} size={28} />}
+            <span>{bubble.kind === 'offer' ? '“Draw?”' : bubble.kind === 'thinking' ? '…' : '“I’ll play on.”'}</span>
+          </p>
         ) : dialogue.line ? (
-          <button type="button" className="talk-bubble" onClick={dialogue.dismiss} key={dialogue.line.key}>
+          <button type="button" className="panel-line talk" onClick={dialogue.dismiss} key={dialogue.line.key}>
             <Portrait who={dialogue.line.face} size={28} expression={dialogue.line.expression} />
-            <span className="talk-words">
-              {dialogue.line.speaker && <span className="talk-speaker">{dialogue.line.speaker}</span>}
-              <span>{dialogue.line.text.startsWith('(') ? dialogue.line.text : `“${dialogue.line.text}”`}</span>
-            </span>
+            <span>{dialogue.line.text.startsWith('(') ? dialogue.line.text : `“${dialogue.line.text}”`}</span>
           </button>
         ) : bookNote ? (
           <p className="book-note">
@@ -895,59 +872,57 @@ export function GameScreen({
         ) : null}
       </section>
 
-      <div className="move-row">
-        <MoveStrip sans={viewing ? sans.slice(0, viewPly!) : sans} />
-        <div className="look-back" aria-label="Look through the moves">
-          <button
-            type="button"
-            aria-label="Previous move"
-            disabled={game.moves.length === 0 || viewPly === 0}
-            onClick={() => setViewPly((v) => Math.max(0, (v ?? game.moves.length) - 1))}
-          >
-            ‹
-          </button>
-          <button
-            type="button"
-            aria-label="Next move"
-            disabled={!viewing}
-            onClick={() => setViewPly((v) => (v === null || v + 1 >= game.moves.length ? null : v + 1))}
-          >
-            ›
-          </button>
-          {viewing && (
-            <button type="button" className="back-to-live" onClick={() => setViewPly(null)}>
-              Live
-            </button>
-          )}
-        </div>
-      </div>
+      <MoveStrip sans={viewing ? sans.slice(0, viewPly!) : sans} />
 
-      {/* One toolbar at the bottom. Confirming a move takes its place, in the
-          same spot, so the screen never moves under your thumb. */}
       <div className="game-toolbar">
         {outcome ? (
           reviewNext ? (
-            <button type="button" className="primary" onClick={onReview}>
+            <button type="button" className="wide primary" onClick={onReview}>
               On to the review
             </button>
           ) : (
             <>
-              <button type="button" className="primary" onClick={onReview}>
+              <button type="button" className="wide primary" onClick={onReview}>
                 Review game
               </button>
-              <button type="button" onClick={onContinue}>
+              <button type="button" className="wide" onClick={onContinue}>
                 {drawReplays ? 'Replay' : 'Continue'}
               </button>
             </>
           )
+        ) : pending?.warning ? (
+          <>
+            <button type="button" className="wide primary" onClick={() => resolveWarning(false)}>
+              Think again
+            </button>
+            <button type="button" className="wide" onClick={() => resolveWarning(true)}>
+              Play it
+            </button>
+          </>
+        ) : bubble?.kind === 'offer' ? (
+          <>
+            <button
+              type="button"
+              className="wide primary"
+              onClick={() => {
+                setBubble(null)
+                setGame((g) => (g ? withDrawAgreed(g) : g))
+              }}
+            >
+              Accept draw
+            </button>
+            <button type="button" className="wide" onClick={() => setBubble(null)}>
+              Decline
+            </button>
+          </>
         ) : proposed && !viewing ? (
-          <div className="confirm-move" role="group" aria-label="Confirm your move">
-            <button type="button" className="confirm-no" aria-label="Cancel the move" onClick={() => setProposed(null)}>
+          <>
+            <button type="button" className="wide confirm-no" aria-label="Cancel the move" onClick={() => setProposed(null)}>
               ✕
             </button>
             <button
               type="button"
-              className="confirm-yes"
+              className="wide primary confirm-yes"
               aria-label="Play the move"
               onClick={() => {
                 const uci = proposed.uci
@@ -957,46 +932,71 @@ export function GameScreen({
             >
               ✓
             </button>
-          </div>
+          </>
         ) : (
           <>
             <ResignButton onResign={() => setGame((g) => (g ? withResignation(g, g.playerColour) : g))} />
             <button
               type="button"
+              aria-label="Offer a draw"
               disabled={
                 pending !== null ||
                 bubble !== null ||
+                viewing ||
                 // After a refusal, wait five moves before asking again.
                 (playerOfferMove !== null && chess.moveNumber() - playerOfferMove < 5)
               }
               onClick={offerDraw}
             >
-              Draw
+              <HalfIcon />
+              <span>Draw</span>
             </button>
             {stage.hints > 0 && (
               <button
                 type="button"
-                disabled={!hintMove || hintsLeft === 0 || pending !== null || peeking || !!hintedHere?.shown}
+                disabled={!hintMove || hintsLeft === 0 || pending !== null || peeking || viewing || !!hintedHere?.shown}
                 onClick={askForHint}
               >
-                {hintedHere && !hintedHere.shown ? 'Show me' : 'Hint'}
+                <BulbIcon />
+                <span>{hintedHere && !hintedHere.shown ? 'Show' : 'Hint'}</span>
               </button>
             )}
             {stage.takebacks > 0 && (
               <button
                 type="button"
-                disabled={!canTakeBack(game) || pending !== null}
+                disabled={!canTakeBack(game) || pending !== null || viewing}
                 onClick={() => {
                   setPeekKey(null)
                   setGame((g) => (g ? withTakeback(g) : g))
                 }}
               >
-                Undo
+                <UndoIcon />
+                <span>Undo</span>
               </button>
             )}
+            <button
+              type="button"
+              aria-label="Previous move"
+              disabled={game.moves.length === 0 || viewPly === 0}
+              onClick={() => setViewPly((v) => Math.max(0, (v ?? game.moves.length) - 1))}
+            >
+              <PrevIcon />
+              <span>Back</span>
+            </button>
+            <button
+              type="button"
+              aria-label={viewing ? 'Next move' : 'Latest move'}
+              className={viewing ? 'live' : undefined}
+              disabled={!viewing}
+              onClick={() => setViewPly((v) => (v === null || v + 1 >= game.moves.length ? null : v + 1))}
+            >
+              <NextIcon />
+              <span>{viewing ? 'Next' : 'Live'}</span>
+            </button>
             {onPause && (
               <button type="button" disabled={pending !== null} onClick={onPause}>
-                Pause
+                <PauseIcon />
+                <span>Pause</span>
               </button>
             )}
           </>
@@ -1075,7 +1075,8 @@ function ResignButton({ onResign }: { onResign: () => void }) {
 
   return (
     <button type="button" className={armed ? 'danger' : undefined} onClick={handleClick}>
-      {armed ? 'Resign?' : 'Resign'}
+      <FlagIcon />
+      <span>{armed ? 'Sure?' : 'Resign'}</span>
     </button>
   )
 }

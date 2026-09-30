@@ -635,3 +635,129 @@
   flex: 0 0 48px;
   margin-top: 0;
 }
+
+/* ---- The match screen, reworked (Joseph, Sep 2026): the board is always as
+   wide as the screen; the rest is slim. Only on a very small screen does the
+   board give way a little. ---- */
+.game-screen {
+  /* Everything that isn't the board, at its smallest. */
+  --game-chrome: 236px;
+  gap: 4px;
+  padding: 4px 0 6px;
+}
+
+.game-screen .board-row {
+  width: min(100%, 560px, calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - var(--game-chrome)));
+}
+
+.game-screen .player-strip {
+  flex: 0 0 34px;
+  min-height: 34px;
+}
+
+.player-right {
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+.player-right .game-status {
+  min-height: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.player-right .game-status.game-over {
+  color: var(--brass);
+}
+
+/* The message panel: whatever room is left (at least two lines). */
+.game-screen .game-panel {
+  flex: 1 1 56px;
+  min-height: 56px;
+  gap: 6px;
+  padding: 2px 14px;
+}
+
+.panel-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.panel-line.talk {
+  cursor: pointer;
+}
+
+.panel-line > span {
+  flex: 1;
+}
+
+/* A thin move list above the toolbar. */
+.game-screen .move-strip {
+  flex: 0 0 24px;
+  align-items: center;
+  font-size: 14px;
+}
+
+/* The toolbar: icons with small labels, one row; questions use two wide
+   buttons in the same place. */
+.game-screen .game-toolbar {
+  flex: 0 0 56px;
+  gap: 2px;
+  margin: 0 8px;
+  padding: 2px;
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.game-screen .game-toolbar > button {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 0 2px;
+  border-radius: 12px;
+  background: none;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.game-screen .game-toolbar > button.danger {
+  background: var(--bad);
+  color: #ffffff;
+}
+
+.game-screen .game-toolbar > button.live {
+  color: var(--brass);
+}
+
+.game-screen .game-toolbar > button.wide {
+  flex-direction: row;
+  background: var(--panel);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.game-screen .game-toolbar > button.wide.primary {
+  background: var(--buff);
+  color: var(--ink);
+}
+
+.game-screen .game-toolbar > button.confirm-yes,
+.game-screen .game-toolbar > button.confirm-no {
+  font-size: 24px;
+}
