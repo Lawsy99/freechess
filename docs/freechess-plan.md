@@ -18,14 +18,15 @@
    draw arrows), clocks, Insights, Achievements, the vision trainer, the custom
    bot, legal-move dots setting. Extras live in quiet menu cards (Play > More,
    Profile) so the main screens stay uncluttered.
-6. **Polish.** Piece sets (waiting on Joseph: needs piece art downloaded), better
-   portraits, and whatever testers find.
+6. **Polish.** Piece sets (waiting on Joseph: needs piece art downloaded) and
+   whatever testers find.
 
 ## Backlog
 
-- **Better portraits (Joseph, Sep 2026).** Really nice cartoon faces, warm and
-  hand-drawn looking, not generic AI art; lots of different nationalities. The
-  current faces are simple placeholders drawn in code (data/appearances.ts).
+- Done (30 Sep 2026): illustrated faces (Micah Lanier, CC BY 4.0, via DiceBear;
+  data/faces.ts), level colours and badges, bot pages with banners, a new result
+  screen with confetti, Learn pieces and the Coach on the path, a Coach greeting on
+  Home, and a redrawn knight icon.
 - More fun, interesting dialogue for every bot (they no longer react to your
   good or bad moves): stories about themselves, reactions to the game's big
   moments (queens off, a sacrifice, an endgame).

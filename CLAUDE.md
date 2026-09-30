@@ -26,7 +26,8 @@ folder is still called `open-file` (the app's first working name).
   inspired by the big sites but never copying their name, logo, pieces or sounds.
 - Bots: data/bots.ts, grouped Beginner / Intermediate / Advanced / Master, far more
   beginner and intermediate. Club Night cast keep their own definitions
-  (data/characters.ts); new bots from around the world. Faces: data/appearances.ts.
+  (data/characters.ts); new bots from around the world. Faces: illustrated (Micah, CC BY 4.0, via DiceBear), one per character in
+  data/faces.ts, expressions in components/faceArt.ts; credit in Settings.
 - Bots do not react to the player's good or bad moves. Dialogue should be fun and
   interesting (greetings, key moments, wins and losses, personality).
 - Stars per bot: 3 for a win with no takebacks or hints, one fewer for each,

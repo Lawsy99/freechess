@@ -1,32 +1,109 @@
-// Draws FreeChess's home-screen icons (a white knight on a blue tile) as PNG
-// files, with no extra tools: the knight's outline is a list of points traced
-// from public/favicon.svg, filled with 4 × 4 smoothing, saved with Node's zlib.
+// Draws FreeChess's home-screen icons (a white knight on a blue tile, with a
+// gold star) as PNG files, with no extra tools: the shapes are the same paths
+// as public/favicon.svg and src/fc/Logo.tsx (Sep 2026 redraw), flattened into
+// points, filled with 4 × 4 smoothing, and saved with Node's zlib.
 // Run: node scripts/makeIcons.mjs
 import { writeFileSync } from 'node:fs'
 import { deflateSync } from 'node:zlib'
 
-// The knight's outline on a 64 × 64 grid (traced from the favicon's path).
-const KNIGHT = [22,50,24.02,50,26.04,50,28.06,50,30.08,50,32.1,50,34.13,50,36.15,50,38.17,50,40.19,50,42.21,50,44.23,50,45.75,50,46,49.75,45.97,49.25,45.9,48.74,45.81,48.25,45.68,47.76,45.51,47.28,45.3,46.82,45.06,46.38,44.78,45.96,44.48,45.56,44.14,45.18,43.78,44.82,43.4,44.49,43.01,44.17,42.6,43.88,42.17,43.61,41.94,43.2,41.85,42.71,41.76,42.21,41.66,41.71,41.57,41.22,41.48,40.72,41.39,40.22,41.29,39.73,41.2,39.23,41.11,38.73,41.01,38.24,40.92,37.74,40.83,37.24,40.73,36.75,40.64,36.25,40.55,35.75,40.74,35.57,41.23,35.69,41.72,35.79,42.22,35.87,42.72,35.94,43.23,35.97,43.73,35.98,44.24,35.96,44.74,35.91,45.24,35.83,45.73,35.71,46.21,35.55,46.67,35.36,47.12,35.13,47.55,34.86,47.96,34.56,48.34,34.22,48.69,33.86,49.02,33.48,49.29,33.05,49.5,32.6,49.64,32.11,49.71,31.61,49.71,31.11,49.65,30.61,49.52,30.12,49.35,29.64,49.14,29.18,48.89,28.74,48.62,28.32,48.31,27.91,47.99,27.53,47.65,27.15,47.3,26.79,46.96,26.42,46.61,26.05,46.27,25.68,45.93,25.31,45.58,24.94,45.24,24.57,44.9,24.2,44.55,23.83,44.21,23.46,43.86,23.09,43.52,22.71,43.18,22.34,42.83,21.97,42.49,21.6,42.15,21.23,41.8,20.86,41.46,20.49,41.11,20.12,40.81,19.72,40.49,19.33,40.15,18.96,39.78,18.62,39.38,18.3,38.96,18.02,38.53,17.77,38.07,17.54,37.61,17.35,37.13,17.18,36.65,17.04,36.34,16.68,36.12,16.23,35.89,15.78,35.66,15.33,35.44,14.87,35.21,14.42,34.99,13.97,34.76,13.52,34.53,13.07,34.22,13.33,33.89,13.71,33.56,14.09,33.23,14.48,32.91,14.86,32.58,15.24,32.25,15.63,31.92,16.01,31.59,16.4,31.14,16.59,30.66,16.74,30.18,16.9,29.71,17.07,29.24,17.27,28.78,17.48,28.33,17.71,27.89,17.95,27.46,18.21,27.04,18.49,26.62,18.78,26.22,19.09,25.84,19.42,25.46,19.75,25.1,20.11,24.75,20.47,24.42,20.85,24.1,21.24,23.79,21.64,23.5,22.06,23.23,22.48,22.97,22.91,22.72,23.36,22.5,23.81,22.28,24.27,22.09,24.73,21.91,25.2,21.74,25.68,21.6,26.17,21.46,26.65,21.35,27.14,21.25,27.64,21.16,28.14,21.09,28.64,21.03,29.14,21,29.64,20.98,30.15,20.96,30.65,20.94,31.16,20.9,32.17,20.86,33.18,20.82,34.19,20.79,35.2,20.75,36.21,20.72,37.22,20.68,38.23,20.65,39.24,20.61,40.25,20.58,41.26,20.54,42.27,20.51,43.28,20.51,43.78,20.25,44.14,19.84,44.43,19.49,44.79,19.21,45.21,19.04,45.69,18.98,46.19,19.04,46.69,19.2,47.17,19.43,47.62,19.71,48.04,20.03,48.42,20.39,48.78,20.77,49.12,21.17,49.43,21.58,49.72]
-const EYE = { x: 38.5, y: 24.5, r: 1.8 }
+const KNIGHT =
+  'M18.5 49.5C18.5 44 21.5 40.5 27.5 37.5L16 36.5C13 36.3 11.2 34.2 11.8 31.4L13.2 27.8C15.2 21.8 19.5 16.8 25 13.6L28.2 5.2L32.4 11.8C40.4 12.8 46.4 18.6 47.8 27.2C48.8 34.2 47.4 41.6 46.6 49.5Z'
+const MANE = 'M40 15.5C43.5 19 45 24 44.8 30'
 const TOP = [0x6c, 0x9b, 0xff]
 const BOTTOM = [0x3d, 0x6f, 0xe0]
+const WHITE = [255, 255, 255]
+const MANE_COLOUR = [0xcf, 0xdc, 0xff]
+const GOLD = [0xff, 0xcb, 0x45]
+const GOLD_EDGE = [0xe0, 0xa8, 0x20]
 
-function insideKnight(x, y) {
-  let inside = false
-  for (let i = 0, j = KNIGHT.length - 2; i < KNIGHT.length; j = i, i += 2) {
-    const [xi, yi, xj, yj] = [KNIGHT[i], KNIGHT[i + 1], KNIGHT[j], KNIGHT[j + 1]]
-    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside
+/** Absolute M / L / C / Z paths into a list of points (curves in 24 steps). */
+function flatten(d) {
+  const nums = d.match(/[MLCZ]|-?\d*\.?\d+/g)
+  const pts = []
+  let i = 0
+  let cmd = ''
+  let x = 0
+  let y = 0
+  const n = () => Number(nums[i++])
+  while (i < nums.length) {
+    if (/[MLCZ]/.test(nums[i])) cmd = nums[i++]
+    if (cmd === 'Z') continue
+    if (cmd === 'M' || cmd === 'L') {
+      x = n()
+      y = n()
+      pts.push([x, y])
+    } else if (cmd === 'C') {
+      const [x1, y1, x2, y2, x3, y3] = [n(), n(), n(), n(), n(), n()]
+      for (let s = 1; s <= 24; s++) {
+        const t = s / 24
+        const u = 1 - t
+        pts.push([
+          u * u * u * x + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t * t * t * x3,
+          u * u * u * y + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y3,
+        ])
+      }
+      x = x3
+      y = y3
+    }
   }
-  return inside
+  return pts
 }
 
+function inside(poly, px, py) {
+  let hit = false
+  for (let a = 0, b = poly.length - 1; a < poly.length; b = a++) {
+    const [xi, yi] = poly[a]
+    const [xj, yj] = poly[b]
+    if (yi > py !== yj > py && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi) hit = !hit
+  }
+  return hit
+}
+
+function nearLine(line, px, py, width) {
+  for (let a = 1; a < line.length; a++) {
+    const [x1, y1] = line[a - 1]
+    const [x2, y2] = line[a]
+    const dx = x2 - x1
+    const dy = y2 - y1
+    const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy)))
+    if ((px - x1 - t * dx) ** 2 + (py - y1 - t * dy) ** 2 <= (width / 2) ** 2) return true
+  }
+  return false
+}
+
+function roundRect(px, py, x, y, w, h, r) {
+  if (px < x || px > x + w || py < y || py > y + h) return false
+  const cx = Math.max(x + r, Math.min(x + w - r, px))
+  const cy = Math.max(y + r, Math.min(y + h - r, py))
+  return (px - cx) ** 2 + (py - cy) ** 2 <= r * r
+}
+
+/** A five-pointed star, as points. */
+function star(cx, cy, outer, inner) {
+  return Array.from({ length: 10 }, (_, k) => {
+    const r = k % 2 ? inner : outer
+    const a = -Math.PI / 2 + (k * Math.PI) / 5
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)]
+  })
+}
+
+const knight = flatten(KNIGHT)
+const shadow = knight.map(([x, y]) => [x, y + 2])
+const mane = flatten(MANE)
+const starOuter = star(51, 13.5, 7.2, 3.1)
+const starInner = star(51, 13.5, 6.2, 2.5)
+
+const mix = (a, b, t) => a.map((c, i) => c + (b[i] - c) * t)
+
 function pixel(u, v) {
-  // u, v on the 64 grid. Blue gradient tile; white knight; blue eye.
-  const t = v / 64
-  const bg = TOP.map((c, i) => c + (BOTTOM[i] - c) * t)
-  const eye = (u - EYE.x) ** 2 + (v - EYE.y) ** 2 <= EYE.r ** 2
-  if (eye) return BOTTOM
-  return insideKnight(u, v) ? [255, 255, 255] : bg
+  const bg = mix(TOP, BOTTOM, v / 64)
+  if (inside(starInner, u, v)) return GOLD
+  if (inside(starOuter, u, v)) return GOLD_EDGE
+  if ((u - 27) ** 2 + (v - 20.5) ** 2 <= 2.3 ** 2) return BOTTOM
+  if (inside(knight, u, v)) return nearLine(mane, u, v, 2) ? MANE_COLOUR : WHITE
+  if (roundRect(u, v, 14, 49.5, 36, 6.5, 3.2)) return WHITE
+  if (inside(shadow, u, v)) return mix(bg, [0, 0, 0], 0.18)
+  return bg
 }
 
 function render(size) {
