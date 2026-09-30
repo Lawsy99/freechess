@@ -101,27 +101,6 @@ export function FullGameView({ moves, evals, reviewed, playerColour, onBack, onD
         <span className="info-eval">{formatCp(forPlayer(evals[index].cp))} for you</span>
       </p>
 
-      {move && move.mover === playerColour && move.rating !== 'best' && (
-        <button type="button" className="try-again" onClick={() => setRetryPly(move.ply)}>
-          Try it again
-        </button>
-      )}
-
-      <div className="full-game-controls">
-        <button type="button" aria-label="Start" onClick={() => step(0)} disabled={index === 0}>
-          <SkipIcon flip />
-        </button>
-        <button type="button" aria-label="Previous move" onClick={() => step(index - 1)} disabled={index === 0}>
-          <StepIcon flip />
-        </button>
-        <button type="button" aria-label="Next move" onClick={() => step(index + 1)} disabled={index === last}>
-          <StepIcon />
-        </button>
-        <button type="button" aria-label="End" onClick={() => step(last)} disabled={index === last}>
-          <SkipIcon />
-        </button>
-      </div>
-
       <EvalGraph points={points} markers={markers} current={index} onSelect={step} />
 
       <ol className="move-list">
@@ -150,6 +129,32 @@ export function FullGameView({ moves, evals, reviewed, playerColour, onBack, onD
           {doneLabel}
         </button>
       )}
+
+      {/* Pinned to the bottom, every button always in the same place, so
+          stepping through never makes the controls jump (Joseph, Sep 2026).
+          Try again greys out on moves that can't be retried. */}
+      <div className="full-game-controls">
+        <button type="button" aria-label="Start" onClick={() => step(0)} disabled={index === 0}>
+          <SkipIcon flip />
+        </button>
+        <button type="button" aria-label="Previous move" onClick={() => step(index - 1)} disabled={index === 0}>
+          <StepIcon flip />
+        </button>
+        <button
+          type="button"
+          className="try-again"
+          disabled={!(move && move.mover === playerColour && move.rating !== 'best')}
+          onClick={() => move && setRetryPly(move.ply)}
+        >
+          Try again
+        </button>
+        <button type="button" aria-label="Next move" onClick={() => step(index + 1)} disabled={index === last}>
+          <StepIcon />
+        </button>
+        <button type="button" aria-label="End" onClick={() => step(last)} disabled={index === last}>
+          <SkipIcon />
+        </button>
+      </div>
     </main>
   )
 }
