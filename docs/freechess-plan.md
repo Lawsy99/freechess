@@ -13,7 +13,13 @@
    rush mode.
 4. **Learn (built, Sep 2026).** A Duolingo-style path of units: a short explanation, puzzles,
    then positions to play out; pass to unlock the next. Ticks the lesson goal.
-5. **Polish.** Stats, settings tidy-up, and the ideas below.
+5. **From chess.com (built, 30 Sep 2026).** Review upgrade (graph, "you played like",
+   phases, brilliant/great/book), analysis board (set up or paste any position,
+   draw arrows), clocks, Insights, Achievements, the vision trainer, the custom
+   bot, legal-move dots setting. Extras live in quiet menu cards (Play > More,
+   Profile) so the main screens stay uncluttered.
+6. **Polish.** Piece sets (waiting on Joseph: needs piece art downloaded), better
+   portraits, and whatever testers find.
 
 ## Backlog
 
@@ -26,7 +32,8 @@
 - Done (30 Sep 2026): Club Night's club taken out of the bots' lines and bios,
   settings, backups, feedback and game labels.
 
-### From a look at chess.com (30 Sep 2026), waiting for Joseph to pick
+### From a look at chess.com (30 Sep 2026): all built except pass and play (Joseph
+### said no) and piece sets (need a download; asked)
 
 1. Review upgrade: an evaluation graph of the whole game, "you played like about
    1200", accuracy for opening, middlegame and endgame, and Brilliant / Great / Book

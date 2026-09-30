@@ -45,6 +45,13 @@ folder is still called `open-file` (the app's first working name).
   puzzle round passes with enough solved first time; otherwise a fresh set.
 - Match screen: the board full width; nothing over it; nothing moves; no scrolling. The
   message panel below the board is a card with what's said and the scoresheet.
+- From chess.com (Sep 2026): review with a graph, "you played like", phases and
+  brilliant/great/book (logic/reviewExtras.ts; evaluations settled with what the
+  engine saw a move later, review.ts settleEvals); analysis board (components/
+  AnalysisBoard.tsx, PositionEditor, DrawLayer); clocks (logic/clock.ts, optional,
+  only run on screen); custom bot (data/customBot.ts, rated, no stars); Insights
+  (logic/insights.ts); Achievements (logic/achievements.ts, from the profile);
+  vision trainer. Keep extras in menu cards (fc/MenuList.tsx) so screens stay calm.
 - Moves in words below 1500, notation from there (logic/notation.ts).
 - Storage names are FreeChess's own ("freechess"), so it never clashes with Club
   Night on the same github.io address.
