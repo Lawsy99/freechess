@@ -179,3 +179,22 @@ export function ratingCounts(moves: readonly ReviewedMove[], side: Colour): Reco
   for (const m of moves) if (m.mover === side) counts[m.rating]++
   return counts
 }
+
+/**
+ * Corrects the engine's quick looks with what it saw a move later (FreeChess,
+ * Sep 2026: Morphy's 15.Bxd7+, which forces mate, was graded a blunder because
+ * the mate only showed up a move later). A position is worth at least what the
+ * move actually played led to, and exactly that when the move played was the
+ * engine's own choice. Worked backwards from the end, so it carries through.
+ */
+export function settleEvals(moves: readonly string[], evals: readonly PositionEval[]): PositionEval[] {
+  const out = evals.map((e) => ({ ...e }))
+  for (let ply = Math.min(moves.length, out.length - 1) - 1; ply >= 0; ply--) {
+    const white = ply % 2 === 0
+    const now = out[ply].cp
+    const next = out[ply + 1].cp
+    if (moves[ply] === out[ply].bestMove) out[ply].cp = next
+    else out[ply].cp = white ? Math.max(now, next) : Math.min(now, next)
+  }
+  return out
+}

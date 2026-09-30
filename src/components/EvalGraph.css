@@ -58,3 +58,13 @@
   font-size: 12px;
   opacity: 0.8;
 }
+
+/* In the review summary: sits in the card's own padding, and lets the page scroll. */
+.eval-graph.compact {
+  padding: 0;
+}
+
+.eval-graph.compact svg {
+  touch-action: auto;
+  background: var(--panel);
+}

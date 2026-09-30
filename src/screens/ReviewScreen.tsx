@@ -2,6 +2,7 @@
 // every move (with a progress bar), then a short sequence: summary, your
 // biggest moments (find a better move), and the best move of the game.
 import { useEffect, useMemo, useState } from 'react'
+import { EvalGraph } from '../components/EvalGraph'
 import { FullGameView } from '../components/FullGameView'
 import { MomentTrainer } from '../components/MomentTrainer'
 import { MoveReplay } from '../components/MoveReplay'
@@ -12,7 +13,8 @@ import { describeOutcome, replay, type Colour } from '../logic/game'
 import { outcomeOf, type GameRecord } from '../logic/gameRecord'
 import { RATING_LABELS, type MoveRating } from '../logic/moveRating'
 import { moveName } from '../logic/notation'
-import { bestMoveOfGame, gameAccuracy, ratingCounts, reviewMoves, SHORTEST_REVIEW, type PositionEval } from '../logic/review'
+import { bestMoveOfGame, gameAccuracy, ratingCounts, reviewMoves, settleEvals, SHORTEST_REVIEW, type PositionEval } from '../logic/review'
+import { PHASE_LABELS, PHASES, phaseAccuracy, playedLike, SPECIAL_LABELS, specialMoves, winPoints, type Special } from '../logic/reviewExtras'
 import { cardId, cardsFromMoments, gameMoments, moveLabel } from '../logic/mistakeCards'
 import { addCardsIfNew, getArchivedGame, retireCardById, saveGameAnalysis } from '../storage/db'
 import '../components/ratings.css'
@@ -29,8 +31,14 @@ type Props = {
   ratingChange?: { from: number; to: number } | null
 }
 
-type KeyKind = 'mistake' | 'missed' | 'best'
-const KEY_LABELS: Record<KeyKind, string> = { mistake: 'Biggest mistake', missed: 'Chance missed', best: 'Best move' }
+type KeyKind = 'mistake' | 'missed' | 'best' | 'brilliant' | 'great'
+const KEY_LABELS: Record<KeyKind, string> = {
+  mistake: 'Biggest mistake',
+  missed: 'Chance missed',
+  best: 'Best move',
+  brilliant: 'Brilliant move',
+  great: 'Great move',
+}
 
 const RATING_ORDER: MoveRating[] = ['best', 'good', 'inaccuracy', 'mistake', 'blunder']
 
@@ -75,7 +83,7 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
       // so the coach's explanations can follow the real lines.
       const hasLines = saved?.evals?.some((e) => e.pv?.length)
       if (saved?.evals?.length === game.moves.length + 1 && hasLines) {
-        if (!cancelled) setEvals(saved.evals)
+        if (!cancelled) setEvals(settleEvals(game.moves, saved.evals))
         return
       }
       const result = await analyseGame(
@@ -84,7 +92,7 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
         () => cancelled,
       )
       if (!result || cancelled) return
-      setEvals(result)
+      setEvals(settleEvals(game.moves, result))
       await saveGameAnalysis(game.id, result)
     })().catch(() => !cancelled && setFailed(true))
     return () => {
@@ -113,6 +121,8 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
     // (Not one of a retry's copied moves.)
     return b && b.move.ply >= (game.startPly ?? 0) ? b : null
   }, [reviewed, player, game.startPly])
+  // Book, great and brilliant moves (FreeChess, Sep 2026, as chess.com shows them).
+  const specials = useMemo(() => (reviewed ? specialMoves(reviewed) : new Map<number, Special>()), [reviewed])
   // Key moments for the summary: your biggest mistake, a chance you missed,
   // and your best move. Each opens the step-through there (FreeChess).
   const keyMoments = useMemo(() => {
@@ -123,11 +133,16 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
     if (worst) out.push({ kind: 'mistake', ply: worst.ply, label: label(worst), retry: true })
     const missed = moments.find((m) => m.kind === 'missed')
     if (missed) out.push({ kind: 'missed', ply: missed.ply, label: label(missed), retry: true })
-    if (best) out.push({ kind: 'best', ply: best.move.ply, label: moveLabel(best.move), retry: false })
+    // Your finest move: a brilliant one, else a great one, else the best of the game.
+    const mine = (reviewed ?? []).filter((m) => m.mover === player && m.ply >= (game.startPly ?? 0))
+    const star = mine.find((m) => specials.get(m.ply) === 'brilliant') ?? mine.find((m) => specials.get(m.ply) === 'great')
+    if (star) out.push({ kind: specials.get(star.ply) as KeyKind, ply: star.ply, label: moveLabel(star), retry: false })
+    else if (best) out.push({ kind: 'best', ply: best.move.ply, label: moveLabel(best.move), retry: false })
     return out
-  }, [moments, best])
+  }, [moments, best, reviewed, specials, player, game.startPly])
   // The moves actually played in this game (a retry's first moves were the original game's).
   const played = useMemo(() => reviewed?.filter((m) => m.ply >= (game.startPly ?? 0)) ?? [], [reviewed, game.startPly])
+  const specialCount = (kind: Special) => played.filter((m) => m.mover === player && specials.get(m.ply) === kind).length
 
   // Real errors (mistakes and blunders) become Tuesday warm-ups. Done as soon
   // as the analysis is in, so they're kept even if the review is skipped.
@@ -166,6 +181,7 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
         moves={game.moves}
         evals={evals}
         reviewed={reviewed}
+        specials={specials}
         playerColour={player}
         onBack={() => {
           setFullGame(false)
@@ -334,13 +350,59 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
         </section>
       ) : (
         <section className="review-summary">
-          <div className="accuracy">
-            <span className="accuracy-value">{gameAccuracy(played, player) ?? '–'}%</span>
-            <span className="accuracy-label">your accuracy</span>
-            <span className="accuracy-opponent">Opponent: {gameAccuracy(played, opponent) ?? '–'}%</span>
+          <div className="review-headline">
+            <div className="accuracy">
+              <span className="accuracy-value">{gameAccuracy(played, player) ?? '–'}%</span>
+              <span className="accuracy-label">your accuracy</span>
+              <span className="accuracy-opponent">Opponent: {gameAccuracy(played, opponent) ?? '–'}%</span>
+            </div>
+            {/* A rough rating for this one game, as chess.com does. */}
+            {(() => {
+              const like = playedLike(gameAccuracy(played, player), played.filter((m) => m.mover === player).length)
+              return like ? (
+                <div className="played-like">
+                  <span className="played-like-value">{like}</span>
+                  <span className="accuracy-label">you played like</span>
+                  <span className="accuracy-opponent">a rough guess</span>
+                </div>
+              ) : null
+            })()}
+          </div>
+
+          {/* The game at a glance: tap it to step through from that point. */}
+          {evals && (
+            <EvalGraph
+              compact
+              points={winPoints(evals, player)}
+              markers={played.filter((m) => m.mover === player && ['mistake', 'blunder'].includes(m.rating)).map((m) => ({ index: m.ply + 1, rating: m.rating }))}
+              current={-1}
+              onSelect={(i) => openAt(i, null)}
+            />
+          )}
+
+          <div className="phase-row">
+            {(() => {
+              const acc = phaseAccuracy(played, player)
+              return PHASES.map((p) => (
+                <div key={p} className={`phase ${acc[p] === null ? 'none' : acc[p]! >= 80 ? 'good' : acc[p]! >= 60 ? 'ok' : 'poor'}`}>
+                  <span className="phase-label">{PHASE_LABELS[p]}</span>
+                  <span className="phase-value">{acc[p] ?? '–'}</span>
+                </div>
+              ))
+            })()}
           </div>
 
           <ul className="rating-counts">
+            {(['brilliant', 'great'] as const).map((kind) => {
+              const count = specialCount(kind)
+              return count > 0 ? (
+                <li key={kind} className={`rating-${kind}`}>
+                  <span className="dot" />
+                  <span className="count">{count}</span>
+                  <span className="label">{count === 1 ? SPECIAL_LABELS[kind] : kind === 'brilliant' ? 'Brilliant moves' : 'Great moves'}</span>
+                </li>
+              ) : null
+            })}
             {RATING_ORDER.map((rating) => {
               const count = ratingCounts(played, player)[rating]
               return (

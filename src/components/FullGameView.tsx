@@ -7,6 +7,7 @@ import { replay, type Colour } from '../logic/game'
 import { RATING_GLYPHS, RATING_LABELS } from '../logic/moveRating'
 import type { PositionEval, ReviewedMove } from '../logic/review'
 import { momentAt } from '../logic/mistakeCards'
+import { SPECIAL_GLYPHS, SPECIAL_LABELS, type Special } from '../logic/reviewExtras'
 import { Board } from './Board'
 import { MomentTrainer } from './MomentTrainer'
 import { EvalGraph } from './EvalGraph'
@@ -18,6 +19,8 @@ type Props = {
   moves: readonly string[]
   evals: readonly PositionEval[]
   reviewed: readonly ReviewedMove[]
+  /** Book, great and brilliant moves, by ply. */
+  specials?: ReadonlyMap<number, Special>
   playerColour: Colour
   onBack: () => void
   /** The way on at the bottom (Joseph, Sep 2026: the review ends here, then Home). */
@@ -31,7 +34,7 @@ type Props = {
 
 const isError = (m: ReviewedMove) => ['inaccuracy', 'mistake', 'blunder'].includes(m.rating)
 
-export function FullGameView({ moves, evals, reviewed, playerColour, onBack, onDone, doneLabel = 'Continue', startAt = 0, retryAt = null }: Props) {
+export function FullGameView({ moves, evals, reviewed, specials = new Map(), playerColour, onBack, onDone, doneLabel = 'Continue', startAt = 0, retryAt = null }: Props) {
   // Position index: 0 = start, i = after the i-th move.
   const [index, setIndex] = useState(startAt)
   // "Try it again" (Joseph, Sep 2026): the position before one of your moves,
@@ -41,6 +44,12 @@ export function FullGameView({ moves, evals, reviewed, playerColour, onBack, onD
   const last = moves.length
   const fen = useMemo(() => replay(moves.slice(0, index)).fen(), [moves, index])
   const move = index > 0 ? reviewed[index - 1] : null
+  const special = move ? specials.get(move.ply) : undefined
+  /** "!!" for brilliant, "!" for great, else the error marks (?!, ?, ??). */
+  const glyph = (m: ReviewedMove) => {
+    const sp = specials.get(m.ply)
+    return sp ? SPECIAL_GLYPHS[sp] : RATING_GLYPHS[m.rating]
+  }
   const forPlayer = (cp: number) => (playerColour === 'w' ? cp : -cp)
 
   const points = useMemo(
@@ -93,10 +102,10 @@ export function FullGameView({ moves, evals, reviewed, playerColour, onBack, onD
           <>
             <strong>
               {moveNumber(move)} {move.san}
-              {RATING_GLYPHS[move.rating]}
+              {glyph(move)}
             </strong>
-            {move.mover === playerColour && (
-              <span className={`info-pill rating-${move.rating}`}>{RATING_LABELS[move.rating]}</span>
+            {(move.mover === playerColour || special === 'book') && (
+              <span className={`info-pill rating-${special ?? move.rating}`}>{special ? SPECIAL_LABELS[special] : RATING_LABELS[move.rating]}</span>
             )}
           </>
         ) : (
@@ -114,14 +123,18 @@ export function FullGameView({ moves, evals, reviewed, playerColour, onBack, onD
             <li key={m.ply}>
               <button
                 type="button"
-                className={[index === m.ply + 1 ? 'current' : '', mine && isError(m) ? `rating-${m.rating} flagged` : '']
+                className={[
+                  index === m.ply + 1 ? 'current' : '',
+                  mine && isError(m) ? `rating-${m.rating} flagged` : '',
+                  mine && (specials.get(m.ply) === 'brilliant' || specials.get(m.ply) === 'great') ? `rating-${specials.get(m.ply)} flagged` : '',
+                ]
                   .join(' ')
                   .trim()}
                 onClick={() => step(m.ply + 1)}
               >
                 {m.mover === 'w' && <span className="num">{Math.floor(m.ply / 2) + 1}.</span>}
                 {m.san}
-                {mine ? RATING_GLYPHS[m.rating] : ''}
+                {mine ? glyph(m) : ''}
               </button>
             </li>
           )

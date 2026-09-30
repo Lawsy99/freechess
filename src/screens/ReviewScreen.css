@@ -336,3 +336,93 @@
   background: var(--panel);
   color: var(--text);
 }
+
+/* FreeChess summary extras (Sep 2026): accuracy beside "you played like", then
+   the graph, then one row for the three phases. Kept to one line each. */
+.review-headline {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.review-headline > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.played-like {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 16px;
+  border-left: 1px solid var(--line-soft);
+}
+
+.played-like-value {
+  font-size: 56px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.phase-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.phase {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--card);
+}
+
+.phase-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.phase-value {
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.phase.good .phase-value {
+  color: var(--good);
+}
+
+.phase.ok .phase-value {
+  color: var(--star);
+}
+
+.phase.poor .phase-value {
+  color: var(--bad);
+}
+
+.phase.none .phase-value {
+  color: var(--muted-dim);
+}
+
+.review-key.brilliant {
+  border-left-color: #2fd6c3;
+}
+
+.review-key.great {
+  border-left-color: #6f9bff;
+}
+
+.review-key.brilliant .review-key-go,
+.review-key.great .review-key-go {
+  background: var(--panel);
+  color: var(--text);
+}
+
+/* Two columns, so the counts take half the height. */
+.review-summary .rating-counts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+}

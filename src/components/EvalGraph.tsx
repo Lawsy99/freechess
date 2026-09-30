@@ -11,20 +11,24 @@ type Props = {
   points: number[]
   /** Player errors to mark: position index (after the move) and grade. */
   markers: { index: number; rating: MoveRating }[]
+  /** The position shown (-1: none, as in the review summary). */
   current: number
   onSelect: (index: number) => void
+  /** Smaller, for the review summary: a glance at the game, tap to open it there. */
+  compact?: boolean
 }
 
 // Drawn in a fixed coordinate space; the SVG scales to the screen width.
 const W = 360
-const H = 100
+const FULL_H = 100
 const PAD_X = 6
 const PAD_Y = 8
 
 /** Dot radius grows with severity, so size backs up the colour. */
 const MARKER_R: Partial<Record<MoveRating, number>> = { inaccuracy: 4, mistake: 5, blunder: 6 }
 
-export function EvalGraph({ points, markers, current, onSelect }: Props) {
+export function EvalGraph({ points, markers, current, onSelect, compact = false }: Props) {
+  const H = compact ? 64 : FULL_H
   const svgRef = useRef<SVGSVGElement>(null)
   const dragging = useRef(false)
   const last = Math.max(points.length - 1, 1)
@@ -44,29 +48,34 @@ export function EvalGraph({ points, markers, current, onSelect }: Props) {
   }
 
   return (
-    <figure className="eval-graph">
+    <figure className={compact ? 'eval-graph compact' : 'eval-graph'}>
       <figcaption>
-        Your winning chances <span>· higher is better for you · middle line is level</span>
+        Your winning chances <span>{compact ? '· tap to see that moment' : '· higher is better for you · middle line is level'}</span>
       </figcaption>
       <svg
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
         role="img"
         aria-label="Graph of your winning chances through the game. The move list below has the same information."
-        onPointerDown={(e) => {
-          dragging.current = true
-          e.currentTarget.setPointerCapture(e.pointerId)
-          select(e.clientX)
-        }}
-        onPointerMove={(e) => dragging.current && select(e.clientX)}
-        onPointerUp={() => (dragging.current = false)}
-        onPointerCancel={() => (dragging.current = false)}
+        // (Compact: a tap only, so scrolling the page past it never opens it.)
+        {...(compact
+          ? { onClick: (e: React.MouseEvent) => select(e.clientX) }
+          : {
+              onPointerDown: (e: React.PointerEvent<SVGSVGElement>) => {
+                dragging.current = true
+                e.currentTarget.setPointerCapture(e.pointerId)
+                select(e.clientX)
+              },
+              onPointerMove: (e: React.PointerEvent) => dragging.current && select(e.clientX),
+              onPointerUp: () => (dragging.current = false),
+              onPointerCancel: () => (dragging.current = false),
+            })}
       >
         {/* 50% = level; hairline, solid, recessive */}
         <line className="graph-mid" x1={PAD_X} x2={W - PAD_X} y1={y(0.5)} y2={y(0.5)} />
         <path className="graph-area" d={area} />
         <path className="graph-line" d={line} />
-        <line className="graph-cursor" x1={x(current)} x2={x(current)} y1={PAD_Y / 2} y2={H - PAD_Y / 2} />
+        {current >= 0 && <line className="graph-cursor" x1={x(current)} x2={x(current)} y1={PAD_Y / 2} y2={H - PAD_Y / 2} />}
         {markers.map((m) => (
           <circle
             key={m.index}
@@ -77,7 +86,7 @@ export function EvalGraph({ points, markers, current, onSelect }: Props) {
           />
         ))}
         {/* A hollow ring, so an error dot underneath stays visible */}
-        <circle className="graph-current" cx={x(current)} cy={y(points[current] ?? 0.5)} r={8} />
+        {current >= 0 && <circle className="graph-current" cx={x(current)} cy={y(points[current] ?? 0.5)} r={8} />}
       </svg>
     </figure>
   )

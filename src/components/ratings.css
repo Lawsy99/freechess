@@ -25,3 +25,19 @@
   --rating: #ff5d5d;
   --rating-ink: #ffffff;
 }
+
+/* Chess.com-style highlights (FreeChess, Sep 2026): brilliant and great moves, and book. */
+.rating-brilliant {
+  --rating: #2fd6c3;
+  --rating-ink: #06231f;
+}
+
+.rating-great {
+  --rating: #6f9bff;
+  --rating-ink: #0b1a3a;
+}
+
+.rating-book {
+  --rating: #c9a57a;
+  --rating-ink: #2a1d0e;
+}
