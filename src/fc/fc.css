@@ -1027,3 +1027,231 @@
 .fc-rush-strikes .hit {
   color: var(--bad);
 }
+
+/* Learn: the path */
+.fc-unit {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fc-unit-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  color: #14161a;
+  box-shadow: var(--lift);
+}
+
+.fc-unit-banner strong {
+  font-size: 19px;
+}
+
+.fc-unit-banner span {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.fc-path {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin: 4px 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.fc-path li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 160px;
+}
+
+.fc-node {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: none;
+  border-radius: 50%;
+  background: var(--panel);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+  color: #14161a;
+  cursor: pointer;
+}
+
+.fc-node:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.fc-node.locked {
+  color: var(--muted-dim);
+  cursor: default;
+}
+
+.fc-node.current {
+  animation: fc-glow 1.8s ease-in-out infinite;
+}
+
+@keyframes fc-glow {
+  50% {
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35), 0 0 0 10px rgba(255, 255, 255, 0.12);
+  }
+}
+
+.fc-node-label {
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.fc-node-label.locked {
+  color: var(--muted-dim);
+}
+
+/* Learn: a lesson */
+.fc-lesson {
+  gap: 12px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 24px;
+}
+
+.fc-lesson > *:not(.coach-drill):not(.puzzle):not(.fc-round) {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.fc-lesson-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fc-lesson-progress {
+  flex: 1;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--panel);
+  overflow: hidden;
+}
+
+.fc-lesson-progress i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--good);
+  transition: width 0.4s ease;
+}
+
+.fc-lesson-title {
+  margin: 0;
+  font-size: 22px !important;
+}
+
+.fc-idea {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fc-idea-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--lift);
+}
+
+.fc-idea-card p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.fc-round {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fc-round > .fc-round-head,
+.fc-round > .fc-primary {
+  margin: 0 16px;
+}
+
+.fc-round-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0;
+}
+
+.fc-round-head span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.fc-round-result {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.fc-round-result strong {
+  font-size: 20px;
+}
+
+.fc-round-result.passed strong {
+  color: var(--good);
+}
+
+.fc-round-result.missed strong {
+  color: var(--bad);
+}
+
+.fc-round-result p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.fc-lesson-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 40px;
+  text-align: center;
+}
+
+.fc-lesson-tick {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--good);
+  color: #10281a;
+  animation: fc-star-pop 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+
+.fc-lesson-done p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.fc-lesson-done .fc-primary {
+  align-self: stretch;
+  margin-top: 12px;
+}

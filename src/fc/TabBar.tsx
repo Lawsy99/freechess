@@ -24,15 +24,3 @@ export function TabBar({ tab, onChange }: { tab: Tab; onChange: (t: Tab) => void
   )
 }
 
-/** Puzzles and Learn, until their phases arrive. */
-export function SoonTab({ title, text }: { title: string; text: string }) {
-  return (
-    <main className="fc-page fc-soon">
-      <h1>{title}</h1>
-      <div className="fc-card">
-        <strong>Coming soon</strong>
-        <p>{text}</p>
-      </div>
-    </main>
-  )
-}

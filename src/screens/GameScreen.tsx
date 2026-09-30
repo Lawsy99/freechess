@@ -820,8 +820,8 @@ export function GameScreen({
         right={<span className={outcome ? 'game-status game-over' : 'game-status'}>{viewing ? 'Looking back' : status}</span>}
       />
 
-      {/* The message panel: whatever room is left, never over the board.
-          Long tips scroll inside it. */}
+      {/* The message panel: whatever room is left, never over the board. What's
+          said at the top, the moves so far below. It scrolls inside itself. */}
       <section className="game-panel" aria-live="polite">
         {!competitive &&
           (viewedRating && viewedBefore ? (
@@ -870,9 +870,9 @@ export function GameScreen({
             {bookNote.label}: next, <strong>{sanInWords(bookNote.san)}</strong>
           </p>
         ) : null}
+        {/* The moves so far, like a scoresheet: the panel is never empty space. */}
+        <MoveStrip sans={viewing ? sans.slice(0, viewPly!) : sans} wrap />
       </section>
-
-      <MoveStrip sans={viewing ? sans.slice(0, viewPly!) : sans} />
 
       <div className="game-toolbar">
         {outcome ? (

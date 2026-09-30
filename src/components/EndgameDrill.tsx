@@ -13,9 +13,11 @@ import './CoachDrill.css'
 type Props = {
   position: EndgamePosition
   onDone: () => void
+  /** A Learn lesson (FreeChess): no leaving it for now; it only counts once it's done. */
+  noSkip?: boolean
 }
 
-export function EndgameDrill({ position, onDone }: Props) {
+export function EndgameDrill({ position, onDone, noSkip = false }: Props) {
   const you = new Chess(position.fen).turn() as Colour
   const [fen, setFen] = useState(position.fen)
   const [last, setLast] = useState<{ from: string; to: string } | null>(null)
@@ -107,7 +109,7 @@ export function EndgameDrill({ position, onDone }: Props) {
           Carry on
         </button>
       )}
-      {!over && (
+      {!over && !noSkip && (
         <button type="button" className="review-secondary" onClick={onDone}>
           Leave it for now
         </button>

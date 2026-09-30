@@ -8,7 +8,10 @@ import { BOT_GROUPS, findBot, type Bot } from '../data/bots'
 import { characterOpponentId } from '../data/opponents'
 import { newGameRecord, outcomeOf, upgradeGameRecord, type GameRecord } from '../logic/gameRecord'
 import type { PathGame } from '../logic/path'
-import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordCoachGame, withRushScore, type Profile } from '../logic/profile'
+import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordCoachGame, recordLesson, withRushScore, type Profile } from '../logic/profile'
+import type { Lesson } from '../data/learnPath'
+import { LearnTab } from './LearnTab'
+import { LessonPlayer } from './LessonPlayer'
 import { PuzzleRun } from './PuzzleRun'
 import { PuzzleRush } from './PuzzleRush'
 import { PuzzlesTab, type PuzzleMode } from './PuzzlesTab'
@@ -34,10 +37,10 @@ import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
 import { ProfileTab } from './ProfileTab'
 import { ResultScreen, type LastResult } from './ResultScreen'
-import { SoonTab, TabBar, type Tab } from './TabBar'
+import { TabBar, type Tab } from './TabBar'
 import './fc.css'
 
-type View = 'tabs' | 'bot' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle'
+type View = 'tabs' | 'bot' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson'
 
 const CHARACTER_PREFIX = 'char:'
 
@@ -65,6 +68,7 @@ export function FreeChessApp() {
   const [last, setLast] = useState<LastResult | null>(null)
   const [pastGame, setPastGame] = useState<ArchivedGame | null>(null)
   const [puzzleMode, setPuzzleMode] = useState<PuzzleMode | null>(null)
+  const [lesson, setLesson] = useState<Lesson | null>(null)
 
   useEffect(() => {
     Promise.all([loadProfile(), loadSettings(), loadCurrentGame()])
@@ -277,6 +281,27 @@ export function FreeChessApp() {
     )
   }
 
+  if (view === 'lesson' && lesson) {
+    const back = () => {
+      setView('tabs')
+      setTab('learn')
+    }
+    return (
+      <BoardThemeContext.Provider value={settings.board}>
+        <LessonPlayer
+          key={lesson.id}
+          lesson={lesson}
+          playerRating={Math.round(profile.rating?.rating ?? 800)}
+          onComplete={() => {
+            updateProfile(recordLesson(profile, lesson.id, new Date()))
+            back()
+          }}
+          onBack={back}
+        />
+      </BoardThemeContext.Provider>
+    )
+  }
+
   if (view === 'bot' && bot) {
     return <BotSheet bot={bot} profile={profile} onBack={() => setView('tabs')} onPlay={(c) => startBotGame(bot, c)} />
   }
@@ -296,7 +321,7 @@ export function FreeChessApp() {
   return (
     <div className="fc-shell">
       {tab === 'home' && (
-        <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} />
+        <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onOpenLearn={() => setTab('learn')} />
       )}
       {tab === 'play' && <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} />}
       {tab === 'puzzles' && (
@@ -308,7 +333,15 @@ export function FreeChessApp() {
           }}
         />
       )}
-      {tab === 'learn' && <SoonTab title="Learn" text="A step-by-step path: short lessons, puzzles and positions to play out. Complete each to unlock the next." />}
+      {tab === 'learn' && (
+        <LearnTab
+          profile={profile}
+          onStart={(l) => {
+            setLesson(l)
+            setView('lesson')
+          }}
+        />
+      )}
       {tab === 'profile' && <ProfileTab profile={profile} onPastGames={() => setView('past')} onSettings={() => setView('settings')} />}
       <TabBar tab={tab} onChange={setTab} />
     </div>

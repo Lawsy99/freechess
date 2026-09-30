@@ -11,7 +11,7 @@
 3. **Puzzles (built, Sep 2026).** Unlimited, rated to your level, their own puzzle rating
    (Lichess puzzle set, as in Club Night). Maybe a daily puzzle and a timed
    rush mode.
-4. **Learn.** A Duolingo-style path of units: a short explanation, puzzles,
+4. **Learn (built, Sep 2026).** A Duolingo-style path of units: a short explanation, puzzles,
    then positions to play out; pass to unlock the next. Ticks the lesson goal.
 5. **Polish.** Stats, settings tidy-up, and the ideas below.
 

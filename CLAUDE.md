@@ -40,6 +40,11 @@ folder is still called `open-file` (the app's first working name).
 - Review after every game: summary, then the step-through with "Try it again" on your
   moves. No "biggest moments" to play through (Try it again replaced them).
 - Bots never resign: every game is played to the end (logic/opponentDecisions.ts).
+- Learn (data/learnPath.ts): 6 units, 25 lessons; each is mostly doing (puzzles by theme,
+  play-outs against the engine, opening drills) after a two- or three-sentence idea. A
+  puzzle round passes with enough solved first time; otherwise a fresh set.
+- Match screen: the board full width; nothing over it; nothing moves; no scrolling. The
+  message panel below the board is a card with what's said and the scoresheet.
 - Moves in words below 1500, notation from there (logic/notation.ts).
 - Storage names are FreeChess's own ("freechess"), so it never clashes with Club
   Night on the same github.io address.

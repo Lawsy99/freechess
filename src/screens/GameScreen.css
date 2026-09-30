@@ -761,3 +761,71 @@
 .game-screen .game-toolbar > button.confirm-no {
   font-size: 24px;
 }
+
+/* The moves so far, wrapping like a scoresheet inside the message panel. */
+.game-panel .move-strip.wrap {
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 0;
+  overflow: visible;
+  white-space: normal;
+}
+
+.game-panel .move-strip.empty {
+  padding: 0;
+}
+
+.game-screen {
+  --game-chrome: 210px;
+}
+
+/* The panel as a card, so the room below the board reads as a designed area
+   (what's said at the top, the scoresheet below), not a gap (Joseph, Sep 2026). */
+.game-screen .game-panel {
+  margin: 2px 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--card);
+}
+
+.game-panel .panel-line,
+.game-panel .move-info {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* A two-column scoresheet: White left, Black right, a row a move. */
+.game-panel .move-strip.wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 16px;
+  font-size: 15px;
+}
+
+.game-panel .move-strip.wrap li {
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
+.game-panel .move-strip.wrap li:nth-child(odd) {
+  display: flex;
+  gap: 6px;
+}
+
+.game-panel .move-strip.wrap .num {
+  min-width: 26px;
+  margin-right: 0;
+  color: var(--muted-dim);
+}
+
+.game-panel .move-strip.wrap li:nth-child(even) {
+  padding-left: 38px;
+}
+
+.game-panel .move-strip.wrap li.latest {
+  background: var(--panel);
+}
+
+.game-panel .move-strip.empty {
+  color: var(--muted);
+}

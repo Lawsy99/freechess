@@ -37,6 +37,8 @@ export type Profile = {
   puzzlesSolved?: number
   rushBest?: number
   dailySolvedOn?: string
+  /** Learn: lessons passed, by id (data/learnPath.ts). */
+  lessonsDone?: string[]
 }
 
 export const NEW_PROFILE: Profile = {
@@ -167,4 +169,10 @@ export function countPuzzle(p: Profile, solved: boolean): Profile {
 /** A Puzzle Rush finished: keeps the best score. */
 export function withRushScore(p: Profile, score: number): Profile {
   return { ...p, rushBest: Math.max(p.rushBest ?? 0, score) }
+}
+
+/** A lesson passed: remembered (it unlocks the next), and today's lesson goal. */
+export function recordLesson(p: Profile, lessonId: string, now: Date): Profile {
+  const done = p.lessonsDone ?? []
+  return completeGoal({ ...p, lessonsDone: done.includes(lessonId) ? done : [...done, lessonId] }, 'lesson', dayKey(now))
 }
