@@ -426,3 +426,41 @@
   grid-template-columns: 1fr 1fr;
   gap: 6px 12px;
 }
+
+/* The Coach's tip (Sep 2026): the one thing to work on, and where to practise it. */
+.review-tip {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: inset 3px 0 0 var(--buff);
+}
+
+.review-tip p {
+  margin: 0;
+}
+
+.review-tip-title {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.review-tip-text {
+  margin-top: 2px !important;
+  line-height: 1.4;
+}
+
+.review-tip-go {
+  min-height: 40px;
+  margin-top: 10px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: var(--buff);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}

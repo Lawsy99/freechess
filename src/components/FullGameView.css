@@ -160,3 +160,22 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* The Coach's line on each move (Sep 2026). Room for three lines, so stepping
+   through doesn't make everything below jump. */
+.full-game-coach {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 64px;
+  margin: 0 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--card);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.full-game-coach > span {
+  flex: 1;
+}

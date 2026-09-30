@@ -15,6 +15,9 @@ import { RATING_LABELS, type MoveRating } from '../logic/moveRating'
 import { moveName } from '../logic/notation'
 import { bestMoveOfGame, gameAccuracy, ratingCounts, reviewMoves, settleEvals, SHORTEST_REVIEW, type PositionEval } from '../logic/review'
 import { PHASE_LABELS, PHASES, phaseAccuracy, playedLike, SPECIAL_LABELS, specialMoves, winPoints, type Special } from '../logic/reviewExtras'
+import { coachTip } from '../logic/stepExplain'
+import { ALL_LESSONS } from '../data/learnPath'
+import { Portrait } from '../components/Portrait'
 import { cardId, cardsFromMoments, gameMoments, moveLabel } from '../logic/mistakeCards'
 import { addCardsIfNew, getArchivedGame, retireCardById, saveGameAnalysis } from '../storage/db'
 import '../components/ratings.css'
@@ -27,6 +30,8 @@ type Props = {
   onContinue: () => void
   /** Opened from Past games: the way out goes back to the list. */
   fromHistory?: boolean
+  /** Open a Learn lesson (the Coach's tip points to one). */
+  onLesson?: (lessonId: string) => void
   /** For rated games: the player's rating before and after this result. */
   ratingChange?: { from: number; to: number } | null
 }
@@ -56,7 +61,7 @@ function theirMoveName(moves: readonly string[], ply: number): string {
   return move ? moveName(move) : 'their move'
 }
 
-export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChange = null, onPlayFrom }: Props) {
+export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChange = null, onPlayFrom, onLesson }: Props) {
   const [evals, setEvals] = useState<PositionEval[] | null>(null)
   const [progress, setProgress] = useState({ done: 0, total: game.moves.length + 1 })
   const [failed, setFailed] = useState(false)
@@ -123,6 +128,12 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
   }, [reviewed, player, game.startPly])
   // Book, great and brilliant moves (FreeChess, Sep 2026, as chess.com shows them).
   const specials = useMemo(() => (reviewed ? specialMoves(reviewed) : new Map<number, Special>()), [reviewed])
+  // The one thing to work on from this game, and the lesson that practises it.
+  const tip = useMemo(
+    () => (reviewed && evals ? coachTip(game.moves, evals, reviewed, player, game.startPly ?? 0) : null),
+    [reviewed, evals, game.moves, player, game.startPly],
+  )
+  const tipLesson = tip ? ALL_LESSONS.find((l) => l.id === tip.lesson) : undefined
   // Key moments for the summary: your biggest mistake, a chance you missed,
   // and your best move. Each opens the step-through there (FreeChess).
   const keyMoments = useMemo(() => {
@@ -422,6 +433,24 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
           </ul>
 
           {moments.length === 0 && <p className="review-note">No big mistakes this game.</p>}
+
+          {/* The Coach's tip: the thing to work on, and where to practise it. */}
+          {tip && tipLesson && (
+            <div className="review-tip">
+              <Portrait who="coach" size={40} expression="neutral" className="fc-face" />
+              <div>
+                <p className="review-tip-title">Coach’s tip</p>
+                <p className="review-tip-text">
+                  {tip.text} The lesson “{tipLesson.title}” practises exactly this.
+                </p>
+                {onLesson && (
+                  <button type="button" className="review-tip-go" onClick={() => onLesson(tipLesson.id)}>
+                    Practise it
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Key moments you can tap (Joseph, Sep 2026: the coach's notes weren't
               useful; these go straight to the move, or straight into Try again). */}

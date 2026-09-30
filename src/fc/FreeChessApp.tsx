@@ -10,7 +10,7 @@ import { newGameRecord, outcomeOf, upgradeGameRecord, type GameRecord } from '..
 import type { PathGame } from '../logic/path'
 import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordCoachGame, recordLesson, withRushScore,
   withVisionScore, type Profile } from '../logic/profile'
-import type { Lesson } from '../data/learnPath'
+import { ALL_LESSONS, type Lesson } from '../data/learnPath'
 import { LearnTab } from './LearnTab'
 import { LessonPlayer } from './LessonPlayer'
 import { PuzzleRun } from './PuzzleRun'
@@ -162,6 +162,14 @@ export function FreeChessApp() {
   // The game is over: record it once (rating, stars, goals), then the result.
   // A game with the Coach (Joseph, Sep 2026): at your rating, full help
   // (hints, takebacks, "are you sure?", tips as you go), never rated.
+  // The Coach's tip in a review opens the lesson that practises it, even one not reached yet.
+  const openLesson = (id: string) => {
+    const l = ALL_LESSONS.find((x) => x.id === id)
+    if (!l) return
+    setLesson(l)
+    setView('lesson')
+  }
+
   const startCoachGame = (choice: ColourChoice = 'random') => {
     const colour = choice === 'random' ? (Math.random() < 0.5 ? 'w' : 'b') : choice
     const rating = Math.round(profile.rating?.rating ?? 800)
@@ -251,6 +259,7 @@ export function FreeChessApp() {
         <ReviewScreen
           key={game.id}
           game={game}
+          onLesson={openLesson}
           onContinue={() => {
             setView('tabs')
             setTab('play')
@@ -263,7 +272,7 @@ export function FreeChessApp() {
   if (view === 'past-review' && pastGame) {
     return (
       <BoardThemeContext.Provider value={settings.board}>
-        <ReviewScreen key={pastGame.id} game={upgradeGameRecord(pastGame)} fromHistory onContinue={() => setView('past')} />
+        <ReviewScreen key={pastGame.id} game={upgradeGameRecord(pastGame)} fromHistory onContinue={() => setView('past')} onLesson={openLesson} />
       </BoardThemeContext.Provider>
     )
   }

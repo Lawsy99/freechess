@@ -10,6 +10,8 @@ import { momentAt } from '../logic/mistakeCards'
 import { SPECIAL_GLYPHS, SPECIAL_LABELS, type Special } from '../logic/reviewExtras'
 import { START_FEN } from '../logic/analysisLine'
 import { AnalysisBoard } from './AnalysisBoard'
+import { Portrait } from './Portrait'
+import { stepExplanation } from '../logic/stepExplain'
 import { Board } from './Board'
 import { MomentTrainer } from './MomentTrainer'
 import { EvalGraph } from './EvalGraph'
@@ -49,6 +51,11 @@ export function FullGameView({ moves, evals, reviewed, specials = new Map(), pla
   const fen = useMemo(() => replay(moves.slice(0, index)).fen(), [moves, index])
   const move = index > 0 ? reviewed[index - 1] : null
   const special = move ? specials.get(move.ply) : undefined
+  // The Coach's line on this move (FreeChess, Sep 2026, like chess.com's coach explanations).
+  const coachSays = useMemo(
+    () => (move ? stepExplanation(moves, evals, reviewed, move.ply, playerColour, specials.get(move.ply)) : 'Step through with the arrows. I’ll talk you through your moves.'),
+    [move, moves, evals, reviewed, playerColour, specials],
+  )
   /** "!!" for brilliant, "!" for great, else the error marks (?!, ?, ??). */
   const glyph = (m: ReviewedMove) => {
     const sp = specials.get(m.ply)
@@ -129,6 +136,11 @@ export function FullGameView({ moves, evals, reviewed, specials = new Map(), pla
           <strong>Starting position</strong>
         )}
         <span className="info-eval">{formatCp(forPlayer(evals[index].cp))} for you</span>
+      </p>
+
+      <p className="full-game-coach" aria-live="polite">
+        <Portrait who="coach" size={32} expression={move && move.mover === playerColour && isError(move) ? 'neutral' : 'pleased'} className="fc-face" />
+        <span>{coachSays ?? (move && move.mover !== playerColour ? `They played ${move.san}. Your move next.` : 'A sensible move. Nothing to add.')}</span>
       </p>
 
       <EvalGraph points={points} markers={markers} current={index} onSelect={step} />
