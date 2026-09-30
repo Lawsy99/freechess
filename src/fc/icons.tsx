@@ -112,3 +112,18 @@ export function Stars({ earned, size = 16 }: { earned: number; size?: number }) 
     </span>
   )
 }
+
+// Playing styles (Sep 2026), shown on a bot's page and the custom bot.
+export const StyleIcon = ({ style, ...p }: IconProps & { style: string }) => (
+  <Svg {...p}>
+    {style === 'aggressive' && (
+      // Crossed swords
+      <path d="M4 4l9 9M20 4l-9 9M13 13l2.5 2.5M11 13l-2.5 2.5M14 17l3 3M10 17l-3 3M16.5 14.5 19 17M7.5 14.5 5 17" />
+    )}
+    {style === 'solid' && <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z" />}
+    {style === 'simplifying' && <path d="M4 8h13l-3-3M20 16H7l3 3" />}
+    {style === 'grinding' && <path d="M12 3v3M12 18v3M3 12h3M18 12h3M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />}
+    {style === 'theoretical' && <path d="M4 5c3-1 5-1 8 1 3-2 5-2 8-1v14c-3-1-5-1-8 1-3-2-5-2-8-1zM12 6v14" />}
+    {style === 'adaptive' && <path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" />}
+  </Svg>
+)

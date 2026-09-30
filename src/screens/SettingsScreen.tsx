@@ -228,6 +228,10 @@ export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Pro
         )}
       </section>
 
+      {/* The faces' licence asks for credit (CC BY 4.0). */}
+      <p className="build-stamp">
+        Faces: “Micah” by Micah Lanier (CC BY 4.0), drawn with DiceBear. Puzzles from the Lichess database (CC0).
+      </p>
       <p className="build-stamp">Version: {BUILD_LABEL}</p>
     </main>
   )

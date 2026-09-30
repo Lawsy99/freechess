@@ -1,12 +1,14 @@
-// A bot's page: who they are, how they play, your record against them, and
-// a colour to play. Then the game.
+// A bot's page: who they are (a banner in their colour, their face, what
+// they'd say about themselves), how they play, your record against them,
+// then a colour and a clock, and the game. (Look reworked Sep 2026.)
 import { useState } from 'react'
 import { Portrait } from '../components/Portrait'
 import { BOT_GROUPS, type Bot } from '../data/bots'
+import { FACES } from '../data/faces'
 import type { Profile } from '../logic/profile'
 import type { TimeControlId } from '../logic/clock'
 import { GameOptions } from './GameOptions'
-import { BackIcon, Stars } from './icons'
+import { BackIcon, Stars, StyleIcon } from './icons'
 import { STYLE_LABELS } from '../logic/botPicks'
 
 export type ColourChoice = 'w' | 'random' | 'b'
@@ -26,25 +28,30 @@ export function BotSheet({ bot, profile, onBack, onPlay, timeControl }: Props) {
   const record = profile.results[bot.id]
   const style = STYLE_LABELS[bot.style]
   const group = BOT_GROUPS.find((g) => g.id === bot.group)
+  const bg = FACES[bot.id]?.bg ?? '8fb3ff'
   return (
-    <main className="fc-page fc-bot-sheet">
-      <button type="button" className="fc-back" onClick={onBack} aria-label="Back to the bots">
-        <BackIcon size={22} /> Bots
-      </button>
+    <main className={`fc-page fc-bot-sheet lvl-${bot.group}`}>
+      <BotBanner bg={bg} who={bot.id} onBack={onBack} />
       <div className="fc-bot-hero">
-        <Portrait who={bot.id} size={112} className="fc-face" />
         <h1>
           {bot.name} <span className="fc-flag">{bot.flag}</span>
         </h1>
-        <p className="fc-bot-meta">
-          {bot.rating} · {group?.label} · {bot.country}
-        </p>
-        <Stars earned={profile.stars[bot.id] ?? 0} size={22} />
+        <div className="fc-bot-chips">
+          <span className={`fc-rating-tag lvl-${bot.group}`}>{bot.rating}</span>
+          <span className="fc-chip">{group?.label}</span>
+          <span className="fc-chip">{bot.country}</span>
+        </div>
+        <Stars earned={profile.stars[bot.id] ?? 0} size={24} />
       </div>
-      <p className="fc-bot-quote">“{bot.bio}”</p>
+      <p className="fc-bubble">{bot.bio}</p>
       <div className="fc-card fc-style">
-        <strong>{style.label}</strong>
-        <span>{style.detail}</span>
+        <span className="fc-style-icon">
+          <StyleIcon style={bot.style} size={22} />
+        </span>
+        <span className="fc-style-text">
+          <strong>{style.label}</strong>
+          <span>{style.detail}</span>
+        </span>
       </div>
       {record && record.wins + record.losses + record.draws > 0 && (
         <p className="fc-record">
@@ -56,5 +63,17 @@ export function BotSheet({ bot, profile, onBack, onPlay, timeControl }: Props) {
         Play {bot.name}
       </button>
     </main>
+  )
+}
+
+/** The top of a bot's page: their colour, a faint board pattern, and their face. */
+export function BotBanner({ bg, who, onBack }: { bg: string; who: string; onBack: () => void }) {
+  return (
+    <div className="fc-bot-banner" style={{ ['--banner' as string]: `#${bg}` }}>
+      <button type="button" className="fc-banner-back" onClick={onBack} aria-label="Back to the bots">
+        <BackIcon size={22} /> Bots
+      </button>
+      <Portrait who={who} size={128} className="fc-face fc-banner-face" />
+    </div>
   )
 }

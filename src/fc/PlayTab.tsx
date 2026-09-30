@@ -8,6 +8,7 @@ import type { Profile } from '../logic/profile'
 import { ChevronIcon, Stars, StarIcon } from './icons'
 import { groupFor } from '../logic/botPicks'
 import { MenuList } from './MenuList'
+import { LevelBadge } from './LevelBadge'
 
 type Props = {
   profile: Profile
@@ -42,8 +43,9 @@ export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis, onCustom }: 
         const stars = bots.reduce((sum, b) => sum + (profile.stars[b.id] ?? 0), 0)
         const isOpen = open.includes(group.id)
         return (
-          <section key={group.id} className={`fc-group ${isOpen ? 'open' : ''}`}>
+          <section key={group.id} className={`fc-group lvl-${group.id} ${isOpen ? 'open' : ''}`}>
             <button type="button" className="fc-group-head" aria-expanded={isOpen} onClick={() => toggle(group.id)}>
+              <LevelBadge group={group.id} />
               <span className="fc-group-title">
                 <strong>{group.label}</strong>
                 <span>
@@ -62,7 +64,7 @@ export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis, onCustom }: 
                   {bots.map((bot) => (
                     <li key={bot.id}>
                       <button type="button" className="fc-bot-row" onClick={() => onPick(bot)}>
-                        <Portrait who={bot.id} size={48} className="fc-face" />
+                        <Portrait who={bot.id} size={54} className="fc-face" />
                         <span className="fc-bot-main">
                           <strong>
                             {bot.name} <span className="fc-flag">{bot.flag}</span>
@@ -70,7 +72,7 @@ export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis, onCustom }: 
                           <span className="fc-bot-bio">{bot.bio}</span>
                         </span>
                         <span className="fc-bot-side">
-                          <span className="fc-rating-tag">{bot.rating}</span>
+                          <span className={`fc-rating-tag lvl-${bot.group}`}>{bot.rating}</span>
                           <Stars earned={profile.stars[bot.id] ?? 0} size={13} />
                         </span>
                       </button>

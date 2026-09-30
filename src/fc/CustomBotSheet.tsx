@@ -1,17 +1,15 @@
 // The custom bot: pick any strength and a style, then a colour, then play
 // (FreeChess, Sep 2026). Starts from what you chose last time, or your rating.
 import { useState } from 'react'
-import { Portrait } from '../components/Portrait'
 import { BOT_GROUPS } from '../data/bots'
 import type { Style } from '../data/characters'
 import { CUSTOM_MAX, CUSTOM_MIN, CUSTOM_STEP, CUSTOM_STYLES, customBot } from '../data/customBot'
 import { groupFor, STYLE_LABELS } from '../logic/botPicks'
 import type { Bot } from '../data/bots'
 import type { Profile } from '../logic/profile'
-import type { ColourChoice } from './BotSheet'
+import { BotBanner, type ColourChoice } from './BotSheet'
 import type { TimeControlId } from '../logic/clock'
 import { GameOptions } from './GameOptions'
-import { BackIcon } from './icons'
 
 type Props = {
   profile: Profile
@@ -32,12 +30,9 @@ export function CustomBotSheet({ profile, onBack, onPlay, timeControl }: Props) 
   const nudge = (by: number) => setRating((r) => Math.max(CUSTOM_MIN, Math.min(CUSTOM_MAX, r + by)))
 
   return (
-    <main className="fc-page fc-bot-sheet">
-      <button type="button" className="fc-back" onClick={onBack} aria-label="Back to the bots">
-        <BackIcon size={22} /> Bots
-      </button>
+    <main className={`fc-page fc-bot-sheet lvl-${groupFor(bot.rating)}`}>
+      <BotBanner bg="6c9bff" who={bot.id} onBack={onBack} />
       <div className="fc-bot-hero">
-        <Portrait who={bot.id} size={96} className="fc-face" />
         <h1>Custom bot</h1>
         <p className="fc-bot-meta">Choose how strong it is and how it plays.</p>
       </div>

@@ -4,6 +4,8 @@
 // dark outlines. Swapped for commissioned art later without touching callers.
 import { useId } from 'react'
 import { APPEARANCES, type Appearance } from '../data/appearances'
+import { FACES } from '../data/faces'
+import { faceUri } from './faceArt'
 import type { Expression } from '../logic/dialogue'
 
 const INK = '#1f2a24'
@@ -19,6 +21,23 @@ type Props = {
 
 export function Portrait({ who, expression = 'neutral', size = 44, className }: Props) {
   const clip = useId()
+  // FreeChess's illustrated faces (Sep 2026); the older drawn-in-code faces
+  // remain for anyone without one.
+  const face = FACES[who]
+  if (face) {
+    return (
+      <img
+        className={className}
+        src={faceUri(who, face, expression)}
+        width={size}
+        height={size}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        style={{ flex: `0 0 ${size}px`, borderRadius: '50%' }}
+      />
+    )
+  }
   const look = APPEARANCES[who]
   // The custom bot (FreeChess): no person, just a tile with sliders.
   if (who.startsWith('custom-')) {

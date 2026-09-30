@@ -25,3 +25,4 @@ dist-ssr
 
 # Claude Code personal settings (launch.json is shared and stays tracked)
 .claude/settings.local.json
+scratch/
