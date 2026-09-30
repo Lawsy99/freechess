@@ -9081,5 +9081,4565 @@
   "conditions": {},
   "weight": 1,
   "once": false
+ },
+ {
+  "id": "fc2-ada-game_start-01",
+  "character": "ada",
+  "trigger": "game_start",
+  "text": "I practised moving the horse. The knight. The horsey one.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-game_start-02",
+  "character": "ada",
+  "trigger": "game_start",
+  "text": "Can pawns go backwards yet? No? Okay. Let's play.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-game_start-03",
+  "character": "ada",
+  "trigger": "game_start",
+  "text": "My queen is ready. She's always ready.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-game_win-01",
+  "character": "ada",
+  "trigger": "game_win",
+  "text": "Did you see my queen? She did everything!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-game_win-02",
+  "character": "ada",
+  "trigger": "game_win",
+  "text": "I'm going to put this game on the fridge.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-game_loss-01",
+  "character": "ada",
+  "trigger": "game_loss",
+  "text": "Oh no. My queen needed more help.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-game_loss-02",
+  "character": "ada",
+  "trigger": "game_loss",
+  "text": "That's okay. I'm only little at chess.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-capture_queen-01",
+  "character": "ada",
+  "trigger": "capture_queen",
+  "text": "I got your queen! Now mine is the only queen!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-capture_minor-01",
+  "character": "ada",
+  "trigger": "capture_minor",
+  "text": "Got your {piece}! Can I keep it?",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-capture_rook-01",
+  "character": "ada",
+  "trigger": "capture_rook",
+  "text": "I took the castle! The rook. The castle one.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-check_given-01",
+  "character": "ada",
+  "trigger": "check_given",
+  "text": "Check! I remembered to say it!",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-castling-01",
+  "character": "ada",
+  "trigger": "castling",
+  "text": "I did the king-and-castle swap! Castling!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-clearly_winning-01",
+  "character": "ada",
+  "trigger": "clearly_winning",
+  "text": "Am I winning? I think I'm winning!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-clearly_losing-01",
+  "character": "ada",
+  "trigger": "clearly_losing",
+  "text": "Hmm. My pieces keep disappearing.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-queens_off-01",
+  "character": "ada",
+  "trigger": "queens_off",
+  "text": "Where did the queens go? I miss her already.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-endgame_reached-01",
+  "character": "ada",
+  "trigger": "endgame_reached",
+  "text": "Not many pieces left. It's like tidying up.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-sacrifice-01",
+  "character": "ada",
+  "trigger": "sacrifice",
+  "text": "I gave you that one because I'm nice. Also by accident.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-promotion-01",
+  "character": "ada",
+  "trigger": "promotion",
+  "text": "A new queen! Now I've got TWO!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ada-opportunity-01",
+  "character": "ada",
+  "trigger": "opportunity",
+  "text": "Wait. Did I just leave something? Don't look.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-game_start-01",
+  "character": "kofi",
+  "trigger": "game_start",
+  "text": "Grandad taught me with bottle tops. You get real pieces. Lucky.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-game_start-02",
+  "character": "kofi",
+  "trigger": "game_start",
+  "text": "One game, then I help Grandad pack up the stall.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-game_start-03",
+  "character": "kofi",
+  "trigger": "game_start",
+  "text": "Grandad says the first capture is the sweetest.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-game_win-01",
+  "character": "kofi",
+  "trigger": "game_win",
+  "text": "Grandad will be proud. He'll pretend not to be.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-game_win-02",
+  "character": "kofi",
+  "trigger": "game_win",
+  "text": "Free pieces, like Grandad says. Thank you.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-game_loss-01",
+  "character": "kofi",
+  "trigger": "game_loss",
+  "text": "Grandad says losing is just paying for lessons.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-game_loss-02",
+  "character": "kofi",
+  "trigger": "game_loss",
+  "text": "You didn't give me any free pieces. Clever.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-capture_queen-01",
+  "character": "kofi",
+  "trigger": "capture_queen",
+  "text": "Your queen! Grandad would clap for that.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-capture_minor-01",
+  "character": "kofi",
+  "trigger": "capture_minor",
+  "text": "Thank you for the {piece}. Grandad says always say thank you.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-capture_rook-01",
+  "character": "kofi",
+  "trigger": "capture_rook",
+  "text": "A whole rook! That's a good market day.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-check_given-01",
+  "character": "kofi",
+  "trigger": "check_given",
+  "text": "Check. Grandad shouts it. I say it nicely.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-castling-01",
+  "character": "kofi",
+  "trigger": "castling",
+  "text": "King safe. Now I can go shopping for pieces.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-clearly_winning-01",
+  "character": "kofi",
+  "trigger": "clearly_winning",
+  "text": "This is like the end of market day. Everything's sold.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-clearly_losing-01",
+  "character": "kofi",
+  "trigger": "clearly_losing",
+  "text": "I think I gave away too many bottle tops.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-queens_off-01",
+  "character": "kofi",
+  "trigger": "queens_off",
+  "text": "No queens. Grandad calls this the quiet part.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-endgame_reached-01",
+  "character": "kofi",
+  "trigger": "endgame_reached",
+  "text": "Grandad always wins from here. Let's see if I do.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-sacrifice-01",
+  "character": "kofi",
+  "trigger": "sacrifice",
+  "text": "That was a gift. Grandad says gifts come back.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-promotion-01",
+  "character": "kofi",
+  "trigger": "promotion",
+  "text": "My pawn made it! Grandad says pawns are the heroes.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kofi-opportunity-01",
+  "character": "kofi",
+  "trigger": "opportunity",
+  "text": "Oh. I think I just left something out on the stall.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-game_start-01",
+  "character": "mei",
+  "trigger": "game_start",
+  "text": "I've counted all my pieces. Sixteen. Good.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-game_start-02",
+  "character": "mei",
+  "trigger": "game_start",
+  "text": "Please move slowly. I like to check everything.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-game_start-03",
+  "character": "mei",
+  "trigger": "game_start",
+  "text": "My pieces are in neat rows. Let's try to keep it that way.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-game_win-01",
+  "character": "mei",
+  "trigger": "game_win",
+  "text": "Nothing left hanging. That's the whole trick.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-game_win-02",
+  "character": "mei",
+  "trigger": "game_win",
+  "text": "I checked every move twice. It worked.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-game_loss-01",
+  "character": "mei",
+  "trigger": "game_loss",
+  "text": "I checked everything except that.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-game_loss-02",
+  "character": "mei",
+  "trigger": "game_loss",
+  "text": "Well played. I'll be even more careful next time. Somehow.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-capture_queen-01",
+  "character": "mei",
+  "trigger": "capture_queen",
+  "text": "Your queen was undefended. I checked.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-capture_minor-01",
+  "character": "mei",
+  "trigger": "capture_minor",
+  "text": "Your {piece} had nobody looking after it.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-capture_rook-01",
+  "character": "mei",
+  "trigger": "capture_rook",
+  "text": "I'll put your rook somewhere safe. Off the board.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-check_given-01",
+  "character": "mei",
+  "trigger": "check_given",
+  "text": "Check. Please make sure your king is safe.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-castling-01",
+  "character": "mei",
+  "trigger": "castling",
+  "text": "Castled. Much tidier.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-clearly_winning-01",
+  "character": "mei",
+  "trigger": "clearly_winning",
+  "text": "Everything is safe on my side. Good.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-clearly_losing-01",
+  "character": "mei",
+  "trigger": "clearly_losing",
+  "text": "Oh no. Something wasn't safe after all.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-queens_off-01",
+  "character": "mei",
+  "trigger": "queens_off",
+  "text": "No queens. That's easier to keep track of.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-endgame_reached-01",
+  "character": "mei",
+  "trigger": "endgame_reached",
+  "text": "Fewer pieces to count. I like this part.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-sacrifice-01",
+  "character": "mei",
+  "trigger": "sacrifice",
+  "text": "I meant to do that. I think. Let me check.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-promotion-01",
+  "character": "mei",
+  "trigger": "promotion",
+  "text": "A new queen. I'll look after her properly.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mei-opportunity-01",
+  "character": "mei",
+  "trigger": "opportunity",
+  "text": "Hmm. Did I leave something? Let me count again.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-game_start-01",
+  "character": "mateo",
+  "trigger": "game_start",
+  "text": "The crowd is ready. Well, the crowd is my dog.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-game_start-02",
+  "character": "mateo",
+  "trigger": "game_start",
+  "text": "I play every piece like it's my number ten.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-game_start-03",
+  "character": "mateo",
+  "trigger": "game_start",
+  "text": "Attack, attack, attack. Defending is for the second half.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-game_win-01",
+  "character": "mateo",
+  "trigger": "game_win",
+  "text": "Goooool! Sorry. Checkmate.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-game_win-02",
+  "character": "mateo",
+  "trigger": "game_win",
+  "text": "Man of the match. Me. Obviously.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-game_loss-01",
+  "character": "mateo",
+  "trigger": "game_loss",
+  "text": "Red card for my defence. Well played.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-game_loss-02",
+  "character": "mateo",
+  "trigger": "game_loss",
+  "text": "The ref was against me. There is no ref. Still.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-capture_queen-01",
+  "character": "mateo",
+  "trigger": "capture_queen",
+  "text": "Your queen! That's like scoring from the halfway line!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-capture_minor-01",
+  "character": "mateo",
+  "trigger": "capture_minor",
+  "text": "Tackle won. Your {piece} is off the pitch.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-capture_rook-01",
+  "character": "mateo",
+  "trigger": "capture_rook",
+  "text": "Your rook is sent off!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-check_given-01",
+  "character": "mateo",
+  "trigger": "check_given",
+  "text": "Check! Shot on target.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-castling-01",
+  "character": "mateo",
+  "trigger": "castling",
+  "text": "Goalkeeper in position. Now we attack.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-clearly_winning-01",
+  "character": "mateo",
+  "trigger": "clearly_winning",
+  "text": "Three nil up. Time to play for the fans.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-clearly_losing-01",
+  "character": "mateo",
+  "trigger": "clearly_losing",
+  "text": "We're behind but there's always extra time.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-queens_off-01",
+  "character": "mateo",
+  "trigger": "queens_off",
+  "text": "Both captains off the pitch. Now it's a real game.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-endgame_reached-01",
+  "character": "mateo",
+  "trigger": "endgame_reached",
+  "text": "Last ten minutes. Legs are tired. Let's go.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-sacrifice-01",
+  "character": "mateo",
+  "trigger": "sacrifice",
+  "text": "That's a dive. I mean a sacrifice. Totally legal.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-promotion-01",
+  "character": "mateo",
+  "trigger": "promotion",
+  "text": "From the youth team to the first team! A new queen!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-mateo-opportunity-01",
+  "character": "mateo",
+  "trigger": "opportunity",
+  "text": "Oh no. I left the goal wide open.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-game_start-01",
+  "character": "hanna",
+  "trigger": "game_start",
+  "text": "I've lit a candle. Chess is better when it's cosy.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-game_start-02",
+  "character": "hanna",
+  "trigger": "game_start",
+  "text": "Let's not rush. There's no prize for finishing first.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-game_start-03",
+  "character": "hanna",
+  "trigger": "game_start",
+  "text": "I like both sides of the board to match. Mostly.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-game_win-01",
+  "character": "hanna",
+  "trigger": "game_win",
+  "text": "Calm and tidy. That's how I like my games.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-game_win-02",
+  "character": "hanna",
+  "trigger": "game_win",
+  "text": "Thank you. That was very pleasant.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-game_loss-01",
+  "character": "hanna",
+  "trigger": "game_loss",
+  "text": "Oh, that was lively. Too lively for me. Well played.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-game_loss-02",
+  "character": "hanna",
+  "trigger": "game_loss",
+  "text": "Lovely game. I'll make more coffee and think about it.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-capture_queen-01",
+  "character": "hanna",
+  "trigger": "capture_queen",
+  "text": "Oh, your queen. I'm sorry. Would you like a biscuit?",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-capture_minor-01",
+  "character": "hanna",
+  "trigger": "capture_minor",
+  "text": "I'll take the {piece}, and we can calm down again.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-capture_rook-01",
+  "character": "hanna",
+  "trigger": "capture_rook",
+  "text": "A rook. That's quite a lot. Sorry.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-check_given-01",
+  "character": "hanna",
+  "trigger": "check_given",
+  "text": "Check. Nothing dramatic, I hope.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-castling-01",
+  "character": "hanna",
+  "trigger": "castling",
+  "text": "Castled. Nice and snug.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-clearly_winning-01",
+  "character": "hanna",
+  "trigger": "clearly_winning",
+  "text": "Things are going smoothly. For me, anyway.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-clearly_losing-01",
+  "character": "hanna",
+  "trigger": "clearly_losing",
+  "text": "This is getting a little too exciting.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-queens_off-01",
+  "character": "hanna",
+  "trigger": "queens_off",
+  "text": "Queens off. Now it's peaceful.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-endgame_reached-01",
+  "character": "hanna",
+  "trigger": "endgame_reached",
+  "text": "An ending. My favourite part. So quiet.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-sacrifice-01",
+  "character": "hanna",
+  "trigger": "sacrifice",
+  "text": "That's a gift. I don't usually do this.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-promotion-01",
+  "character": "hanna",
+  "trigger": "promotion",
+  "text": "A new queen. How lovely.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-hanna-opportunity-01",
+  "character": "hanna",
+  "trigger": "opportunity",
+  "text": "Hm. That wasn't very tidy of me.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-game_start-01",
+  "character": "ravi",
+  "trigger": "game_start",
+  "text": "This opening has a name. I've forgotten it, but it has one.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-game_start-02",
+  "character": "ravi",
+  "trigger": "game_start",
+  "text": "I read that grandmasters look at the centre. So I'll look at the centre.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-game_start-03",
+  "character": "ravi",
+  "trigger": "game_start",
+  "text": "Fun fact: the longest chess game lasted 269 moves. Let's not do that.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-game_win-01",
+  "character": "ravi",
+  "trigger": "game_win",
+  "text": "Just like the book. The first half of the book.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-game_win-02",
+  "character": "ravi",
+  "trigger": "game_win",
+  "text": "I'm going to write this one down. For my collection.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-game_loss-01",
+  "character": "ravi",
+  "trigger": "game_loss",
+  "text": "That wasn't in any of my books. I'll buy another.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-game_loss-02",
+  "character": "ravi",
+  "trigger": "game_loss",
+  "text": "Well played. Can you tell me what that opening was called?",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-capture_queen-01",
+  "character": "ravi",
+  "trigger": "capture_queen",
+  "text": "Your queen! There's a name for this. I think.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-capture_minor-01",
+  "character": "ravi",
+  "trigger": "capture_minor",
+  "text": "The {piece} for free. That's in chapter one.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-capture_rook-01",
+  "character": "ravi",
+  "trigger": "capture_rook",
+  "text": "A rook is worth five points. I've just got five points.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-check_given-01",
+  "character": "ravi",
+  "trigger": "check_given",
+  "text": "Check. Chapter three: checks.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-castling-01",
+  "character": "ravi",
+  "trigger": "castling",
+  "text": "Castled. Every book says so.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-clearly_winning-01",
+  "character": "ravi",
+  "trigger": "clearly_winning",
+  "text": "According to my calculations, I'm winning. My calculations are sometimes wrong.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-clearly_losing-01",
+  "character": "ravi",
+  "trigger": "clearly_losing",
+  "text": "I think I've gone off the page.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-queens_off-01",
+  "character": "ravi",
+  "trigger": "queens_off",
+  "text": "Queens off. Now we're in a different book.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-endgame_reached-01",
+  "character": "ravi",
+  "trigger": "endgame_reached",
+  "text": "Endgames. I skipped that chapter. It was long.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-sacrifice-01",
+  "character": "ravi",
+  "trigger": "sacrifice",
+  "text": "It's a gambit. They have fancy names. This one doesn't yet.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-promotion-01",
+  "character": "ravi",
+  "trigger": "promotion",
+  "text": "Promotion! That's my favourite rule.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ravi-opportunity-01",
+  "character": "ravi",
+  "trigger": "opportunity",
+  "text": "Hmm. The book didn't warn me about that.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-game_start-01",
+  "character": "yuki",
+  "trigger": "game_start",
+  "text": "Breathe in. Now we begin.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-game_start-02",
+  "character": "yuki",
+  "trigger": "game_start",
+  "text": "A quiet mind sees more.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-game_start-03",
+  "character": "yuki",
+  "trigger": "game_start",
+  "text": "No hurry. The pieces aren't going anywhere.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-game_win-01",
+  "character": "yuki",
+  "trigger": "game_win",
+  "text": "You waited too little. I waited just enough.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-game_win-02",
+  "character": "yuki",
+  "trigger": "game_win",
+  "text": "Thank you. A calm game.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-game_loss-01",
+  "character": "yuki",
+  "trigger": "game_loss",
+  "text": "Well played. You were calmer than me.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-game_loss-02",
+  "character": "yuki",
+  "trigger": "game_loss",
+  "text": "I lost patience first. Next time.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-capture_queen-01",
+  "character": "yuki",
+  "trigger": "capture_queen",
+  "text": "The queen. You moved too quickly.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-capture_minor-01",
+  "character": "yuki",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. I've been waiting for that.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-capture_rook-01",
+  "character": "yuki",
+  "trigger": "capture_rook",
+  "text": "A rook. Patience pays.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-check_given-01",
+  "character": "yuki",
+  "trigger": "check_given",
+  "text": "Check.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-castling-01",
+  "character": "yuki",
+  "trigger": "castling",
+  "text": "The king rests.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-clearly_winning-01",
+  "character": "yuki",
+  "trigger": "clearly_winning",
+  "text": "Now I only need to stay calm.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-clearly_losing-01",
+  "character": "yuki",
+  "trigger": "clearly_losing",
+  "text": "Hm. Still, one mistake can change everything.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-queens_off-01",
+  "character": "yuki",
+  "trigger": "queens_off",
+  "text": "Quieter now.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-endgame_reached-01",
+  "character": "yuki",
+  "trigger": "endgame_reached",
+  "text": "The ending. Where patience matters most.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-sacrifice-01",
+  "character": "yuki",
+  "trigger": "sacrifice",
+  "text": "Sometimes you give, to receive.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-promotion-01",
+  "character": "yuki",
+  "trigger": "promotion",
+  "text": "A small pawn, grown up.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-yuki-opportunity-01",
+  "character": "yuki",
+  "trigger": "opportunity",
+  "text": "Ah. That was not patient of me.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-game_start-01",
+  "character": "lena",
+  "trigger": "game_start",
+  "text": "Two stops. That's all I need.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-game_start-02",
+  "character": "lena",
+  "trigger": "game_start",
+  "text": "I've got my bag on, my ticket out, let's go.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-game_start-03",
+  "character": "lena",
+  "trigger": "game_start",
+  "text": "If the train stops suddenly, I'm not resigning. I'm getting off.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-game_win-01",
+  "character": "lena",
+  "trigger": "game_win",
+  "text": "Done before the doors opened. Bye!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-game_win-02",
+  "character": "lena",
+  "trigger": "game_win",
+  "text": "Fastest game on the line. Good one.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-game_loss-01",
+  "character": "lena",
+  "trigger": "game_loss",
+  "text": "I rushed it. Obviously. I always rush it.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-game_loss-02",
+  "character": "lena",
+  "trigger": "game_loss",
+  "text": "Tomorrow on the 8:15. Rematch.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-capture_queen-01",
+  "character": "lena",
+  "trigger": "capture_queen",
+  "text": "Queen! No time for sorry, next move.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-capture_minor-01",
+  "character": "lena",
+  "trigger": "capture_minor",
+  "text": "Took your {piece}, keep up.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-capture_rook-01",
+  "character": "lena",
+  "trigger": "capture_rook",
+  "text": "Rook gone. Mind the gap.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-check_given-01",
+  "character": "lena",
+  "trigger": "check_given",
+  "text": "Check! Quick, quick.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-castling-01",
+  "character": "lena",
+  "trigger": "castling",
+  "text": "Castled. That's a move, right? Next.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-clearly_winning-01",
+  "character": "lena",
+  "trigger": "clearly_winning",
+  "text": "This is going faster than the train.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-clearly_losing-01",
+  "character": "lena",
+  "trigger": "clearly_losing",
+  "text": "Signal failure. On my side of the board.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-queens_off-01",
+  "character": "lena",
+  "trigger": "queens_off",
+  "text": "No queens. Fine. Faster.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-endgame_reached-01",
+  "character": "lena",
+  "trigger": "endgame_reached",
+  "text": "Endgame already? I've still got a stop to go.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-sacrifice-01",
+  "character": "lena",
+  "trigger": "sacrifice",
+  "text": "Didn't have time to protect it. Call it a sacrifice.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-promotion-01",
+  "character": "lena",
+  "trigger": "promotion",
+  "text": "New queen! Express service.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lena-opportunity-01",
+  "character": "lena",
+  "trigger": "opportunity",
+  "text": "Wait. I think I missed my stop. And that move.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-game_start-01",
+  "character": "amara",
+  "trigger": "game_start",
+  "text": "I don't defend. I attack until you give up.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-game_start-02",
+  "character": "amara",
+  "trigger": "game_start",
+  "text": "Scared? You shouldn't be. Well. Maybe a bit.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-game_start-03",
+  "character": "amara",
+  "trigger": "game_start",
+  "text": "Let's make it exciting from move one.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-game_win-01",
+  "character": "amara",
+  "trigger": "game_win",
+  "text": "Fortune favours the bold. That's me.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-game_win-02",
+  "character": "amara",
+  "trigger": "game_win",
+  "text": "Too fast for you. Next!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-game_loss-01",
+  "character": "amara",
+  "trigger": "game_loss",
+  "text": "You stood your ground. I respect that.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-game_loss-02",
+  "character": "amara",
+  "trigger": "game_loss",
+  "text": "I'll be braver next time. Somehow.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-capture_queen-01",
+  "character": "amara",
+  "trigger": "capture_queen",
+  "text": "Queen down. Your move, if you're brave enough.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-capture_minor-01",
+  "character": "amara",
+  "trigger": "capture_minor",
+  "text": "Your {piece} got in my way.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-capture_rook-01",
+  "character": "amara",
+  "trigger": "capture_rook",
+  "text": "Rook taken. I'm just warming up.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-check_given-01",
+  "character": "amara",
+  "trigger": "check_given",
+  "text": "Check. There's more where that came from.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-castling-01",
+  "character": "amara",
+  "trigger": "castling",
+  "text": "Castled. Now there's nothing to stop me.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-clearly_winning-01",
+  "character": "amara",
+  "trigger": "clearly_winning",
+  "text": "Feel that? That's the pressure.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-clearly_losing-01",
+  "character": "amara",
+  "trigger": "clearly_losing",
+  "text": "I'm not scared. I'm just thinking.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-queens_off-01",
+  "character": "amara",
+  "trigger": "queens_off",
+  "text": "No queens? Fine. I'll attack with the rest.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-endgame_reached-01",
+  "character": "amara",
+  "trigger": "endgame_reached",
+  "text": "An ending. My king is coming for you too.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-sacrifice-01",
+  "character": "amara",
+  "trigger": "sacrifice",
+  "text": "Take it. I dare you.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-promotion-01",
+  "character": "amara",
+  "trigger": "promotion",
+  "text": "Another queen. Now I'm unstoppable.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-amara-opportunity-01",
+  "character": "amara",
+  "trigger": "opportunity",
+  "text": "Okay. That was a bit too bold.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-game_start-01",
+  "character": "lukas",
+  "trigger": "game_start",
+  "text": "My plan is simple. Trade everything. Win the ending.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-game_start-02",
+  "character": "lukas",
+  "trigger": "game_start",
+  "text": "I have calculated that fewer pieces means fewer mistakes.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-game_start-03",
+  "character": "lukas",
+  "trigger": "game_start",
+  "text": "Please offer trades. I will accept them all.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-game_win-01",
+  "character": "lukas",
+  "trigger": "game_win",
+  "text": "Exactly as planned. Efficient.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-game_win-02",
+  "character": "lukas",
+  "trigger": "game_win",
+  "text": "The endgame is where games are decided. Today too.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-game_loss-01",
+  "character": "lukas",
+  "trigger": "game_loss",
+  "text": "You kept the pieces on. Very clever. Irritating, but clever.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-game_loss-02",
+  "character": "lukas",
+  "trigger": "game_loss",
+  "text": "Well played. My plan needs revision.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-capture_queen-01",
+  "character": "lukas",
+  "trigger": "capture_queen",
+  "text": "Your queen. That simplifies things considerably.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-capture_minor-01",
+  "character": "lukas",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. One less thing to think about.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-capture_rook-01",
+  "character": "lukas",
+  "trigger": "capture_rook",
+  "text": "A rook. The ending just got easier.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-check_given-01",
+  "character": "lukas",
+  "trigger": "check_given",
+  "text": "Check. Logically.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-castling-01",
+  "character": "lukas",
+  "trigger": "castling",
+  "text": "Castled. Correct.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-clearly_winning-01",
+  "character": "lukas",
+  "trigger": "clearly_winning",
+  "text": "The position is technically winning. Now I need only technique.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-clearly_losing-01",
+  "character": "lukas",
+  "trigger": "clearly_losing",
+  "text": "This is not efficient.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-queens_off-01",
+  "character": "lukas",
+  "trigger": "queens_off",
+  "text": "Queens off. Now we are getting somewhere.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-endgame_reached-01",
+  "character": "lukas",
+  "trigger": "endgame_reached",
+  "text": "At last. The endgame. My office.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-sacrifice-01",
+  "character": "lukas",
+  "trigger": "sacrifice",
+  "text": "A calculated investment.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-promotion-01",
+  "character": "lukas",
+  "trigger": "promotion",
+  "text": "Promotion. Precisely as calculated.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-lukas-opportunity-01",
+  "character": "lukas",
+  "trigger": "opportunity",
+  "text": "An inaccuracy. Mine. Unusual.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-game_start-01",
+  "character": "omar",
+  "trigger": "game_start",
+  "text": "My friend, you play like my cousin. That's a compliment. Mostly.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-game_start-02",
+  "character": "omar",
+  "trigger": "game_start",
+  "text": "Have you tried mint tea? You must. After the game. Or during!",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-game_start-03",
+  "character": "omar",
+  "trigger": "game_start",
+  "text": "In my café, the loser pays for tea. No pressure.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-game_win-01",
+  "character": "omar",
+  "trigger": "game_win",
+  "text": "Tea's on you! I'm joking. Mostly.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-game_win-02",
+  "character": "omar",
+  "trigger": "game_win",
+  "text": "Forty years at the café, habibi. Forty years.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-game_loss-01",
+  "character": "omar",
+  "trigger": "game_loss",
+  "text": "Ah, you got me! Wonderful. Tea's on me.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-game_loss-02",
+  "character": "omar",
+  "trigger": "game_loss",
+  "text": "I was talking too much. As usual. Well played.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-capture_queen-01",
+  "character": "omar",
+  "trigger": "capture_queen",
+  "text": "Your queen! Oh, my friends at the café would love this.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-capture_minor-01",
+  "character": "omar",
+  "trigger": "capture_minor",
+  "text": "Your {piece}, thank you. Very generous.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-capture_rook-01",
+  "character": "omar",
+  "trigger": "capture_rook",
+  "text": "A rook! Now I'll talk even more.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-check_given-01",
+  "character": "omar",
+  "trigger": "check_given",
+  "text": "Check, my friend. Check.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-castling-01",
+  "character": "omar",
+  "trigger": "castling",
+  "text": "The king goes home for a nap.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-clearly_winning-01",
+  "character": "omar",
+  "trigger": "clearly_winning",
+  "text": "I think I'll order another tea to celebrate.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-clearly_losing-01",
+  "character": "omar",
+  "trigger": "clearly_losing",
+  "text": "Ah. Now I stop talking and start thinking.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-queens_off-01",
+  "character": "omar",
+  "trigger": "queens_off",
+  "text": "No queens. Like the café after closing. Quiet.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-endgame_reached-01",
+  "character": "omar",
+  "trigger": "endgame_reached",
+  "text": "The endgame. Where old men like me shine.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-sacrifice-01",
+  "character": "omar",
+  "trigger": "sacrifice",
+  "text": "A gift! You know, in Cairo we always bring gifts.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-promotion-01",
+  "character": "omar",
+  "trigger": "promotion",
+  "text": "A new queen. Bring more tea!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-omar-opportunity-01",
+  "character": "omar",
+  "trigger": "opportunity",
+  "text": "Oh ho. I think I talked through that move.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-game_start-01",
+  "character": "sofia",
+  "trigger": "game_start",
+  "text": "Castle first, party later.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-game_start-02",
+  "character": "sofia",
+  "trigger": "game_start",
+  "text": "My king will be safe. Can you say the same?",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-game_start-03",
+  "character": "sofia",
+  "trigger": "game_start",
+  "text": "I'm very friendly until move ten.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-game_win-01",
+  "character": "sofia",
+  "trigger": "game_win",
+  "text": "Safe king, happy ending. Obrigada!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-game_win-02",
+  "character": "sofia",
+  "trigger": "game_win",
+  "text": "You see? Castle early, attack late.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-game_loss-01",
+  "character": "sofia",
+  "trigger": "game_loss",
+  "text": "You got to my king. Very rude. Very good.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-game_loss-02",
+  "character": "sofia",
+  "trigger": "game_loss",
+  "text": "Next time my castle has thicker walls.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-capture_queen-01",
+  "character": "sofia",
+  "trigger": "capture_queen",
+  "text": "Your queen. Now the party really starts.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-capture_minor-01",
+  "character": "sofia",
+  "trigger": "capture_minor",
+  "text": "I'll take the {piece}, obrigada.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-capture_rook-01",
+  "character": "sofia",
+  "trigger": "capture_rook",
+  "text": "Your rook! Now your king is a bit lonely.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-check_given-01",
+  "character": "sofia",
+  "trigger": "check_given",
+  "text": "Check. Is your king comfortable?",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-castling-01",
+  "character": "sofia",
+  "trigger": "castling",
+  "text": "Castled. Now I can have fun.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-clearly_winning-01",
+  "character": "sofia",
+  "trigger": "clearly_winning",
+  "text": "My king is safe and yours isn't. Perfect.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-clearly_losing-01",
+  "character": "sofia",
+  "trigger": "clearly_losing",
+  "text": "Hm. My castle has a crack in it.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-queens_off-01",
+  "character": "sofia",
+  "trigger": "queens_off",
+  "text": "Queens gone. Kings can come out now.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-endgame_reached-01",
+  "character": "sofia",
+  "trigger": "endgame_reached",
+  "text": "An ending. My king's coming out to play.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-sacrifice-01",
+  "character": "sofia",
+  "trigger": "sacrifice",
+  "text": "A little gift to open your king. You're welcome.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-promotion-01",
+  "character": "sofia",
+  "trigger": "promotion",
+  "text": "New queen! Let's dance.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-sofia-opportunity-01",
+  "character": "sofia",
+  "trigger": "opportunity",
+  "text": "Ai. I forgot to look behind me.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-game_start-01",
+  "character": "jonas",
+  "trigger": "game_start",
+  "text": "It's snowing again. Perfect chess weather.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-game_start-02",
+  "character": "jonas",
+  "trigger": "game_start",
+  "text": "I read that this opening is very sound. We'll find out.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-game_start-03",
+  "character": "jonas",
+  "trigger": "game_start",
+  "text": "My grandfather played this way. He was very slow. So am I.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-game_win-01",
+  "character": "jonas",
+  "trigger": "game_win",
+  "text": "Just like chapter twelve. Thank you.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-game_win-02",
+  "character": "jonas",
+  "trigger": "game_win",
+  "text": "A long winter's game. I enjoyed it.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-game_loss-01",
+  "character": "jonas",
+  "trigger": "game_loss",
+  "text": "I'll read about that tonight. By the fire.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-game_loss-02",
+  "character": "jonas",
+  "trigger": "game_loss",
+  "text": "Very instructive. For me, unfortunately.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-capture_queen-01",
+  "character": "jonas",
+  "trigger": "capture_queen",
+  "text": "Your queen. The book said this might happen.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-capture_minor-01",
+  "character": "jonas",
+  "trigger": "capture_minor",
+  "text": "Your {piece}, as the book suggests.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-capture_rook-01",
+  "character": "jonas",
+  "trigger": "capture_rook",
+  "text": "A rook. That's a big chapter.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-check_given-01",
+  "character": "jonas",
+  "trigger": "check_given",
+  "text": "Check. As recommended.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-castling-01",
+  "character": "jonas",
+  "trigger": "castling",
+  "text": "Castled. The book approves.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-clearly_winning-01",
+  "character": "jonas",
+  "trigger": "clearly_winning",
+  "text": "The position is good. I have read about positions like this.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-clearly_losing-01",
+  "character": "jonas",
+  "trigger": "clearly_losing",
+  "text": "Hm. This is not in the book I brought.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-queens_off-01",
+  "character": "jonas",
+  "trigger": "queens_off",
+  "text": "Queens off. A quieter chapter.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-endgame_reached-01",
+  "character": "jonas",
+  "trigger": "endgame_reached",
+  "text": "The ending. The best part of any book.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-sacrifice-01",
+  "character": "jonas",
+  "trigger": "sacrifice",
+  "text": "A sacrifice. There's a whole book about these.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-promotion-01",
+  "character": "jonas",
+  "trigger": "promotion",
+  "text": "Promotion. A satisfying ending to the chapter.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-jonas-opportunity-01",
+  "character": "jonas",
+  "trigger": "opportunity",
+  "text": "Hm. I think I skipped a page.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-game_start-01",
+  "character": "fatima",
+  "trigger": "game_start",
+  "text": "Every position has a tactic. I'm going to find it.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-game_start-02",
+  "character": "fatima",
+  "trigger": "game_start",
+  "text": "Don't blink. Things happen fast with me.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-game_start-03",
+  "character": "fatima",
+  "trigger": "game_start",
+  "text": "I only play sharp lines. Hope you're ready.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-game_win-01",
+  "character": "fatima",
+  "trigger": "game_win",
+  "text": "Combinations win games. That one was fun.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-game_win-02",
+  "character": "fatima",
+  "trigger": "game_win",
+  "text": "I saw it three moves ago. Good game.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-game_loss-01",
+  "character": "fatima",
+  "trigger": "game_loss",
+  "text": "You saw further than me. That's rare. Respect.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-game_loss-02",
+  "character": "fatima",
+  "trigger": "game_loss",
+  "text": "Too quiet for me. You kept it quiet on purpose, didn't you?",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-capture_queen-01",
+  "character": "fatima",
+  "trigger": "capture_queen",
+  "text": "Your queen. I told you there was a tactic.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-capture_minor-01",
+  "character": "fatima",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. That was the first step.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-capture_rook-01",
+  "character": "fatima",
+  "trigger": "capture_rook",
+  "text": "The rook falls. As calculated.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-check_given-01",
+  "character": "fatima",
+  "trigger": "check_given",
+  "text": "Check. Watch the next one.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-castling-01",
+  "character": "fatima",
+  "trigger": "castling",
+  "text": "Castled. Now the fireworks.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-clearly_winning-01",
+  "character": "fatima",
+  "trigger": "clearly_winning",
+  "text": "The tactics are all mine now.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-clearly_losing-01",
+  "character": "fatima",
+  "trigger": "clearly_losing",
+  "text": "I need a tactic. There's always a tactic.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-queens_off-01",
+  "character": "fatima",
+  "trigger": "queens_off",
+  "text": "No queens? That's so boring.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-endgame_reached-01",
+  "character": "fatima",
+  "trigger": "endgame_reached",
+  "text": "An ending. Even here, there are tricks.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-sacrifice-01",
+  "character": "fatima",
+  "trigger": "sacrifice",
+  "text": "Take it. Then look again.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-promotion-01",
+  "character": "fatima",
+  "trigger": "promotion",
+  "text": "A queen. The final trick.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-fatima-opportunity-01",
+  "character": "fatima",
+  "trigger": "opportunity",
+  "text": "Ah. I missed my own tactic.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-game_start-01",
+  "character": "tomas",
+  "trigger": "game_start",
+  "text": "Pawns to the middle. Always to the middle.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-game_start-02",
+  "character": "tomas",
+  "trigger": "game_start",
+  "text": "The centre is like the plaza. Everyone meets there.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-game_start-03",
+  "character": "tomas",
+  "trigger": "game_start",
+  "text": "Vamos. Let's see who owns the middle.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-game_win-01",
+  "character": "tomas",
+  "trigger": "game_win",
+  "text": "The centre never lies. Good game, amigo.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-game_win-02",
+  "character": "tomas",
+  "trigger": "game_win",
+  "text": "My pawns marched and your pieces ran. Olé.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-game_loss-01",
+  "character": "tomas",
+  "trigger": "game_loss",
+  "text": "You took my plaza. Well played.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-game_loss-02",
+  "character": "tomas",
+  "trigger": "game_loss",
+  "text": "My centre cracked. I'll rebuild it.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-capture_queen-01",
+  "character": "tomas",
+  "trigger": "capture_queen",
+  "text": "Your queen! Right in the middle of the board.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-capture_minor-01",
+  "character": "tomas",
+  "trigger": "capture_minor",
+  "text": "Your {piece} wandered into my centre.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-capture_rook-01",
+  "character": "tomas",
+  "trigger": "capture_rook",
+  "text": "A rook. Olé!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-check_given-01",
+  "character": "tomas",
+  "trigger": "check_given",
+  "text": "Check! From the centre, of course.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-castling-01",
+  "character": "tomas",
+  "trigger": "castling",
+  "text": "King safe. Now my pawns can go.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-clearly_winning-01",
+  "character": "tomas",
+  "trigger": "clearly_winning",
+  "text": "Look at my pawns. Like a wall.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-clearly_losing-01",
+  "character": "tomas",
+  "trigger": "clearly_losing",
+  "text": "My centre is under siege.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-queens_off-01",
+  "character": "tomas",
+  "trigger": "queens_off",
+  "text": "Queens gone. Pawns matter even more now.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-endgame_reached-01",
+  "character": "tomas",
+  "trigger": "endgame_reached",
+  "text": "An ending. Every pawn is gold now.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-sacrifice-01",
+  "character": "tomas",
+  "trigger": "sacrifice",
+  "text": "A pawn sacrifice for the centre. Worth it.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-promotion-01",
+  "character": "tomas",
+  "trigger": "promotion",
+  "text": "My pawn made it! Fiesta!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-tomas-opportunity-01",
+  "character": "tomas",
+  "trigger": "opportunity",
+  "text": "Ay. I left the plaza empty.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-game_start-01",
+  "character": "olga",
+  "trigger": "game_start",
+  "text": "Get comfortable. This will take a while.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-game_start-02",
+  "character": "olga",
+  "trigger": "game_start",
+  "text": "I've never offered a draw in my life. I won't start today.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-game_start-03",
+  "character": "olga",
+  "trigger": "game_start",
+  "text": "Many people are strong early. I am strong late.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-game_win-01",
+  "character": "olga",
+  "trigger": "game_win",
+  "text": "Eighty moves is not too many. Good game.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-game_win-02",
+  "character": "olga",
+  "trigger": "game_win",
+  "text": "You tired first. They always do.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-game_loss-01",
+  "character": "olga",
+  "trigger": "game_loss",
+  "text": "You held on to the end. I respect that.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-game_loss-02",
+  "character": "olga",
+  "trigger": "game_loss",
+  "text": "Well played. Next time I'll grind harder.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-capture_queen-01",
+  "character": "olga",
+  "trigger": "capture_queen",
+  "text": "Your queen. The long part of the game starts now.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-capture_minor-01",
+  "character": "olga",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. Every little bit helps.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-capture_rook-01",
+  "character": "olga",
+  "trigger": "capture_rook",
+  "text": "A rook. That will do nicely.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-check_given-01",
+  "character": "olga",
+  "trigger": "check_given",
+  "text": "Check.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-castling-01",
+  "character": "olga",
+  "trigger": "castling",
+  "text": "Castled. Settling in.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-clearly_winning-01",
+  "character": "olga",
+  "trigger": "clearly_winning",
+  "text": "Now I squeeze.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-clearly_losing-01",
+  "character": "olga",
+  "trigger": "clearly_losing",
+  "text": "It's not over. I don't let things be over.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-queens_off-01",
+  "character": "olga",
+  "trigger": "queens_off",
+  "text": "Queens off. Good. My kind of game now.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-endgame_reached-01",
+  "character": "olga",
+  "trigger": "endgame_reached",
+  "text": "The ending. This is where I live.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-sacrifice-01",
+  "character": "olga",
+  "trigger": "sacrifice",
+  "text": "A small investment for a long game.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-promotion-01",
+  "character": "olga",
+  "trigger": "promotion",
+  "text": "A new queen. Worth the wait.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-olga-opportunity-01",
+  "character": "olga",
+  "trigger": "opportunity",
+  "text": "Hm. A small slip. I'll grind it back.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-game_start-01",
+  "character": "kenji",
+  "trigger": "game_start",
+  "text": "My opening, as always. I trust it.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-game_start-02",
+  "character": "kenji",
+  "trigger": "game_start",
+  "text": "I don't change what works.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-game_start-03",
+  "character": "kenji",
+  "trigger": "game_start",
+  "text": "Every game is the same opening. Every game is different.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-game_win-01",
+  "character": "kenji",
+  "trigger": "game_win",
+  "text": "The opening did its job. Arigatou.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-game_win-02",
+  "character": "kenji",
+  "trigger": "game_win",
+  "text": "Preparation is respect for the game.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-game_loss-01",
+  "character": "kenji",
+  "trigger": "game_loss",
+  "text": "You left my preparation early. Well played.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-game_loss-02",
+  "character": "kenji",
+  "trigger": "game_loss",
+  "text": "I'll study this game tonight. Thank you.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-capture_queen-01",
+  "character": "kenji",
+  "trigger": "capture_queen",
+  "text": "Your queen. Just as I prepared.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-capture_minor-01",
+  "character": "kenji",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. I've seen this position before.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-capture_rook-01",
+  "character": "kenji",
+  "trigger": "capture_rook",
+  "text": "A rook. Thank you.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-check_given-01",
+  "character": "kenji",
+  "trigger": "check_given",
+  "text": "Check.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-castling-01",
+  "character": "kenji",
+  "trigger": "castling",
+  "text": "Castled. On schedule.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-clearly_winning-01",
+  "character": "kenji",
+  "trigger": "clearly_winning",
+  "text": "Everything is going to plan.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-clearly_losing-01",
+  "character": "kenji",
+  "trigger": "clearly_losing",
+  "text": "This is not in my notes.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-queens_off-01",
+  "character": "kenji",
+  "trigger": "queens_off",
+  "text": "Queens traded. Also in my notes.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-endgame_reached-01",
+  "character": "kenji",
+  "trigger": "endgame_reached",
+  "text": "An ending. I prepared these too.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-sacrifice-01",
+  "character": "kenji",
+  "trigger": "sacrifice",
+  "text": "Prepared at home. Probably.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-promotion-01",
+  "character": "kenji",
+  "trigger": "promotion",
+  "text": "A new queen. Satisfying.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-kenji-opportunity-01",
+  "character": "kenji",
+  "trigger": "opportunity",
+  "text": "Hm. That wasn't in my preparation.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-game_start-01",
+  "character": "diego",
+  "trigger": "game_start",
+  "text": "Chess should be art. Let's paint something.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-game_start-02",
+  "character": "diego",
+  "trigger": "game_start",
+  "text": "I've never met a sacrifice I didn't like.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-game_start-03",
+  "character": "diego",
+  "trigger": "game_start",
+  "text": "Safe moves are for safe people. ¡Vámonos!",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-game_win-01",
+  "character": "diego",
+  "trigger": "game_win",
+  "text": "¡Qué bonito! Did you see that finish?",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-game_win-02",
+  "character": "diego",
+  "trigger": "game_win",
+  "text": "The maths worked out. This time.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-game_loss-01",
+  "character": "diego",
+  "trigger": "game_loss",
+  "text": "I gave you everything and you took it. Fair.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-game_loss-02",
+  "character": "diego",
+  "trigger": "game_loss",
+  "text": "Beautiful attack, terrible result. The story of my life.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-capture_queen-01",
+  "character": "diego",
+  "trigger": "capture_queen",
+  "text": "Your queen! Now THAT's art.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-capture_minor-01",
+  "character": "diego",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. I'll probably give it back later.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-capture_rook-01",
+  "character": "diego",
+  "trigger": "capture_rook",
+  "text": "A rook! Something to sacrifice.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-check_given-01",
+  "character": "diego",
+  "trigger": "check_given",
+  "text": "Check! Here comes the fun part.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-castling-01",
+  "character": "diego",
+  "trigger": "castling",
+  "text": "Castled. Boring, but necessary.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-clearly_winning-01",
+  "character": "diego",
+  "trigger": "clearly_winning",
+  "text": "The masterpiece is nearly finished.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-clearly_losing-01",
+  "character": "diego",
+  "trigger": "clearly_losing",
+  "text": "Maybe I sacrificed one piece too many.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-queens_off-01",
+  "character": "diego",
+  "trigger": "queens_off",
+  "text": "No queens? Where's the romance?",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-endgame_reached-01",
+  "character": "diego",
+  "trigger": "endgame_reached",
+  "text": "An ending. Fewer pieces to sacrifice. Sad.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-sacrifice-01",
+  "character": "diego",
+  "trigger": "sacrifice",
+  "text": "¡Ole! Take it, if you dare.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-promotion-01",
+  "character": "diego",
+  "trigger": "promotion",
+  "text": "A new queen. Another piece to sacrifice!",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-diego-opportunity-01",
+  "character": "diego",
+  "trigger": "opportunity",
+  "text": "Ay, ay. That was not art. That was a mistake.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-game_start-01",
+  "character": "chloe",
+  "trigger": "game_start",
+  "text": "Chess is like cooking. Good things take time.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-game_start-02",
+  "character": "chloe",
+  "trigger": "game_start",
+  "text": "I prefer positions to fireworks.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-game_start-03",
+  "character": "chloe",
+  "trigger": "game_start",
+  "text": "Let's play slowly, and properly.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-game_win-01",
+  "character": "chloe",
+  "trigger": "game_win",
+  "text": "Voilà. A small advantage, well kept.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-game_win-02",
+  "character": "chloe",
+  "trigger": "game_win",
+  "text": "Élégant, non? Thank you for the game.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-game_loss-01",
+  "character": "chloe",
+  "trigger": "game_loss",
+  "text": "Magnifique. You played the position better.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-game_loss-02",
+  "character": "chloe",
+  "trigger": "game_loss",
+  "text": "A little too much hurry from me. Well done.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-capture_queen-01",
+  "character": "chloe",
+  "trigger": "capture_queen",
+  "text": "Your queen. Pardon.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-capture_minor-01",
+  "character": "chloe",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. It was badly placed, I'm afraid.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-capture_rook-01",
+  "character": "chloe",
+  "trigger": "capture_rook",
+  "text": "A rook. That's quite decisive.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-check_given-01",
+  "character": "chloe",
+  "trigger": "check_given",
+  "text": "Check. Excusez-moi.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-castling-01",
+  "character": "chloe",
+  "trigger": "castling",
+  "text": "Castled. Everything in its place.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-clearly_winning-01",
+  "character": "chloe",
+  "trigger": "clearly_winning",
+  "text": "The position is harmonious. On my side.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-clearly_losing-01",
+  "character": "chloe",
+  "trigger": "clearly_losing",
+  "text": "Hmm. My pieces are not happy.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-queens_off-01",
+  "character": "chloe",
+  "trigger": "queens_off",
+  "text": "Queens off. Now the fine details matter.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-endgame_reached-01",
+  "character": "chloe",
+  "trigger": "endgame_reached",
+  "text": "An endgame. Precise, like a good sauce.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-sacrifice-01",
+  "character": "chloe",
+  "trigger": "sacrifice",
+  "text": "A small sacrifice for a better position.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-promotion-01",
+  "character": "chloe",
+  "trigger": "promotion",
+  "text": "A new queen. Très bien.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-chloe-opportunity-01",
+  "character": "chloe",
+  "trigger": "opportunity",
+  "text": "Oh là là. That was not elegant.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-game_start-01",
+  "character": "aarav",
+  "trigger": "game_start",
+  "text": "I've done two hundred puzzles today. I'm warmed up.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-game_start-02",
+  "character": "aarav",
+  "trigger": "game_start",
+  "text": "Every move, I check three moves ahead. At least.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-game_start-03",
+  "character": "aarav",
+  "trigger": "game_start",
+  "text": "Let's see if my calculation holds up.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-game_win-01",
+  "character": "aarav",
+  "trigger": "game_win",
+  "text": "Calculated. Every move. Good game.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-game_win-02",
+  "character": "aarav",
+  "trigger": "game_win",
+  "text": "The puzzles paid off. Thank you.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-game_loss-01",
+  "character": "aarav",
+  "trigger": "game_loss",
+  "text": "You saw something I didn't. I'll find out what.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-game_loss-02",
+  "character": "aarav",
+  "trigger": "game_loss",
+  "text": "More puzzles tonight. Well played.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-capture_queen-01",
+  "character": "aarav",
+  "trigger": "capture_queen",
+  "text": "Your queen. I saw that coming three moves ago.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-capture_minor-01",
+  "character": "aarav",
+  "trigger": "capture_minor",
+  "text": "The {piece}. That was the point of the last move.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-capture_rook-01",
+  "character": "aarav",
+  "trigger": "capture_rook",
+  "text": "A rook. Calculated.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-check_given-01",
+  "character": "aarav",
+  "trigger": "check_given",
+  "text": "Check. And then there's a follow-up.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-castling-01",
+  "character": "aarav",
+  "trigger": "castling",
+  "text": "Castled. The king's out of the calculations.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-clearly_winning-01",
+  "character": "aarav",
+  "trigger": "clearly_winning",
+  "text": "I've checked it. It's winning.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-clearly_losing-01",
+  "character": "aarav",
+  "trigger": "clearly_losing",
+  "text": "My calculation must have a hole somewhere.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-queens_off-01",
+  "character": "aarav",
+  "trigger": "queens_off",
+  "text": "Queens off. Fewer lines to calculate.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-endgame_reached-01",
+  "character": "aarav",
+  "trigger": "endgame_reached",
+  "text": "An ending. Counting squares now.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-sacrifice-01",
+  "character": "aarav",
+  "trigger": "sacrifice",
+  "text": "It's a sacrifice. I've calculated it. Mostly.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-promotion-01",
+  "character": "aarav",
+  "trigger": "promotion",
+  "text": "Promotion. Exactly five moves, like I counted.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-aarav-opportunity-01",
+  "character": "aarav",
+  "trigger": "opportunity",
+  "text": "Wait. I miscalculated. That never happens.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-game_start-01",
+  "character": "ingrid",
+  "trigger": "game_start",
+  "text": "I don't need much. Just a little something.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-game_start-02",
+  "character": "ingrid",
+  "trigger": "game_start",
+  "text": "Hygge first, chess second. Comfortable?",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-game_start-03",
+  "character": "ingrid",
+  "trigger": "game_start",
+  "text": "Small advantages add up. Let's see.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-game_win-01",
+  "character": "ingrid",
+  "trigger": "game_win",
+  "text": "One small edge at a time. Good game.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-game_win-02",
+  "character": "ingrid",
+  "trigger": "game_win",
+  "text": "You gave me a little. That's all I needed.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-game_loss-01",
+  "character": "ingrid",
+  "trigger": "game_loss",
+  "text": "Nothing to squeeze. You played very cleanly.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-game_loss-02",
+  "character": "ingrid",
+  "trigger": "game_loss",
+  "text": "Well done. I couldn't find a single crack.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-capture_queen-01",
+  "character": "ingrid",
+  "trigger": "capture_queen",
+  "text": "Your queen. That's more than a small advantage.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-capture_minor-01",
+  "character": "ingrid",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. Now I just need to hold on.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-capture_rook-01",
+  "character": "ingrid",
+  "trigger": "capture_rook",
+  "text": "A rook. I'll make it count.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-check_given-01",
+  "character": "ingrid",
+  "trigger": "check_given",
+  "text": "Check.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-castling-01",
+  "character": "ingrid",
+  "trigger": "castling",
+  "text": "Castled. Comfortable.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-clearly_winning-01",
+  "character": "ingrid",
+  "trigger": "clearly_winning",
+  "text": "Now I tighten, slowly.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-clearly_losing-01",
+  "character": "ingrid",
+  "trigger": "clearly_losing",
+  "text": "Hm. You're squeezing me. I don't like it.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-queens_off-01",
+  "character": "ingrid",
+  "trigger": "queens_off",
+  "text": "Queens off. Now the small things are big.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-endgame_reached-01",
+  "character": "ingrid",
+  "trigger": "endgame_reached",
+  "text": "An ending. Small advantages grow here.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-sacrifice-01",
+  "character": "ingrid",
+  "trigger": "sacrifice",
+  "text": "A pawn, for a better position. Long term.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-promotion-01",
+  "character": "ingrid",
+  "trigger": "promotion",
+  "text": "A new queen. The squeeze worked.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-ingrid-opportunity-01",
+  "character": "ingrid",
+  "trigger": "opportunity",
+  "text": "Ah. A small mistake. From me.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-game_start-01",
+  "character": "nino",
+  "trigger": "game_start",
+  "text": "I became champion by never being scared. Let's play.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-game_start-02",
+  "character": "nino",
+  "trigger": "game_start",
+  "text": "My bishops are hungry. Don't open the diagonals.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-game_start-03",
+  "character": "nino",
+  "trigger": "game_start",
+  "text": "I'll go easy. That's a lie.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-game_win-01",
+  "character": "nino",
+  "trigger": "game_win",
+  "text": "The bishops did the work. As always.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-game_win-02",
+  "character": "nino",
+  "trigger": "game_win",
+  "text": "Good fight. You'll be dangerous one day.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-game_loss-01",
+  "character": "nino",
+  "trigger": "game_loss",
+  "text": "Impressive. Not many beat me. Remember it.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-game_loss-02",
+  "character": "nino",
+  "trigger": "game_loss",
+  "text": "You neutralised my bishops. Clever.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-capture_queen-01",
+  "character": "nino",
+  "trigger": "capture_queen",
+  "text": "Your queen. The diagonals were open.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-capture_minor-01",
+  "character": "nino",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. Now my bishops have more room.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-capture_rook-01",
+  "character": "nino",
+  "trigger": "capture_rook",
+  "text": "A rook. My bishops say thank you.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-check_given-01",
+  "character": "nino",
+  "trigger": "check_given",
+  "text": "Check, along the diagonal.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-castling-01",
+  "character": "nino",
+  "trigger": "castling",
+  "text": "Castled. Now the bishops can hunt.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-clearly_winning-01",
+  "character": "nino",
+  "trigger": "clearly_winning",
+  "text": "Two bishops, open board. You know how this ends.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-clearly_losing-01",
+  "character": "nino",
+  "trigger": "clearly_losing",
+  "text": "Hm. This is unusual for me.",
+  "expression": "annoyed",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-queens_off-01",
+  "character": "nino",
+  "trigger": "queens_off",
+  "text": "Queens off. Bishops matter even more.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-endgame_reached-01",
+  "character": "nino",
+  "trigger": "endgame_reached",
+  "text": "The ending. Bishops love open space.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-sacrifice-01",
+  "character": "nino",
+  "trigger": "sacrifice",
+  "text": "The bishop goes in. The king comes out.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-promotion-01",
+  "character": "nino",
+  "trigger": "promotion",
+  "text": "Queen. And the bishops still aren't finished.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-nino-opportunity-01",
+  "character": "nino",
+  "trigger": "opportunity",
+  "text": "Hm. My diagonals were closed. My mistake.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-game_start-01",
+  "character": "samuel",
+  "trigger": "game_start",
+  "text": "Show me your style. I'll meet it.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-game_start-02",
+  "character": "samuel",
+  "trigger": "game_start",
+  "text": "In Nairobi we play in the park. Everyone watches. No pressure.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-game_start-03",
+  "character": "samuel",
+  "trigger": "game_start",
+  "text": "A game is a conversation. Let's talk.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-game_win-01",
+  "character": "samuel",
+  "trigger": "game_win",
+  "text": "Good game. Keep asking good questions on the board.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-game_win-02",
+  "character": "samuel",
+  "trigger": "game_win",
+  "text": "You play with courage. Add patience, and you'll be very strong.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-game_loss-01",
+  "character": "samuel",
+  "trigger": "game_loss",
+  "text": "Beautifully played. I learned from you today.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-game_loss-02",
+  "character": "samuel",
+  "trigger": "game_loss",
+  "text": "You found the answers. Well done.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-capture_queen-01",
+  "character": "samuel",
+  "trigger": "capture_queen",
+  "text": "Your queen. Think about how that happened.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-capture_minor-01",
+  "character": "samuel",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. It was asking to be taken.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-capture_rook-01",
+  "character": "samuel",
+  "trigger": "capture_rook",
+  "text": "A rook. The position gave it to me.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-check_given-01",
+  "character": "samuel",
+  "trigger": "check_given",
+  "text": "Check. What's your answer?",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-castling-01",
+  "character": "samuel",
+  "trigger": "castling",
+  "text": "Castled. A calm king thinks clearly.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-clearly_winning-01",
+  "character": "samuel",
+  "trigger": "clearly_winning",
+  "text": "The position speaks for itself.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-clearly_losing-01",
+  "character": "samuel",
+  "trigger": "clearly_losing",
+  "text": "Interesting. You've found something.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-queens_off-01",
+  "character": "samuel",
+  "trigger": "queens_off",
+  "text": "Queens off. Now we see who understands the position.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-endgame_reached-01",
+  "character": "samuel",
+  "trigger": "endgame_reached",
+  "text": "The ending. Where understanding shows.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-sacrifice-01",
+  "character": "samuel",
+  "trigger": "sacrifice",
+  "text": "A sacrifice. Can you see why?",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-promotion-01",
+  "character": "samuel",
+  "trigger": "promotion",
+  "text": "A new queen. The patient pawn rewarded.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-samuel-opportunity-01",
+  "character": "samuel",
+  "trigger": "opportunity",
+  "text": "Hm. I let the conversation slip there.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-game_start-01",
+  "character": "elena",
+  "trigger": "game_start",
+  "text": "I've played thousands of games. I remember most of them.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-game_start-02",
+  "character": "elena",
+  "trigger": "game_start",
+  "text": "I don't need to attack. I just need you to make one mistake.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-game_start-03",
+  "character": "elena",
+  "trigger": "game_start",
+  "text": "Let's play a proper game. All the way to the end.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-game_win-01",
+  "character": "elena",
+  "trigger": "game_win",
+  "text": "Solid play wins. Good game.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-game_win-02",
+  "character": "elena",
+  "trigger": "game_win",
+  "text": "You lasted well. Most don't.",
+  "expression": "pleased",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-game_loss-01",
+  "character": "elena",
+  "trigger": "game_loss",
+  "text": "Very well played. You made no mistakes. That's rare.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-game_loss-02",
+  "character": "elena",
+  "trigger": "game_loss",
+  "text": "I'll be studying this one. Congratulations.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-capture_queen-01",
+  "character": "elena",
+  "trigger": "capture_queen",
+  "text": "Your queen. That was the mistake I was waiting for.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-capture_minor-01",
+  "character": "elena",
+  "trigger": "capture_minor",
+  "text": "Your {piece}. Noted.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-capture_rook-01",
+  "character": "elena",
+  "trigger": "capture_rook",
+  "text": "A rook. The game is simpler now.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-check_given-01",
+  "character": "elena",
+  "trigger": "check_given",
+  "text": "Check.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-castling-01",
+  "character": "elena",
+  "trigger": "castling",
+  "text": "Castled.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-clearly_winning-01",
+  "character": "elena",
+  "trigger": "clearly_winning",
+  "text": "Now it's only technique.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-clearly_losing-01",
+  "character": "elena",
+  "trigger": "clearly_losing",
+  "text": "Hm. You're playing very accurately.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-queens_off-01",
+  "character": "elena",
+  "trigger": "queens_off",
+  "text": "Queens off. The long game begins.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-endgame_reached-01",
+  "character": "elena",
+  "trigger": "endgame_reached",
+  "text": "The ending. Where grandmasters earn their title.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-sacrifice-01",
+  "character": "elena",
+  "trigger": "sacrifice",
+  "text": "A sacrifice. Calculated to the end.",
+  "expression": "smug",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-promotion-01",
+  "character": "elena",
+  "trigger": "promotion",
+  "text": "Promotion. As expected.",
+  "expression": "neutral",
+  "conditions": {},
+  "weight": 1,
+  "once": false
+ },
+ {
+  "id": "fc2-elena-opportunity-01",
+  "character": "elena",
+  "trigger": "opportunity",
+  "text": "A small imprecision. I'll hold it together.",
+  "expression": "surprised",
+  "conditions": {},
+  "weight": 1,
+  "once": false
  }
 ]
