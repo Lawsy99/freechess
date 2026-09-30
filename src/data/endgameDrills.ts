@@ -129,6 +129,15 @@ ENDGAME_DRILLS.hold = [
   },
 ]
 
+// FreeChess (Sep 2026): each of the classic positions as a lesson of its own,
+// so everyone plays all of them, not just the one their rating picks.
+const byId = (id: string) => Object.values(ENDGAME_DRILLS).flat().find((p) => p.id === id)!
+ENDGAME_DRILLS['queen-mate'] = [byId('queen')]
+ENDGAME_DRILLS['rook-mate'] = [byId('rook')]
+ENDGAME_DRILLS.opposition = [byId('opposition')]
+ENDGAME_DRILLS.lucena = [byId('lucena')]
+ENDGAME_DRILLS.philidor = [byId('philidor')]
+
 /** The position that suits the player's rating. */
 export function endgameFor(drill: string, rating: number): EndgamePosition | undefined {
   const list = ENDGAME_DRILLS[drill]

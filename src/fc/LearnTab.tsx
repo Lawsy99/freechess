@@ -35,6 +35,12 @@ const UNIT_PIECE: Record<string, string> = {
 /** The piece on each lesson's button: the one that does the job (knights fork, rooks mate on the back rank). */
 const LESSON_PIECE: Record<string, string> = {
   rules: 'wK',
+  'queen-mate': 'wQ',
+  'rook-mate': 'wR',
+  'key-squares': 'wK',
+  opposition: 'bK',
+  lucena: 'wR',
+  philidor: 'bR',
   'free-pieces': 'wP',
   'mate-in-one': 'wQ',
   'lone-king': 'wK',

@@ -174,6 +174,38 @@ export const LEARN_PATH: Unit[] = [
           { kind: 'puzzles', title: 'Pawn endgames', themes: ['pawnEndgame'], count: 4, pass: 3, offset: -200 },
         ],
       },
+      {
+        id: 'queen-mate',
+        title: 'Mate with the queen',
+        steps: [
+          { kind: 'idea', text: 'A queen and king against a lone king is always a win, if you avoid stalemate. Box the king in with your queen, a knight’s move away, then bring your king up to help.' },
+          { kind: 'endgame', drill: 'queen-mate' },
+        ],
+      },
+      {
+        id: 'rook-mate',
+        title: 'Mate with the rook',
+        steps: [
+          { kind: 'idea', text: 'Harder than the queen, but always a win. Your rook cuts the king off; your king does the pushing. Take the opposition, then check.' },
+          { kind: 'endgame', drill: 'rook-mate' },
+        ],
+      },
+      {
+        id: 'key-squares',
+        title: 'Key squares',
+        steps: [
+          { kind: 'idea', text: 'In king and pawn endings, your king wins by reaching a key square: two ranks in front of the pawn. Get there first, and the pawn walks home.' },
+          { kind: 'endgame', drill: 'key-squares' },
+        ],
+      },
+      {
+        id: 'opposition',
+        title: 'Hold the draw',
+        steps: [
+          { kind: 'idea', text: 'A pawn down is often only a draw if you know how. Stand face to face with their king, one square between, and make them move first: the opposition.' },
+          { kind: 'endgame', drill: 'opposition' },
+        ],
+      },
       tactic('promotion', 'Promotion', 'promotion', 'A pawn that reaches the end becomes a queen. Clear its path, push it, and watch out for the pieces that can stop it.'),
       {
         id: 'rook-endings',
@@ -233,6 +265,22 @@ export const LEARN_PATH: Unit[] = [
       tactic('passed-pawns', 'Passed pawns', 'advancedPawn', 'A pawn with no enemy pawns in front of it is dangerous. Push it, protect it, and use it to pull their pieces away.'),
       tactic('bishop-endings', 'Bishop endings', 'bishopEndgame', 'Bishops love open boards and long diagonals. Put your pawns on the other colour to your bishop, and use your king.'),
       tactic('knight-endings', 'Knight endings', 'knightEndgame', 'Knights are slow over long distances but tricky up close. Watch for forks, and keep your king active.'),
+      {
+        id: 'lucena',
+        title: 'The Lucena position',
+        steps: [
+          { kind: 'idea', text: 'The most important winning rook ending. Build a bridge: bring your rook to the fourth rank, so it can block the checks when your king steps out.' },
+          { kind: 'endgame', drill: 'lucena' },
+        ],
+      },
+      {
+        id: 'philidor',
+        title: 'The Philidor defence',
+        steps: [
+          { kind: 'idea', text: 'The most important drawing rook ending. Keep your rook on the sixth rank so their king can’t come forward; when the pawn advances, go to the back and check from behind.' },
+          { kind: 'endgame', drill: 'philidor' },
+        ],
+      },
       tactic('queen-endings', 'Queen endings', 'queenEndgame', 'With queens on, checks come from everywhere. Look for forks and for ways to trade queens into a won pawn ending.'),
     ],
   },
