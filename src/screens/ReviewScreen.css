@@ -470,3 +470,42 @@
   color: var(--muted);
   font-size: 14px;
 }
+
+/* The result as a badge (Oct 2026). */
+.review-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--result) 18%, transparent);
+  color: var(--result);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.result-badge.won {
+  --result: var(--good);
+}
+
+.result-badge.lost {
+  --result: var(--bad);
+}
+
+.result-badge.drawn {
+  --result: var(--muted);
+}
+
+.review-result .result-how {
+  display: inline;
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}

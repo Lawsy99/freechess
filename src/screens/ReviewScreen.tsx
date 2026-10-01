@@ -326,11 +326,14 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
           <h1>Review</h1>
           {skipButton}
         </div>
-        <p className="review-result">
-          {/* The result, stamped as on the club's results sheet. */}
-          <strong className={`result-stamp ${stampKind}`}>{resultLine}</strong>{' '}
-          {outcome && <span>{describeOutcome(outcome)}</span>}
-        </p>
+        {/* The result as a badge (Joseph, Oct 2026: the old rubber stamp went). */}
+        <div className="review-result">
+          <span className={`result-badge ${stampKind}`}>
+            <ResultIcon kind={stampKind} />
+            {stampKind === 'won' ? 'You won' : stampKind === 'lost' ? 'You lost' : stampKind === 'drawn' ? 'Draw' : resultLine}
+          </span>
+          {outcome && <span className="result-how">{describeOutcome(outcome)}</span>}
+        </div>
         {(opening.name || opening.bookMoves > 0) && (
           <p className="review-opening">
             {opening.name ?? 'Opening'}
@@ -512,4 +515,12 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
       )}
     </main>
   )
+}
+
+/** A trophy for a win, a flag for a loss, a half for a draw. */
+function ResultIcon({ kind }: { kind: string }) {
+  const common = { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true }
+  if (kind === 'won') return <svg {...common}><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6" /></svg>
+  if (kind === 'lost') return <svg {...common}><path d="M6 21V4M6 4h11l-2 4 2 4H6" /></svg>
+  return <svg {...common}><circle cx="12" cy="12" r="8" /><path d="M12 4v16" /></svg>
 }
