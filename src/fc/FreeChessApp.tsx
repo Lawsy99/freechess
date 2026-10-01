@@ -8,7 +8,7 @@ import { BOT_GROUPS, findBot, type Bot } from '../data/bots'
 import { characterOpponentId } from '../data/opponents'
 import { newGameRecord, outcomeOf, upgradeGameRecord, type GameRecord } from '../logic/gameRecord'
 import type { PathGame } from '../logic/path'
-import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordCoachGame, recordLesson, withRushScore,
+import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordLegendGame, recordCoachGame, recordLesson, withRushScore,
   withVisionScore, type Profile } from '../logic/profile'
 import { ALL_LESSONS, type Lesson } from '../data/learnPath'
 import { LearnTab } from './LearnTab'
@@ -39,6 +39,8 @@ import {
 import { BotSheet, type ColourChoice } from './BotSheet'
 import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
+import { LegendSheet } from './LegendSheet'
+import { findLegend, legendBot, LEGEND_LEVELS, legendLevel, type Legend } from '../data/legends'
 import { analyseInBackground } from '../engine/reviewJobs'
 import { SHORTEST_REVIEW } from '../logic/review'
 import { VisionTrainer } from './VisionTrainer'
@@ -55,7 +57,7 @@ import { ResultScreen, type LastResult } from './ResultScreen'
 import { TabBar, type Tab } from './TabBar'
 import './fc.css'
 
-type View = 'tabs' | 'bot' | 'custom' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis' | 'insights' | 'badges'
+type View = 'tabs' | 'bot' | 'custom' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis' | 'insights' | 'badges' | 'legend'
 
 const CHARACTER_PREFIX = 'char:'
 
@@ -72,7 +74,9 @@ function botOf(game: GameRecord): Bot | undefined {
   if (!game.levelId.startsWith(CHARACTER_PREFIX)) return undefined
   const id = game.levelId.slice(CHARACTER_PREFIX.length)
   const style = customStyle(id)
-  return style ? customBot(game.opponentRating ?? 800, style) : findBot(id)
+  if (style) return customBot(game.opponentRating ?? 800, style)
+  const legend = findLegend(id)
+  return legend ? legendBot(legend, game.opponentRating ?? 200) : findBot(id)
 }
 
 export function FreeChessApp() {
@@ -86,6 +90,7 @@ export function FreeChessApp() {
   const [last, setLast] = useState<LastResult | null>(null)
   const [pastGame, setPastGame] = useState<ArchivedGame | null>(null)
   const [puzzleMode, setPuzzleMode] = useState<PuzzleMode | null>(null)
+  const [legend, setLegend] = useState<Legend | null>(null)
   // Your own mistakes waiting to be practised (FreeChess, Sep 2026: the deck
   // was filling up from reviews with nowhere to play it). Checked on the tabs.
   const [mistakesDue, setMistakesDue] = useState(0)
@@ -207,7 +212,10 @@ export function FreeChessApp() {
       const result = outcome.winner === null ? 'draw' : outcome.winner === g.playerColour ? 'win' : 'loss'
       const aidsUsed = g.takebacksUsed + (g.hintsUsed ?? 0)
       const bestBefore = profile.stars[b.id] ?? 0
-      const recorded = recordBotGame(profile, b, result, aidsUsed, new Date(), !isCustomBot(b.id))
+      const isLegend = !!findLegend(b.id)
+      const recorded = isLegend
+        ? { ...recordLegendGame(profile, b, b.rating, result, aidsUsed, new Date(), LEGEND_LEVELS), stars: 0 }
+        : { ...recordBotGame(profile, b, result, aidsUsed, new Date(), !isCustomBot(b.id)), levelUp: null }
       updateProfile(recorded.profile)
       setGame({ ...g, resultRecorded: true })
       setLast({
@@ -217,7 +225,14 @@ export function FreeChessApp() {
         aidsUsed,
         ratingChange: recorded.ratingChange,
         newBest: recorded.stars > bestBefore,
-        custom: isCustomBot(b.id),
+        custom: isCustomBot(b.id) || isLegend,
+        legend: isLegend
+          ? {
+              name: b.name,
+              levelUp: recorded.levelUp,
+              peak: result === 'win' && (recorded.profile.legends?.[b.id] ?? 0) >= LEGEND_LEVELS.length && !recorded.levelUp,
+            }
+          : undefined,
         badges: newlyEarned(profile, recorded.profile).map((x) => x.title),
       })
     }
@@ -252,7 +267,13 @@ export function FreeChessApp() {
         {...last}
         game={game ?? undefined}
         onReview={() => setView('review')}
-        onRematch={() => (last.coach ? startCoachGame(game?.playerColour === 'w' ? 'b' : 'w') : startBotGame(last.bot, game?.playerColour === 'w' ? 'b' : 'w'))}
+        onRematch={() => {
+          const other = game?.playerColour === 'w' ? 'b' : 'w'
+          if (last.coach) return startCoachGame(other)
+          // A legend: at the level they're on now (one up, after a win).
+          const lg = findLegend(last.bot.id)
+          startBotGame(lg ? legendBot(lg, LEGEND_LEVELS[legendLevel(profile.legends?.[lg.id] ?? 0)]) : last.bot, other)
+        }}
         onDone={() => {
           setView('tabs')
           setTab('play')
@@ -370,6 +391,18 @@ export function FreeChessApp() {
     )
   }
 
+  if (view === 'legend' && legend) {
+    return (
+      <LegendSheet
+        legend={legend}
+        profile={profile}
+        timeControl={settings.timeControl ?? 'none'}
+        onBack={() => setView('tabs')}
+        onPlay={(rating, c, t) => startBotGame(legendBot(legend, rating), c, t)}
+      />
+    )
+  }
+
   if (view === 'custom') {
     return (
       <CustomBotSheet
@@ -405,7 +438,15 @@ export function FreeChessApp() {
       {tab === 'home' && (
         <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onOpenLearn={() => setTab('learn')} onOpenPuzzles={() => setTab('puzzles')} />
       )}
-      {tab === 'play' && <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onAnalysis={() => setView('analysis')} onCustom={() => (paused ? setView('game') : setView('custom'))} />}
+      {tab === 'play' && (
+        <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onAnalysis={() => setView('analysis')} onCustom={() => (paused ? setView('game') : setView('custom'))}
+          onLegend={(l) => {
+            if (paused) return setView('game')
+            setLegend(l)
+            setView('legend')
+          }}
+        />
+      )}
       {tab === 'puzzles' && (
         <PuzzlesTab
           profile={profile}

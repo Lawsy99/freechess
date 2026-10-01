@@ -9,6 +9,8 @@ import { ChevronIcon, Stars, StarIcon } from './icons'
 import { groupFor } from '../logic/botPicks'
 import { MenuList } from './MenuList'
 import { LevelBadge } from './LevelBadge'
+import { LEGEND_LEVELS, LEGENDS, legendLevel, type Legend } from '../data/legends'
+import './legends.css'
 
 type Props = {
   profile: Profile
@@ -16,9 +18,10 @@ type Props = {
   onPlayCoach: () => void
   onAnalysis: () => void
   onCustom: () => void
+  onLegend: (legend: Legend) => void
 }
 
-export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis, onCustom }: Props) {
+export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis, onCustom, onLegend }: Props) {
   const rating = profile.rating ? Math.round(profile.rating.rating) : 800
   const [open, setOpen] = useState<BotGroup[]>([groupFor(rating)])
   const toggle = (g: BotGroup) => setOpen((o) => (o.includes(g) ? o.filter((x) => x !== g) : [...o, g]))
@@ -38,6 +41,35 @@ export function PlayTab({ profile, onPick, onPlayCoach, onAnalysis, onCustom }: 
         </span>
         <span className="fc-chip-button">Play</span>
       </button>
+      {/* Chess legends (Oct 2026): each one gets stronger every time you beat them. */}
+      <section className="fc-legends">
+        <h2 className="fc-menu-label">
+          Chess legends <span>Beat them to make them stronger</span>
+        </h2>
+        <ul className="fc-legend-row">
+          {LEGENDS.map((l) => {
+            const beaten = profile.legends?.[l.id] ?? 0
+            const level = legendLevel(beaten)
+            return (
+              <li key={l.id}>
+                <button type="button" className="fc-legend-card" onClick={() => onLegend(l)}>
+                  <Portrait who={l.id} size={64} className="fc-face" />
+                  <strong>{l.name}</strong>
+                  <span className="fc-legend-level">
+                    {beaten >= LEGEND_LEVELS.length ? 'Beaten at peak' : `Level ${level + 1} · ${LEGEND_LEVELS[level]}`}
+                  </span>
+                  <span className="fc-legend-dots" aria-hidden="true">
+                    {LEGEND_LEVELS.map((r, i) => (
+                      <i key={r} className={i < beaten ? 'on' : undefined} />
+                    ))}
+                  </span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+
       {BOT_GROUPS.map((group) => {
         const bots = botsIn(group.id)
         const stars = bots.reduce((sum, b) => sum + (profile.stars[b.id] ?? 0), 0)

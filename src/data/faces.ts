@@ -84,6 +84,15 @@ export const FACES: Record<string, Face> = {
   ingrid: { bg: 'cfe0e8', skin: S.l1, hair: 'full', hairColour: 'e9dcb0', lashes: true, shirt: 'crew', shirtColour: '8a3b3b' },
   malcolm: { bg: 'b3b1c4', skin: S.l2, hair: 'dannyPhantom', hairColour: '9c9790', glasses: 'square', shirt: 'collared', shirtColour: '2f3440' },
 
+  // Chess legends (Oct 2026): warm, old-photograph backgrounds.
+  philidor: { bg: 'd9c7a3', skin: S.l1, hair: 'full', hairColour: 'e9e6df', shirt: 'collared', shirtColour: '6b3a2a' },
+  anderssen: { bg: 'cdb892', skin: S.l2, hair: 'dougFunny', hairColour: '6e5a48', beard: 'beard', shirt: 'collared', shirtColour: '2f2a26' },
+  morphy: { bg: 'e0cfa8', skin: S.l1, hair: 'fonze', hairColour: '2b1d16', shirt: 'collared', shirtColour: '1f2a3a' },
+  lasker: { bg: 'd6c39c', skin: S.l2, hair: 'mrClean', beard: 'scruff', glasses: 'round', shirt: 'collared', shirtColour: '3a3530' },
+  capablanca: { bg: 'e6d3a8', skin: S.m1, hair: 'dannyPhantom', hairColour: '141212', shirt: 'collared', shirtColour: 'e8e2d6' },
+  menchik: { bg: 'dccab0', skin: S.l1, hair: 'pixie', hairColour: '4a2a1c', lashes: true, shirt: 'open', shirtColour: '4a3b5c', earrings: 'stud' },
+  alekhine: { bg: 'd2bf9a', skin: S.l1, hair: 'fonze', hairColour: 'c9a15e', shirt: 'collared', shirtColour: '2f3d5c', moods: { winning: 'smug', losing: 'annoyed' } },
+
   // Master
   tariq: { bg: 'b9d6b0', skin: S.d1, hair: 'fonze', hairColour: '141010', beard: 'beard', shirt: 'collared', shirtColour: '1f6f3d', moods: { winning: 'smug', losing: 'annoyed' } },
   leila: { bg: 'd9c2e8', skin: S.m1, hair: 'turban', hairColour: '3a2f5c', lashes: true, glasses: 'round', shirt: 'collared', shirtColour: '3a2f5c', moods: { winning: 'neutral', losing: 'surprised' } },

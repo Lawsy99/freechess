@@ -3,6 +3,7 @@
 // are). Vera, Felix and Derek join with Acts 2–3.
 import { botCharacter, findBot } from './bots'
 import { customBot, customStyle } from './customBot'
+import { findLegend, legendCharacter } from './legends'
 import { FC_COACH } from './coach'
 
 export type Style = 'aggressive' | 'solid' | 'simplifying' | 'grinding' | 'theoretical' | 'adaptive'
@@ -267,6 +268,8 @@ export function findCharacter(id: string): Character | undefined {
   if (id === FC_COACH.id) return FC_COACH
   const bot = findBot(id)
   if (bot) return botCharacter(bot)
+  const legend = findLegend(id)
+  if (legend) return legendCharacter(legend)
   // A custom bot: its style is in its id; its strength is saved with the game.
   const style = customStyle(id)
   return style ? botCharacter(customBot(800, style)) : undefined

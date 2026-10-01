@@ -3,9 +3,10 @@
 // count what you'd done before they existed. Pure, so it can be tested.
 import { BOTS, botsIn, type BotGroup } from '../data/bots'
 import { ALL_LESSONS } from '../data/learnPath'
+import { LEGENDS, LEGEND_LEVELS } from '../data/legends'
 import type { Profile } from './profile'
 
-export type BadgeGroup = 'play' | 'stars' | 'rating' | 'puzzles' | 'learn' | 'streak'
+export type BadgeGroup = 'play' | 'legends' | 'stars' | 'rating' | 'puzzles' | 'learn' | 'streak'
 
 export type Badge = {
   id: string
@@ -18,6 +19,7 @@ export type Badge = {
 
 export const BADGE_GROUPS: { id: BadgeGroup; label: string }[] = [
   { id: 'play', label: 'Playing' },
+  { id: 'legends', label: 'Legends' },
   { id: 'stars', label: 'Stars' },
   { id: 'rating', label: 'Rating' },
   { id: 'puzzles', label: 'Puzzles' },
@@ -60,6 +62,9 @@ export const BADGES: Badge[] = [
 
   count('upset-200', 'Giant killer', 'Beat a bot rated 200 or more above you.', 'play', 200, (p) => Math.max(0, p.bestUpset ?? 0)),
   count('upset-400', 'David and Goliath', 'Beat a bot rated 400 or more above you.', 'play', 400, (p) => Math.max(0, p.bestUpset ?? 0)),
+  count('legend-first', 'Making history', 'Beat a chess legend.', 'legends', 1, (p) => Object.values(p.legends ?? {}).filter((n) => n > 0).length),
+  count('legends-1000', 'Old masters', 'Get every legend to level 4 (1000).', 'legends', LEGENDS.length, (p) => LEGENDS.filter((l) => (p.legends?.[l.id] ?? 0) >= 3).length),
+  count('legend-peak', 'Legendary', 'Beat a legend at their peak, level 8.', 'legends', 1, (p) => Object.values(p.legends ?? {}).filter((n) => n >= LEGEND_LEVELS.length).length),
   count('three-stars', 'Clean win', 'Win three stars against any bot.', 'stars', 1, (p) => Object.values(p.stars).filter((s) => s >= 3).length),
   count('stars-50', 'Star collector', 'Collect 50 stars.', 'stars', 50, stars),
   count('stars-all', 'Every star', 'Collect every star from every bot.', 'stars', BOTS.length * 3, stars),

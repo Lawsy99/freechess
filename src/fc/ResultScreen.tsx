@@ -28,6 +28,8 @@ export type LastResult = {
   custom?: boolean
   /** Badges this game earned. */
   badges?: string[]
+  /** A chess legend: whether they levelled up (or were beaten at their peak). */
+  legend?: { name: string; levelUp: { level: number; rating: number } | null; peak: boolean }
 }
 
 type Props = LastResult & {
@@ -46,7 +48,7 @@ const LOSS_LINES = [
   'Close games teach the most. See what you’d change.',
 ]
 
-export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBest, coach = false, custom = false, badges = [], game, onReview, onRematch, onDone }: Props) {
+export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBest, coach = false, custom = false, badges = [], legend, game, onReview, onRematch, onDone }: Props) {
   // The Coach is pleased whatever happened; a bot is put out by losing, pleased by winning.
   const expression = coach ? 'pleased' : result === 'win' ? 'annoyed' : result === 'loss' ? 'pleased' : 'neutral'
   const [lossLine] = useState(() => LOSS_LINES[Math.floor(Math.random() * LOSS_LINES.length)])
@@ -87,6 +89,15 @@ export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBe
         </div>
       )}
 
+      {legend && (
+        <p className={`fc-legend-up ${legend.levelUp || legend.peak ? 'up' : ''}`}>
+          {legend.peak
+            ? `You beat ${legend.name} at their peak. A true legend.`
+            : legend.levelUp
+              ? `Level up! ${legend.name} is now level ${legend.levelUp.level}, at ${legend.levelUp.rating}.`
+              : `${legend.name} stays at this level. Beat them to move them up.`}
+        </p>
+      )}
       {!coach && ratingChange && <RatingChange from={ratingChange.from} to={ratingChange.to} />}
 
       {badges.length > 0 && (
@@ -104,7 +115,7 @@ export function ResultScreen({ bot, result, stars, aidsUsed, ratingChange, newBe
           Game review
         </button>
         <button type="button" className="fc-secondary" onClick={onRematch}>
-          {coach ? 'Play the Coach again' : 'Rematch'}
+          {coach ? 'Play the Coach again' : legend?.levelUp ? `Play level ${legend.levelUp.level}` : 'Rematch'}
         </button>
         <button type="button" className="fc-text-button" onClick={onDone}>
           {coach ? 'Done' : 'Play someone else'}

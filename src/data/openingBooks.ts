@@ -132,6 +132,23 @@ const HALF_REMEMBERED = [
   '1. d4 Nf6 2. c4 g6',
 ]
 
+// --- Chess legends (Oct 2026): the openings each was known for ---
+const PHILIDOR_DEFENCE = [
+  '1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Be7 6. Be2 O-O',
+  '1. e4 e5 2. Nf3 d6 3. Bc4 Be7 4. d4 exd4 5. Nxd4 Nf6 6. Nc3 O-O',
+]
+const BISHOPS_OPENING = ['1. e4 e5 2. Bc4 Nf6 3. d3 c6 4. Nf3 d5 5. Bb3 Bd6 6. Nc3 O-O']
+const OPEN_GAME_BLACK = ['1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+']
+const LASKER_LINES = [
+  '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. d4 exd4 6. Qxd4 Qxd4 7. Nxd4',
+  '1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 h6 7. Bh4 Ne4',
+]
+const ALEKHINE_DEFENCE = [
+  '1. e4 Nf6 2. e5 Nd5 3. d4 d6 4. Nf3 Bg4 5. Be2 e6 6. O-O Be7',
+  '1. e4 Nf6 2. e5 Nd5 3. c4 Nb6 4. d4 d6 5. f4 dxe5 6. fxe5 Nc6',
+  '1. e4 Nf6 2. Nc3 d5 3. exd5 Nxd5 4. Bc4 Nb6 5. Bb3 Nc6 6. Nf3 Bg4',
+]
+
 export const OPENING_BOOKS: Record<string, OpeningBook> = {
   marjorie: { white: LONDON, black: [...FRENCH, ...QGD] },
   dex: {
@@ -271,4 +288,12 @@ export const OPENING_BOOKS: Record<string, OpeningBook> = {
   lukas: { white: EXCHANGES, black: [...PETROFF, ...EXCHANGES] },
   hanna: { white: SYMMETRICAL, black: [...PETROFF, ...QGD, ...SYMMETRICAL] },
   ravi: { white: HALF_REMEMBERED, black: HALF_REMEMBERED },
+  // Chess legends (Oct 2026)
+  philidor: { white: BISHOPS_OPENING, black: [...PHILIDOR_DEFENCE, ...QGD] },
+  anderssen: { white: [...KINGS_GAMBIT, ...EVANS], black: [...OPEN_GAME_BLACK, ...QGD] },
+  morphy: { white: [...EVANS, ...ITALIAN_TWO_KNIGHTS], black: [...OPEN_GAME_BLACK, ...PHILIDOR_DEFENCE, ...QGD] },
+  lasker: { white: [...LASKER_LINES, ...QUEENS_GAMBIT], black: [...PRIYA_RUY, ...LASKER_LINES] },
+  capablanca: { white: [...QUEENS_GAMBIT, ...PRIYA_RUY], black: [...PRIYA_RUY, ...QGD] },
+  menchik: { white: QUEENS_GAMBIT, black: [...CARO, ...QGD] },
+  alekhine: { white: [...FRENCH, ...QUEENS_GAMBIT], black: [...ALEKHINE_DEFENCE, ...QGD] },
 }

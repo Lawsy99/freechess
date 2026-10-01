@@ -1,0 +1,154 @@
+/* Chess legends (Oct 2026): a row of cards on Play, the journey on their
+   page, the level-up after a game. Warm, old-photograph tones. */
+.fc-legends .fc-menu-label span {
+  margin-left: 6px;
+  color: var(--muted-dim);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fc-legend-row {
+  display: flex;
+  gap: 10px;
+  margin: 0 -16px;
+  padding: 2px 16px 6px;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.fc-legend-row::-webkit-scrollbar {
+  display: none;
+}
+
+.fc-legend-row li {
+  scroll-snap-align: start;
+}
+
+.fc-legend-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 128px;
+  padding: 14px 8px 12px;
+  border: 1px solid #5a4a32;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #2e2a22, #22252b);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.fc-legend-card strong {
+  margin-top: 4px;
+  font-size: 15px;
+}
+
+.fc-legend-level {
+  color: #e6c98a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.fc-legend-dots {
+  display: flex;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.fc-legend-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4a4233;
+}
+
+.fc-legend-dots i.on {
+  background: #e6c98a;
+}
+
+.fc-legend-story {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.fc-journey {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+}
+
+.fc-journey-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+.fc-journey-head span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.fc-journey-steps {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fc-journey-steps li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.fc-journey-steps li span {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.fc-journey-steps li small {
+  color: var(--muted-dim);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-journey-steps li.beaten span {
+  background: #e6c98a;
+  color: #2a2110;
+}
+
+.fc-journey-steps li.current span {
+  box-shadow: 0 0 0 2px #e6c98a;
+  color: var(--text);
+}
+
+.fc-legend-up {
+  max-width: 320px;
+  margin: 10px 0 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.fc-legend-up.up {
+  background: linear-gradient(135deg, #e6c98a, #c9a35a);
+  color: #2a2110;
+}

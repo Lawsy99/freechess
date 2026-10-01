@@ -54,6 +54,8 @@ export type Profile = {
    */
   freezes?: number
   frozenDays?: string[]
+  /** Chess legends: how many of each one's levels you've beaten (data/legends.ts). */
+  legends?: Record<string, number>
   /** Puzzles solved today, for the puzzle goal. */
   puzzlesToday?: { day: string; count: number }
   /** Days with at least one goal done ("2026-09-30"), the last 60, for the week on Home. */
@@ -267,4 +269,28 @@ export function recordLesson(p: Profile, lessonId: string, now: Date): Profile {
 /** A vision trainer score: the best is remembered. */
 export function withVisionScore(p: Profile, score: number): Profile {
   return { ...p, visionBest: Math.max(p.visionBest ?? 0, score) }
+}
+
+/**
+ * After a game against a chess legend (Oct 2026): rated like any bot game (no
+ * stars), and a win at their current level moves them up one.
+ */
+export function recordLegendGame(
+  p: Profile,
+  legend: { id: string },
+  rating: number,
+  result: BotResult,
+  aidsUsed: number,
+  now: Date,
+  levels: readonly number[],
+): { profile: Profile; ratingChange: { from: number; to: number } | null; levelUp: { level: number; rating: number } | null } {
+  const recorded = recordBotGame(p, { id: legend.id, rating }, result, aidsUsed, now, false)
+  const beaten = p.legends?.[legend.id] ?? 0
+  const atLevel = levels[Math.min(beaten, levels.length - 1)] === rating
+  if (result !== 'win' || !atLevel || beaten >= levels.length) return { profile: recorded.profile, ratingChange: recorded.ratingChange, levelUp: null }
+  const next = beaten + 1
+  const profile = { ...recorded.profile, legends: { ...p.legends, [legend.id]: next } }
+  // (Beating the last level finishes the journey: no level beyond it.)
+  const levelUp = next < levels.length ? { level: next + 1, rating: levels[next] } : null
+  return { profile, ratingChange: recorded.ratingChange, levelUp }
 }
