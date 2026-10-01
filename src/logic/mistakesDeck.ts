@@ -17,15 +17,21 @@ export type MistakeCard = Moment & {
   createdAt: number
   schedule: Card
   retired: boolean
+  /** When it was played (for today's three). */
+  answeredAt?: number
 }
 
 /**
  * Keeping the deck small enough to stay useful (Joseph, Sep 2026: "will get
  * too filled up otherwise"). The design's "at most 3 per game" is tightened.
  */
-export const MAX_CARDS_PER_GAME = 2
-/** Active (not retired) cards; beyond this the oldest retire. */
-export const MAX_ACTIVE_CARDS = 30
+export const MAX_CARDS_PER_GAME = 1
+/** Active (not retired) cards; beyond this the oldest retire. (FreeChess, Oct 2026: 12, so it never piles up.) */
+export const MAX_ACTIVE_CARDS = 12
+/** "Your mistakes" in FreeChess: three a day at most (Joseph, Oct 2026: focused, not a pile). */
+export const DAILY_MISTAKES = 3
+/** Older than this, a position quietly drops off: it's from a different you. */
+export const STALE_DAYS = 30
 /** Cards shown in one sitting; the rest wait for next time. */
 export const MAX_CARDS_PER_SESSION = 10
 
@@ -112,7 +118,7 @@ const GRADES: Record<Answer, Rating.Good | Rating.Hard | Rating.Again> = {
  */
 export function answerCard(card: MistakeCard, answer: Answer, now = new Date()): MistakeCard {
   const { card: schedule } = scheduler.next(card.schedule, now, GRADES[answer])
-  return { ...card, schedule, retired: true }
+  return { ...card, schedule, retired: true, answeredAt: now.getTime() }
 }
 
 export function isDue(card: MistakeCard, now = new Date()): boolean {
@@ -154,4 +160,36 @@ export function planAdditions(
 export function nextDue(cards: readonly MistakeCard[]): Date | null {
   const upcoming = cards.filter((c) => !c.retired).map((c) => new Date(c.schedule.due).getTime())
   return upcoming.length ? new Date(Math.min(...upcoming)) : null
+}
+
+// --- Today's three (FreeChess, Oct 2026) -----------------------------------------
+
+const sameDay = (a: number, b: Date) => new Date(a).toDateString() === b.toDateString()
+const fresh = (c: MistakeCard, now: Date) => now.getTime() - c.createdAt <= STALE_DAYS * 24 * 60 * 60 * 1000
+
+/** Positions still waiting (not played, not too old). */
+export function waitingMistakes(cards: readonly MistakeCard[], now = new Date()): MistakeCard[] {
+  return cards.filter((c) => !c.retired && fresh(c, now))
+}
+
+/** How much a card's mistake cost (centipawns), for picking the ones that matter most. */
+const cost = (c: MistakeCard) => (c.rating === 'blunder' ? 10_000 : 0) + c.bestCp - (c.playedCp ?? c.bestCp)
+
+/**
+ * Today's positions: at most three a day, minus any already played today.
+ * Blunders before mistakes, the costliest first, one per game, newest games
+ * first among equals.
+ */
+export function todaysMistakes(cards: readonly MistakeCard[], now = new Date()): MistakeCard[] {
+  const playedToday = cards.filter((c) => c.answeredAt !== undefined && sameDay(c.answeredAt, now)).length
+  const room = Math.max(0, DAILY_MISTAKES - playedToday)
+  const candidates = waitingMistakes(cards, now)
+    .filter((c) => isDue(c, now))
+    .sort((a, b) => cost(b) - cost(a) || b.createdAt - a.createdAt)
+  const picked: MistakeCard[] = []
+  for (const c of candidates) {
+    if (picked.length >= room) break
+    if (!picked.some((p) => p.gameId === c.gameId)) picked.push(c)
+  }
+  return picked
 }

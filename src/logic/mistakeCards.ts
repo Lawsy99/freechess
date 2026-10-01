@@ -41,10 +41,11 @@ export function withLeadUp<M extends Moment>(moment: M, moves: readonly string[]
 
 /** Warm-up cards from a game: its real errors, blunders first, a few at most. */
 export function cardsFromMoments(game: Pick<GameRecord, 'id'>, moments: readonly ReviewMoment[]): MistakeCard[] {
-  const severity = (m: ReviewMoment) => (m.rating === 'blunder' ? 2 : 1)
+  // The costliest first (blunders before mistakes): only the game's biggest error becomes a card.
+  const cost = (m: ReviewMoment) => (m.rating === 'blunder' ? 10_000 : 0) + m.bestCp - (m.playedCp ?? m.bestCp)
   return moments
     .filter((m) => qualifiesForDeck(m.rating))
-    .sort((a, b) => severity(b) - severity(a))
+    .sort((a, b) => cost(b) - cost(a))
     .slice(0, MAX_CARDS_PER_GAME)
     .map((m) => newCard(m, { gameId: game.id, ply: m.ply, rating: m.rating, moveLabel: m.moveLabel }))
 }

@@ -5,9 +5,8 @@ import { MomentTrainer } from '../components/MomentTrainer'
 import { RATING_LABELS } from '../logic/moveRating'
 import {
   answerCard,
-  dueCards,
-  MAX_CARDS_PER_SESSION,
-  nextDue,
+  todaysMistakes,
+  waitingMistakes,
   warmupCards,
   type Answer,
   type MistakeCard,
@@ -23,13 +22,15 @@ type QueueItem = { card: MistakeCard; repeat: boolean }
 
 type Props = {
   onBack: () => void
+  /** Each position answered (FreeChess: solved first time counts for the puzzle goal). */
+  onAnswered?: (answer: Answer) => void
   /** Coaching night's warm-ups: three recent errors, then on to the lesson. */
   warmup?: boolean
   /** Warm-ups finished (leaving part-way doesn't count). */
   onDone?: () => void
 }
 
-export function MistakesDeckScreen({ onBack, warmup = false, onDone }: Props) {
+export function MistakesDeckScreen({ onBack, warmup = false, onDone, onAnswered }: Props) {
   const [queue, setQueue] = useState<QueueItem[] | null>(null)
   const [allCards, setAllCards] = useState<MistakeCard[]>([])
   const [index, setIndex] = useState(0)
@@ -40,7 +41,8 @@ export function MistakesDeckScreen({ onBack, warmup = false, onDone }: Props) {
       .then((cards) => {
         setAllCards(cards)
         // Short sittings: at most MAX_CARDS_PER_SESSION, oldest-due first.
-        const picked = warmup ? warmupCards(cards) : dueCards(cards).slice(0, MAX_CARDS_PER_SESSION)
+        // (FreeChess: today's three, the ones that matter most.)
+        const picked = warmup ? warmupCards(cards) : todaysMistakes(cards)
         // Each card is brought up to date from its game: the move before for
         // context, and the coach's explanation written afresh (so it only says
         // what really happened next in that game).
@@ -64,6 +66,7 @@ export function MistakesDeckScreen({ onBack, warmup = false, onDone }: Props) {
     // Seen once, right or wrong, and it's gone: no repeats, so it never
     // becomes a memory test (Joseph, Sep 2026).
     const updated = answerCard(item.card, answer)
+    onAnswered?.(answer)
     saveCard(updated).catch((err) => console.error('Card save failed', err))
     setAllCards((cards) => cards.map((c) => (c.id === updated.id ? updated : c)))
   }
@@ -81,10 +84,8 @@ export function MistakesDeckScreen({ onBack, warmup = false, onDone }: Props) {
 
   const item = queue[index]
   if (!item) {
-    const upcoming = nextDue(allCards)
-    const active = allCards.filter((c) => !c.retired).length
-    const learned = allCards.length - active
-    const stillDue = dueCards(allCards).length
+    const waiting = waitingMistakes(allCards).length
+    const learned = allCards.filter((c) => c.retired && c.answeredAt).length
     if (warmup) {
       return (
         <main className="review-screen">
@@ -105,18 +106,12 @@ export function MistakesDeckScreen({ onBack, warmup = false, onDone }: Props) {
         </header>
         <p className="review-note">
           {allCards.length === 0
-            ? 'No cards yet. Mistakes and blunders from your game reviews will appear here.'
-            : queue.length === 0
-              ? `Nothing due right now.${upcoming ? ` Next card ${describeWhen(upcoming)}.` : ''}`
-              : stillDue > 0
-                ? `That's enough for one sitting. ${stillDue} more waiting for next time.`
-                : `All done for now.${upcoming ? ` Next card ${describeWhen(upcoming)}.` : ''}`}
+            ? 'Nothing yet. The biggest mistake from each game you review comes back here, three a day.'
+            : waiting === 0
+              ? 'All caught up. Review your games and their biggest mistakes come back here.'
+              : `Done for today. ${waiting} more from your games ${waiting === 1 ? 'is' : 'are'} waiting: three a day, the ones that matter most first.`}
         </p>
-        {allCards.length > 0 && (
-          <p className="review-note">
-            {active} card{active === 1 ? '' : 's'} in the deck · {learned} learned
-          </p>
-        )}
+        {learned > 0 && <p className="review-note">{learned} put right so far.</p>}
         <button type="button" className="review-continue" onClick={onBack}>
           Back
         </button>
@@ -133,7 +128,7 @@ export function MistakesDeckScreen({ onBack, warmup = false, onDone }: Props) {
         </button>
         <p className="review-kicker">
           {warmup ? 'Warm-up · ' : ''}
-          {item.repeat ? 'One more go' : `Position ${index + 1} of ${queue.length}`}
+          {item.repeat ? 'One more go' : warmup ? `Position ${index + 1} of ${queue.length}` : `Today’s ${index + 1} of ${queue.length}`}
         </p>
       </header>
       <h1 className="deck-title">
@@ -153,13 +148,4 @@ export function MistakesDeckScreen({ onBack, warmup = false, onDone }: Props) {
 
 function formatDate(ms: number): string {
   return new Date(ms).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
-}
-
-/** "tomorrow", "in 3 days", "on 12 Oct"… */
-function describeWhen(date: Date): string {
-  const days = Math.ceil((date.getTime() - Date.now()) / (24 * 60 * 60 * 1000))
-  if (days <= 0) return 'is due now'
-  if (days === 1) return 'is due tomorrow'
-  if (days < 7) return `is due in ${days} days`
-  return `is due on ${formatDate(date.getTime())}`
 }

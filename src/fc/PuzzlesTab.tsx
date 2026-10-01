@@ -77,8 +77,8 @@ export function PuzzlesTab({ profile, mistakesDue, focus, onStart }: Props) {
           <strong>Your mistakes</strong>
           <span>
             {mistakesDue > 0
-              ? `${mistakesDue} position${mistakesDue === 1 ? '' : 's'} from your games to try again.`
-              : 'Positions from your games come back here to try again.'}
+              ? `Today: ${mistakesDue} position${mistakesDue === 1 ? '' : 's'} from your games. The biggest mistakes first.`
+              : 'Done for today. Your biggest mistakes come back here, three a day.'}
           </span>
         </span>
         <ChevronIcon size={20} />

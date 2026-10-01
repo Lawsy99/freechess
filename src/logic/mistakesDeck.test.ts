@@ -110,3 +110,38 @@ describe('mistakes deck', () => {
     expect(nextDue([answered])).toBeNull()
   })
 })
+
+describe("today's three (FreeChess)", () => {
+  const now = new Date('2026-10-01T12:00:00')
+  const make = (id: string, gameId: string, rating: 'mistake' | 'blunder', loss: number, daysOld = 1) => ({
+    ...card(),
+    id,
+    gameId,
+    rating,
+    bestCp: 0,
+    playedCp: -loss,
+    createdAt: now.getTime() - daysOld * 86_400_000,
+    schedule: { ...card().schedule, due: new Date(now.getTime() - 1000) },
+  })
+
+  it('picks at most three, blunders and the costliest first, one per game', async () => {
+    const { todaysMistakes } = await import('./mistakesDeck')
+    const cards = [
+      make('a', 'g1', 'mistake', 150),
+      make('b', 'g2', 'blunder', 400),
+      make('c', 'g2', 'blunder', 900), // same game as b: only the costlier
+      make('d', 'g3', 'mistake', 300),
+      make('e', 'g4', 'mistake', 120),
+    ]
+    expect(todaysMistakes(cards, now).map((c) => c.id)).toEqual(['c', 'd', 'a'])
+  })
+
+  it('counts what you have done today, and drops positions over a month old', async () => {
+    const { todaysMistakes, waitingMistakes, answerCard } = await import('./mistakesDeck')
+    const done = answerCard(make('x', 'g9', 'blunder', 500), 'first-try', now)
+    const old = make('o', 'g8', 'blunder', 900, 40)
+    const cards = [done, old, make('a', 'g1', 'mistake', 150), make('d', 'g3', 'mistake', 300), make('e', 'g4', 'mistake', 120)]
+    expect(todaysMistakes(cards, now)).toHaveLength(2)
+    expect(waitingMistakes(cards, now).map((c) => c.id)).not.toContain('o')
+  })
+})

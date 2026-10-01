@@ -23,8 +23,8 @@ const moment = (ply: number, rating: ReviewMoment['rating']): ReviewMoment => ({
 })
 
 describe('warm-up positions from a game', () => {
-  it('keeps only real errors, blunders first, and ids match the review’s moments', () => {
+  it('keeps only the biggest real error (one per game), and ids match the review’s moments', () => {
     const cards = cardsFromMoments({ id: 'g1' }, [moment(4, 'mistake'), moment(10, 'blunder'), moment(12, 'inaccuracy')])
-    expect(cards.map((c) => c.id)).toEqual([cardId('g1', 10), cardId('g1', 4)])
+    expect(cards.map((c) => c.id)).toEqual([cardId('g1', 10)])
   })
 })

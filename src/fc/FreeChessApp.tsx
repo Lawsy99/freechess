@@ -24,7 +24,7 @@ import { PastGamesScreen } from '../screens/PastGamesScreen'
 import { ReviewScreen } from '../screens/ReviewScreen'
 import { SettingsScreen } from '../screens/SettingsScreen'
 import { MistakesDeckScreen } from '../screens/MistakesDeckScreen'
-import { dueCards } from '../logic/mistakesDeck'
+import { todaysMistakes } from '../logic/mistakesDeck'
 import { trainingFocus, type Focus } from '../logic/focus'
 import { myOpenings, type MyOpening } from '../logic/myOpenings'
 import {
@@ -104,7 +104,7 @@ export function FreeChessApp() {
   useEffect(() => {
     if (view !== 'tabs') return
     loadCards()
-      .then((cards) => setMistakesDue(dueCards(cards).length))
+      .then((cards) => setMistakesDue(todaysMistakes(cards).length))
       .catch(() => undefined)
     listArchivedGames()
       .then((games) => {
@@ -353,7 +353,7 @@ export function FreeChessApp() {
     return (
       <BoardThemeContext.Provider value={settings.board}>
         {puzzleMode.kind === 'mistakes' ? (
-          <MistakesDeckScreen onBack={back} />
+          <MistakesDeckScreen onBack={back} onAnswered={(a) => updateProfile(countPuzzle(profile, a === 'first-try'))} />
         ) : puzzleMode.kind === 'vision' ? (
           <VisionTrainer best={profile.visionBest ?? 0} onFinished={(score) => updateProfile(withVisionScore(profile, score))} onBack={back} />
         ) : puzzleMode.kind === 'rush' ? (
