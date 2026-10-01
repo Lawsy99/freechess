@@ -1,7 +1,7 @@
 // FreeChess: the whole app. The main screens sit under a bottom tab bar;
 // a bot game, its result and its review take the full screen. Everything is
 // saved on the phone after every change, so a closed app resumes exactly.
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BoardThemeContext } from '../components/boardTheme'
 import { setSoundEnabled } from '../components/moveSound'
 import { BOT_GROUPS, findBot, type Bot } from '../data/bots'
@@ -42,6 +42,8 @@ import {
 import { BotSheet, type ColourChoice } from './BotSheet'
 import { HomeTab } from './HomeTab'
 import { PlayTab } from './PlayTab'
+import { SyncPanel } from './SyncPanel'
+import { syncCode, syncNow } from '../storage/sync'
 import { LegendSheet } from './LegendSheet'
 import { findLegend, legendBot, LEGEND_LEVELS, legendLevel, type Legend } from '../data/legends'
 import { analyseInBackground } from '../engine/reviewJobs'
@@ -94,6 +96,28 @@ export function FreeChessApp() {
   const [pastGame, setPastGame] = useState<ArchivedGame | null>(null)
   const [puzzleMode, setPuzzleMode] = useState<PuzzleMode | null>(null)
   const [legend, setLegend] = useState<Legend | null>(null)
+  // Sync (Oct 2026): progress kept the same on every linked device.
+  const reloadProfile = () => {
+    loadProfile()
+      .then((p) => p && setProfile(p))
+      .catch(() => undefined)
+  }
+  const lastSync = useRef(0)
+  useEffect(() => {
+    if (!loaded || view !== 'tabs' || !syncCode() || Date.now() - lastSync.current < 30_000) return
+    lastSync.current = Date.now()
+    syncNow()
+      .then(reloadProfile)
+      .catch(() => undefined) // (offline: next time)
+  }, [loaded, view])
+  useEffect(() => {
+    const away = () => {
+      if (document.visibilityState === 'hidden' && syncCode()) syncNow().catch(() => undefined)
+    }
+    document.addEventListener('visibilitychange', away)
+    return () => document.removeEventListener('visibilitychange', away)
+  }, [])
+
   // Your own mistakes waiting to be practised (FreeChess, Sep 2026: the deck
   // was filling up from reviews with nowhere to play it). Checked on the tabs.
   const [mistakesDue, setMistakesDue] = useState(0)
@@ -340,6 +364,7 @@ export function FreeChessApp() {
           onChange={updateSettings}
           onBack={() => setView('tabs')}
           whereTheyAre={`FreeChess, rating ${profile.rating ? Math.round(profile.rating.rating) : 'none'}`}
+          sync={<SyncPanel onSynced={reloadProfile} />}
         />
       </BoardThemeContext.Provider>
     )

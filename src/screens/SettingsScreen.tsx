@@ -1,7 +1,7 @@
 // Settings (design document, "Screens"): how much the characters talk, the
 // board's colours, sound, and the backup (export everything to one file, or
 // restore from one).
-import { useRef, useState } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { BUILD_LABEL } from '../buildInfo'
 import { BOARD_THEMES, type BoardThemeId } from '../components/boardTheme'
 import { backupFileName, parseBackup, summarise } from '../logic/backup'
@@ -16,9 +16,11 @@ type Props = {
   onBack: () => void
   /** Where the player is ("Week 3, rating 1180"), for feedback. */
   whereTheyAre: string
+  /** FreeChess: the Sync section. */
+  sync?: ReactNode
 }
 
-export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Props) {
+export function SettingsScreen({ settings, onChange, onBack, whereTheyAre, sync }: Props) {
   const [message, setMessage] = useState<string | null>(null)
   const fileInput = useRef<HTMLInputElement>(null)
   const [feedback, setFeedback] = useState('')
@@ -168,6 +170,8 @@ export function SettingsScreen({ settings, onChange, onBack, whereTheyAre }: Pro
           />
         </ul>
       </section>
+
+      {sync}
 
       <section>
         <h2>Backup</h2>

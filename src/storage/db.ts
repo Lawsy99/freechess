@@ -10,6 +10,7 @@ import type { Progress } from '../logic/path'
 import type { PositionEval } from '../logic/review'
 import { DEFAULT_SETTINGS, type Settings } from '../logic/settings'
 import type { Backup } from '../logic/backup'
+import { mergeSync, type SyncData, type SyncPuzzles } from '../logic/syncMerge'
 
 /** A finished game in the archive, with its review analysis once done. */
 export type ArchivedGame = GameRecord & {
@@ -65,7 +66,8 @@ export async function loadProfile(): Promise<Profile | null> {
 }
 
 export async function saveProfile(profile: Profile): Promise<void> {
-  await (await db()).put('state', profile, 'profile')
+  // (Stamped, so syncing knows which device was used last.)
+  await (await db()).put('state', { ...profile, updatedAt: Date.now() }, 'profile')
 }
 
 export async function loadCurrentGame(): Promise<GameRecord | null> {
@@ -92,6 +94,8 @@ export type PuzzleProgress = {
   seen: string[]
   /** Positions from your own games already used as lesson examples ("gameId:ply"), so none is used twice. */
   ownSeen?: string[]
+  /** When last saved (for syncing). */
+  updatedAt?: number
 }
 
 /**
@@ -103,7 +107,7 @@ export async function updatePuzzleProgress(change: (saved: PuzzleProgress | null
   const value = await tx.store.get('puzzles')
   const saved = value && typeof value === 'object' && 'seen' in value ? (value as PuzzleProgress) : null
   const next = change(saved)
-  if (next) await tx.store.put(next, 'puzzles')
+  if (next) await tx.store.put({ ...next, updatedAt: Date.now() }, 'puzzles')
   await tx.done
 }
 
@@ -114,7 +118,7 @@ export async function loadPuzzleProgress(): Promise<PuzzleProgress | null> {
 
 export async function savePuzzleProgress(p: PuzzleProgress): Promise<void> {
   // Remember the most recent 3,000 seen, plenty to avoid repeats.
-  await (await db()).put('state', { ...p, seen: p.seen.slice(-3000) }, 'puzzles')
+  await (await db()).put('state', { ...p, seen: p.seen.slice(-3000), updatedAt: Date.now() }, 'puzzles')
 }
 
 /** Recently used dialogue lines and once-only lines already shown. */
@@ -289,4 +293,35 @@ export async function requestPersistentStorage(): Promise<void> {
   } catch {
     // Not supported: nothing to do.
   }
+}
+
+// --- Sync (FreeChess, Oct 2026) ----------------------------------------------------
+
+/** This device's progress, for syncing (settings and a game in progress stay put). */
+export async function readSyncData(): Promise<SyncData> {
+  const database = await db()
+  return {
+    v: 1,
+    savedAt: Date.now(),
+    profile: ((await database.get('state', 'profile')) as Profile | undefined) ?? null,
+    puzzles: ((await database.get('state', 'puzzles')) as SyncPuzzles | undefined) ?? null,
+    games: (await database.getAll('games')) as never[],
+    cards: await database.getAll('cards'),
+  }
+}
+
+/**
+ * Saves combined progress on this device. It's combined once more with what's
+ * here now, so anything done while the sync was running isn't undone.
+ */
+export async function applySyncData(data: SyncData): Promise<void> {
+  const now = await readSyncData()
+  const merged = mergeSync(now, data)
+  const database = await db()
+  const tx = database.transaction(['state', 'games', 'cards'], 'readwrite')
+  if (merged.profile) await tx.objectStore('state').put(merged.profile as never, 'profile' as never)
+  if (merged.puzzles) await tx.objectStore('state').put(merged.puzzles as never, 'puzzles' as never)
+  for (const game of merged.games) await tx.objectStore('games').put(game as unknown as ArchivedGame)
+  for (const card of merged.cards) await tx.objectStore('cards').put(card)
+  await tx.done
 }

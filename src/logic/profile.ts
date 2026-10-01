@@ -54,6 +54,8 @@ export type Profile = {
    */
   freezes?: number
   frozenDays?: string[]
+  /** When this profile was last saved (for combining devices: the newest decides the rating and streak). */
+  updatedAt?: number
   /** Chess legends: how many of each one's levels you've beaten (data/legends.ts). */
   legends?: Record<string, number>
   /** Puzzles solved today, for the puzzle goal. */
