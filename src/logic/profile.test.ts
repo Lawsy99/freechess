@@ -75,19 +75,20 @@ describe('the week on Home', () => {
 })
 
 describe('streak freezes', () => {
-  it('earns one for doing all three goals, two at most', async () => {
-    const { completeGoal, NEW_PROFILE } = await import('./profile')
+  it('earns one for doing all the goals, two at most', async () => {
+    const { completeGoal, GOALS, NEW_PROFILE } = await import('./profile')
     let p = NEW_PROFILE
     for (const day of ['2026-09-28', '2026-09-29', '2026-09-30']) {
-      for (const goal of ['bot', 'coach', 'lesson'] as const) p = completeGoal(p, goal, day)
+      for (const goal of GOALS) p = completeGoal(p, goal, day)
       p = completeGoal(p, 'bot', day) // (doing one again earns nothing more)
     }
     expect(p.freezes).toBe(2)
   })
 
   it('covers a missed day, and the streak carries on', async () => {
-    const { completeGoal, currentStreak, thisWeek, NEW_PROFILE } = await import('./profile')
-    let p = completeGoal(completeGoal(completeGoal(NEW_PROFILE, 'bot', '2026-09-28'), 'coach', '2026-09-28'), 'lesson', '2026-09-28')
+    const { completeGoal, currentStreak, GOALS, thisWeek, NEW_PROFILE } = await import('./profile')
+    let p = NEW_PROFILE
+    for (const goal of GOALS) p = completeGoal(p, goal, '2026-09-28')
     expect(p.freezes).toBe(1)
     // Missed the 29th; on the 30th the streak is still alive, and playing keeps it.
     expect(currentStreak(p, '2026-09-30')).toBe(1)
@@ -102,5 +103,19 @@ describe('streak freezes', () => {
     const p = completeGoal(NEW_PROFILE, 'bot', '2026-09-28')
     expect(currentStreak(p, '2026-09-30')).toBe(0)
     expect(completeGoal(p, 'bot', '2026-09-30').streak.count).toBe(1)
+  })
+})
+
+describe('the puzzle goal', () => {
+  it('ticks after three puzzles in a day, of any kind', async () => {
+    const { countPuzzle, withRushScore, puzzlesSolvedToday, todaysGoals, NEW_PROFILE } = await import('./profile')
+    const now = new Date('2026-10-01T12:00:00')
+    let p = countPuzzle(NEW_PROFILE, true, now)
+    p = countPuzzle(p, false, now) // a miss doesn't count
+    expect(puzzlesSolvedToday(p, '2026-10-01')).toBe(1)
+    expect(todaysGoals(p, '2026-10-01')).toEqual([])
+    p = withRushScore(p, 2, now) // two solved in a Rush
+    expect(todaysGoals(p, '2026-10-01')).toEqual(['puzzles'])
+    expect(puzzlesSolvedToday(p, '2026-10-02')).toBe(0)
   })
 })

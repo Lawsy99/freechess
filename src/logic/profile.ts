@@ -15,8 +15,11 @@ export const NEW_DEVIATION = 200
 /** The most one game can move the rating. */
 export const MAX_CHANGE = 80
 
-export type Goal = 'bot' | 'coach' | 'lesson'
-export const GOALS: Goal[] = ['bot', 'coach', 'lesson']
+// Joseph, Oct 2026: the lesson first, and puzzles get a goal of their own.
+export type Goal = 'lesson' | 'puzzles' | 'bot' | 'coach'
+export const GOALS: Goal[] = ['lesson', 'puzzles', 'bot', 'coach']
+/** Puzzles solved in a day for the puzzle goal. */
+export const PUZZLE_GOAL = 3
 
 export type Record3 = { wins: number; losses: number; draws: number }
 
@@ -51,6 +54,8 @@ export type Profile = {
    */
   freezes?: number
   frozenDays?: string[]
+  /** Puzzles solved today, for the puzzle goal. */
+  puzzlesToday?: { day: string; count: number }
   /** Days with at least one goal done ("2026-09-30"), the last 60, for the week on Home. */
   activeDays?: string[]
   /** The custom bot you last set up (strength and style), to start from next time. */
@@ -140,7 +145,7 @@ export function completeGoal(p: Profile, goal: Goal, today: string): Profile {
     streak = { count, lastDay: today, best: Math.max(streak.best, count) }
   }
   // All three goals done today, for the first time today: a freeze earned.
-  if (daily.done.length === 3 && done.length < 3) freezes = Math.min(MAX_FREEZES, freezes + 1)
+  if (daily.done.length === GOALS.length && done.length < GOALS.length) freezes = Math.min(MAX_FREEZES, freezes + 1)
   const days = p.activeDays ?? []
   const activeDays = days.includes(today) ? days : [...days, today].slice(-60)
   return { ...p, daily, streak, activeDays, freezes, frozenDays }
@@ -231,13 +236,26 @@ export function recordCoachGame(p: Profile, now: Date): Profile {
 }
 
 /** A puzzle finished (the puzzle rating itself is kept with the puzzles). */
-export function countPuzzle(p: Profile, solved: boolean): Profile {
-  return solved ? { ...p, puzzlesSolved: (p.puzzlesSolved ?? 0) + 1 } : p
+export function countPuzzle(p: Profile, solved: boolean, now = new Date()): Profile {
+  return solved ? addPuzzlesToday({ ...p, puzzlesSolved: (p.puzzlesSolved ?? 0) + 1 }, 1, now) : p
 }
 
-/** A Puzzle Rush finished: keeps the best score. */
-export function withRushScore(p: Profile, score: number): Profile {
-  return { ...p, rushBest: Math.max(p.rushBest ?? 0, score) }
+/** A Puzzle Rush finished: keeps the best score, and its puzzles count for today. */
+export function withRushScore(p: Profile, score: number, now = new Date()): Profile {
+  return addPuzzlesToday({ ...p, rushBest: Math.max(p.rushBest ?? 0, score) }, score, now)
+}
+
+/** How many puzzles you've solved today (for the goal's "1 of 3"). */
+export function puzzlesSolvedToday(p: Profile, today: string): number {
+  return p.puzzlesToday?.day === today ? p.puzzlesToday.count : 0
+}
+
+function addPuzzlesToday(p: Profile, solved: number, now: Date): Profile {
+  if (solved <= 0) return p
+  const today = dayKey(now)
+  const count = puzzlesSolvedToday(p, today) + solved
+  const next = { ...p, puzzlesToday: { day: today, count } }
+  return count >= PUZZLE_GOAL ? completeGoal(next, 'puzzles', today) : next
 }
 
 /** A lesson passed: remembered (it unlocks the next), and today's lesson goal. */

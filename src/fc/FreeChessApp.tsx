@@ -403,7 +403,7 @@ export function FreeChessApp() {
   return (
     <div className="fc-shell">
       {tab === 'home' && (
-        <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onOpenLearn={() => setTab('learn')} />
+        <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onOpenLearn={() => setTab('learn')} onOpenPuzzles={() => setTab('puzzles')} />
       )}
       {tab === 'play' && <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onAnalysis={() => setView('analysis')} onCustom={() => (paused ? setView('game') : setView('custom'))} />}
       {tab === 'puzzles' && (

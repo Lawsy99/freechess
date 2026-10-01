@@ -3,7 +3,7 @@
 // if one is paused, and a suggested bot at about your level.
 import { Portrait } from '../components/Portrait'
 import type { Bot } from '../data/bots'
-import { currentStreak, dayKey, thisWeek, todaysGoals, totalStars, type Goal, type Profile } from '../logic/profile'
+import { currentStreak, dayKey, GOALS, PUZZLE_GOAL, puzzlesSolvedToday, thisWeek, todaysGoals, totalStars, type Goal, type Profile } from '../logic/profile'
 import { CheckIcon, ChevronIcon, FlameIcon, SnowIcon, Stars, StarIcon } from './icons'
 import { Logo } from './Logo'
 import './learnhome.css'
@@ -18,15 +18,17 @@ type Props = {
   onOpenPlay: () => void
   onPlayCoach: () => void
   onOpenLearn: () => void
+  onOpenPuzzles: () => void
 }
 
 const GOAL_TEXT: Record<Goal, { title: string; detail: string; ready: boolean }> = {
+  lesson: { title: 'Do a lesson', detail: 'The next step on the Learn path.', ready: true },
+  puzzles: { title: `Solve ${PUZZLE_GOAL} puzzles`, detail: 'Any kind: rated, daily, a theme or Rush.', ready: true },
   bot: { title: 'Play a bot', detail: 'Any bot, any result.', ready: true },
   coach: { title: 'Play the Coach', detail: 'At your level, with tips as you go.', ready: true },
-  lesson: { title: 'Do a lesson', detail: 'The next step on the Learn path.', ready: true },
 }
 
-export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPlayCoach, onOpenLearn }: Props) {
+export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPlayCoach, onOpenLearn, onOpenPuzzles }: Props) {
   const today = dayKey(new Date())
   const done = todaysGoals(profile, today)
   const streak = currentStreak(profile, today)
@@ -59,16 +61,16 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
         <span className="fc-hello-text">
           <strong>{greeting(new Date())}</strong>
           <span>
-            {done.length === 3
+            {done.length === GOALS.length
               ? 'All three done. A streak freeze now covers a day you miss.'
               : streak > 0 && !doneToday
                 ? `Keep your ${streak}-day streak going.`
                 : doneToday
-                  ? `${3 - done.length} of today’s goals to go.`
+                  ? `${GOALS.length - done.length} of today’s goals to go.`
                   : 'Do one of today’s goals to start a streak.'}
           </span>
         </span>
-        <GoalRing done={done.length} total={3} />
+        <GoalRing done={done.length} total={GOALS.length} />
         </div>
         {/* This week, Duolingo style: a flame for each day you practised. */}
         <ol className="fc-week" aria-label="This week">
@@ -83,7 +85,7 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
 
       <section className="fc-card fc-today">
         <ul className="fc-goals">
-          {(['bot', 'coach', 'lesson'] as Goal[]).map((goal) => {
+          {GOALS.map((goal) => {
             const text = GOAL_TEXT[goal]
             const isDone = done.includes(goal)
             return (
@@ -93,11 +95,20 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
                 </span>
                 <span>
                   <strong>{text.title}</strong>
-                  <span>{text.detail}</span>
+                  <span>
+                    {goal === 'puzzles' && !isDone
+                      ? `${puzzlesSolvedToday(profile, today)} of ${PUZZLE_GOAL} solved today. Any kind counts.`
+                      : text.detail}
+                  </span>
                 </span>
                 {goal === 'bot' && !isDone && (
                   <button type="button" className="fc-chip-button" onClick={onOpenPlay}>
                     Play
+                  </button>
+                )}
+                {goal === 'puzzles' && !isDone && (
+                  <button type="button" className="fc-chip-button" onClick={onOpenPuzzles}>
+                    Solve
                   </button>
                 )}
                 {goal === 'lesson' && !isDone && (
