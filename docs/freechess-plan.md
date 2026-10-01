@@ -18,8 +18,27 @@
    draw arrows), clocks, Insights, Achievements, the vision trainer, the custom
    bot, legal-move dots setting. Extras live in quiet menu cards (Play > More,
    Profile) so the main screens stay uncluttered.
-6. **Polish.** Piece sets (waiting on Joseph: needs piece art downloaded) and
-   whatever testers find.
+6. **Deeper (built, 30 Sep to 1 Oct 2026).** Coach explanations on every move in the
+   step-through and a Coach's tip per game (logic/stepExplain.ts); "you played like"
+   from the opponent's rating; Your mistakes (spaced repetition) in Puzzles; reviews
+   analysed as soon as a game ends (engine/reviewJobs.ts) with a glimpse on the
+   result screen; Learn grown to 49 lessons (rules walkthrough, three more units,
+   four more openings, six classic endgames); 13 more bots (48) and about 800 new
+   lines; opening books matching bios; faces that follow the game; the week strip
+   and streak freezes; four daily goals (lesson first, then 3 puzzles, a bot, the
+   Coach); more boards and badges; the opening named in reviews; Share this game
+   (PGN); Play from here on the analysis board.
+7. **Chess legends (built, Oct 2026).** Philidor, Anderssen, Morphy, Lasker,
+   Capablanca, Menchik, Alekhine (data/legends.ts): eight levels each, 200 to 2400;
+   a win moves them up one. Their own openings and lines. Only long-dead players:
+   living ones (Magnus Carlsen and the like) own their name and likeness.
+8. **Training around you (built, Oct 2026).** Your training focus (logic/focus.ts):
+   the mistake you make most lately picks today's lesson, a "For you" puzzle set,
+   and what the Coach points out. Your openings (logic/myOpenings.ts): drills of
+   the lines you play, slips put right.
+9. **Next.** A real-iPhone check by Joseph; piece sets (needs a download, asked);
+   later, the App Store version (Capacitor). Bundle is about 300 KB gzipped: the
+   dialogue file could be trimmed if load time becomes a problem.
 
 ## Backlog
 

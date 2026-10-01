@@ -53,6 +53,11 @@ folder is still called `open-file` (the app's first working name).
   only run on screen); custom bot (data/customBot.ts, rated, no stars); Insights
   (logic/insights.ts); Achievements (logic/achievements.ts, from the profile);
   vision trainer. Keep extras in menu cards (fc/MenuList.tsx) so screens stay calm.
+- Oct 2026: daily goals are lesson, 3 puzzles, a bot, the Coach (profile.ts GOALS);
+  streak freezes; chess legends (data/legends.ts, only long-dead players, never
+  living ones); training focus (logic/focus.ts) and Your openings (logic/myOpenings.ts);
+  Play from here (components/PositionPlay.tsx); reviews analysed in the background
+  (engine/reviewJobs.ts). The review's result is a badge, not a stamp.
 - Moves in words below 1500, notation from there (logic/notation.ts).
 - Storage names are FreeChess's own ("freechess"), so it never clashes with Club
   Night on the same github.io address.
