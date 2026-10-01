@@ -263,7 +263,9 @@ function addPuzzlesToday(p: Profile, solved: number, now: Date): Profile {
 /** A lesson passed: remembered (it unlocks the next), and today's lesson goal. */
 export function recordLesson(p: Profile, lessonId: string, now: Date): Profile {
   const done = p.lessonsDone ?? []
-  return completeGoal({ ...p, lessonsDone: done.includes(lessonId) ? done : [...done, lessonId] }, 'lesson', dayKey(now))
+  // (Practising your own openings counts for the day, but isn't a step on the path.)
+  const keep = done.includes(lessonId) || lessonId.startsWith('my-')
+  return completeGoal({ ...p, lessonsDone: keep ? done : [...done, lessonId] }, 'lesson', dayKey(now))
 }
 
 /** A vision trainer score: the best is remembered. */

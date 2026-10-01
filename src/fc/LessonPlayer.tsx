@@ -89,6 +89,7 @@ function StepView({ step, playerRating, onDone }: { step: LearnStep; playerRatin
     return <EndgameDrill position={position} onDone={onDone} noSkip />
   }
   if (step.kind === 'rules') return <RulesTutorial speaker="coach" doneLabel="Finish" onDone={onDone} onSkip={onDone} />
+  if (step.kind === 'my-opening') return <OpeningDrill drill={step.drill} onDone={onDone} />
   if (step.kind === 'opening') {
     const drill = OPENING_DRILLS[step.drill]
     if (!drill) return <SkipStep onDone={onDone} />

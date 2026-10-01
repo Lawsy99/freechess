@@ -226,3 +226,8 @@
   background: #bfe6ff;
   color: #1f6fa8;
 }
+
+/* Your openings, on Learn (Oct 2026). */
+.fc-my-openings .fc-menu-row:disabled {
+  opacity: 0.7;
+}

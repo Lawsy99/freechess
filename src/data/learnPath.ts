@@ -6,6 +6,7 @@
 //
 // Puzzles come from the Lichess set by theme, pitched around your rating;
 // play-outs from data/endgameDrills.ts; openings from data/openingLessons.ts.
+import type { OpeningDrill } from './openingLessons'
 
 export type LearnStep =
   /** The idea, in a few sentences. The only step where you just read. */
@@ -22,6 +23,8 @@ export type LearnStep =
   | { kind: 'opening'; drill: string }
   /** How the pieces move, hands on (data/rulesTutorial.ts), for complete beginners. */
   | { kind: 'rules' }
+  /** Your own opening, as you play it, with the slips put right (logic/myOpenings.ts). */
+  | { kind: 'my-opening'; drill: OpeningDrill }
 
 export type Lesson = { id: string; title: string; steps: LearnStep[] }
 export type Unit = { id: string; title: string; about: string; colour: string; lessons: Lesson[] }

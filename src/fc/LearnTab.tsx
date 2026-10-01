@@ -9,11 +9,14 @@ import { ALL_LESSONS, LEARN_PATH, type Lesson } from '../data/learnPath'
 import { isOpen, nextLesson } from '../logic/learn'
 import type { Profile } from '../logic/profile'
 import { CheckIcon } from './icons'
+import type { MyOpening } from '../logic/myOpenings'
 import './learnhome.css'
 
 type Props = {
   profile: Profile
   onStart: (lesson: Lesson) => void
+  /** The openings you play, from your games (null while loading). */
+  openings: MyOpening[] | null
 }
 
 /** How far each button sits from the middle, in a gentle wave. */
@@ -87,7 +90,7 @@ const LESSON_PIECE: Record<string, string> = {
 
 const piece = (key: string, size: number) => defaultPieces[key]({ svgStyle: { width: size, height: size } })
 
-export function LearnTab({ profile, onStart }: Props) {
+export function LearnTab({ profile, onStart, openings }: Props) {
   const done = profile.lessonsDone ?? []
   const upNext = nextLesson(done)
   let n = 0
@@ -100,6 +103,47 @@ export function LearnTab({ profile, onStart }: Props) {
           {done.length} of {ALL_LESSONS.length} lessons done.{upNext ? ` Next: ${upNext.title}.` : ' All done!'}
         </p>
       </header>
+
+      {/* Your openings (Oct 2026): drills of the lines you actually play. */}
+      {openings && openings.length > 0 && (
+        <section className="fc-my-openings">
+          <h2 className="fc-menu-label">Your openings</h2>
+          <ul className="fc-card fc-menu">
+            {openings.slice(0, 4).map((o) => (
+              <li key={o.key + o.colour}>
+                <button
+                  type="button"
+                  className="fc-menu-row"
+                  disabled={!o.drill}
+                  onClick={() =>
+                    o.drill &&
+                    onStart({
+                      id: o.drill.id,
+                      title: `Your ${o.name} (${o.colour === 'w' ? 'White' : 'Black'})`,
+                      steps: [
+                        {
+                          kind: 'idea',
+                          text: `These are the lines you play in your own games, with any slips in the first moves put right. Play your side; I'll play what your opponents played.`,
+                        },
+                        { kind: 'my-opening', drill: o.drill },
+                      ],
+                    })
+                  }
+                >
+                  <i className={`fc-colour-dot ${o.colour}`} aria-hidden="true" />
+                  <span className="fc-menu-text">
+                    <strong>{o.name}</strong>
+                    <span>
+                      {o.games} games · {o.score}% scored{o.drill ? '' : ' · review a game to practise it'}
+                    </span>
+                  </span>
+                  {o.drill && <span className="fc-chip-button">Practise</span>}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {LEARN_PATH.map((unit) => (
         <section key={unit.id} className="fc-unit">

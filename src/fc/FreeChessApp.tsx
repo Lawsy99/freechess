@@ -26,6 +26,7 @@ import { SettingsScreen } from '../screens/SettingsScreen'
 import { MistakesDeckScreen } from '../screens/MistakesDeckScreen'
 import { dueCards } from '../logic/mistakesDeck'
 import { trainingFocus, type Focus } from '../logic/focus'
+import { myOpenings, type MyOpening } from '../logic/myOpenings'
 import {
   archiveGame,
   listArchivedGames,
@@ -99,13 +100,17 @@ export function FreeChessApp() {
   // Your training focus (Oct 2026): the mistake you make most lately, which
   // picks today's lesson, a puzzle set for you, and what the Coach watches for.
   const [focus, setFocus] = useState<Focus | null>(null)
+  const [openings, setOpenings] = useState<MyOpening[] | null>(null)
   useEffect(() => {
     if (view !== 'tabs') return
     loadCards()
       .then((cards) => setMistakesDue(dueCards(cards).length))
       .catch(() => undefined)
     listArchivedGames()
-      .then((games) => setFocus(trainingFocus(games)))
+      .then((games) => {
+        setFocus(trainingFocus(games))
+        setOpenings(myOpenings(games))
+      })
       .catch(() => undefined)
   }, [view])
   const [lesson, setLesson] = useState<Lesson | null>(null)
@@ -470,6 +475,7 @@ export function FreeChessApp() {
       {tab === 'learn' && (
         <LearnTab
           profile={profile}
+          openings={openings}
           onStart={(l) => {
             setLesson(l)
             setView('lesson')
