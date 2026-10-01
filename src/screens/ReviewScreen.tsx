@@ -16,6 +16,8 @@ import { moveName } from '../logic/notation'
 import { bestMoveOfGame, gameAccuracy, ratingCounts, reviewMoves, settleEvals, SHORTEST_REVIEW, type PositionEval } from '../logic/review'
 import { bookLength, PHASE_LABELS, PHASES, phaseAccuracy, playedLike, SPECIAL_LABELS, specialMoves, winPoints, type Special } from '../logic/reviewExtras'
 import { coachTip } from '../logic/stepExplain'
+import { gamePgn } from '../logic/pgn'
+import { resolveOpponent } from '../data/opponents'
 import { detectOpening } from '../logic/openings'
 import { OPENING_NAMES } from '../data/scouting'
 import { ALL_LESSONS } from '../data/learnPath'
@@ -500,6 +502,7 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
           <button type="button" className="review-secondary" onClick={onContinue}>
             {finalLabel}
           </button>
+          <ShareGame game={game} />
           {canRetry && (
             <button type="button" className="review-secondary" onClick={() => onPlayFrom!(retryFrom!)}>
               Play on from before your mistake (move {Math.floor(retryFrom! / 2) + 1})
@@ -523,4 +526,29 @@ function ResultIcon({ kind }: { kind: string }) {
   if (kind === 'won') return <svg {...common}><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6" /></svg>
   if (kind === 'lost') return <svg {...common}><path d="M6 21V4M6 4h11l-2 4 2 4H6" /></svg>
   return <svg {...common}><circle cx="12" cy="12" r="8" /><path d="M12 4v16" /></svg>
+}
+
+/** Share this game as PGN through the phone's share sheet (or copy it where there isn't one). */
+function ShareGame({ game }: { game: GameRecord }) {
+  const [note, setNote] = useState<string | null>(null)
+  async function share() {
+    const text = gamePgn(game, resolveOpponent(game.levelId, game.opponentRating).name)
+    try {
+      if (navigator.share) await navigator.share({ title: 'A FreeChess game', text })
+      else {
+        await navigator.clipboard.writeText(text)
+        setNote('Copied. Paste it into any chess site or app.')
+      }
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') setNote('Couldn’t share it this time.')
+    }
+  }
+  return (
+    <>
+      <button type="button" className="review-secondary" onClick={() => void share()}>
+        Share this game
+      </button>
+      {note && <p className="review-note">{note}</p>}
+    </>
+  )
 }
