@@ -12,6 +12,7 @@ import { Board, DRAW_COLOUR } from './Board'
 import { DrawLayer } from './DrawLayer'
 import { EvalBar } from './EvalBar'
 import { PositionEditor } from './PositionEditor'
+import { PositionPlay } from './PositionPlay'
 import { SkipIcon, StepIcon } from './StepIcons'
 import './AnalysisBoard.css'
 
@@ -22,14 +23,20 @@ type Props = {
   onBack: () => void
   /** Offer "Set up a position" (not when opened from a game's review). */
   canSetUp?: boolean
+  /** Your rating: the computer's strength to start from for "Play from here". */
+  playerRating?: number
 }
 
 const ARROW = 'rgba(79, 134, 247, 0.85)'
 
-export function AnalysisBoard({ initial, orientation = 'white', onBack, canSetUp = false }: Props) {
+export function AnalysisBoard({ initial, orientation = 'white', onBack, canSetUp = false, playerRating = 800 }: Props) {
   const [line, setLine] = useState<AnalysisLine>(initial ?? { startFen: START_FEN, moves: [], cursor: 0 })
   const [flipped, setFlipped] = useState(orientation === 'black')
   const [editing, setEditing] = useState(false)
+  // Play from here (Oct 2026): choosing a strength, then playing the position out.
+  const [choosing, setChoosing] = useState(false)
+  const [playing, setPlaying] = useState(false)
+  const [strength, setStrength] = useState(() => Math.max(100, Math.min(2400, Math.round(playerRating / 50) * 50)))
   // Your own arrows and circles: for this position only (a new move clears them).
   const [drawing, setDrawing] = useState(false)
   const [drawn, setDrawn] = useState<{ at: string; arrows: { from: string; to: string }[]; circles: string[] }>({ at: '', arrows: [], circles: [] })
@@ -40,6 +47,8 @@ export function AnalysisBoard({ initial, orientation = 'white', onBack, canSetUp
   const lastUci = line.cursor > 0 ? line.moves[line.cursor - 1] : null
   const bottom = flipped ? 'b' : 'w'
   const mine = drawn.at === fen ? drawn : { at: fen, arrows: [], circles: [] }
+
+  if (playing) return <PositionPlay startFen={fen} rating={strength} onBack={() => setPlaying(false)} />
 
   if (editing) {
     return (
@@ -81,6 +90,9 @@ export function AnalysisBoard({ initial, orientation = 'white', onBack, canSetUp
         >
           <PencilIcon />
         </button>
+        <button type="button" className={`analysis-tool text ${choosing ? 'on-blue' : ''}`} onClick={() => setChoosing(!choosing)} disabled={new Chess(fen).isGameOver()}>
+          Play
+        </button>
         <button type="button" className="analysis-tool" onClick={() => setFlipped(!flipped)} aria-label="Turn the board round">
           <FlipIcon />
         </button>
@@ -114,6 +126,26 @@ export function AnalysisBoard({ initial, orientation = 'white', onBack, canSetUp
           )}
         </div>
       </div>
+
+      {choosing && (
+        <section className="play-from-here">
+          <span>
+            Play this position against the computer, as {turn === 'w' ? 'White' : 'Black'}. Not rated.
+          </span>
+          <div className="play-from-here-row">
+            <button type="button" aria-label="Weaker" onClick={() => setStrength((s) => Math.max(100, s - 100))}>
+              −
+            </button>
+            <strong>{strength}</strong>
+            <button type="button" aria-label="Stronger" onClick={() => setStrength((s) => Math.min(2400, s + 100))}>
+              +
+            </button>
+          </div>
+          <button type="button" className="go" onClick={() => setPlaying(true)}>
+            Play from here
+          </button>
+        </section>
+      )}
 
       {/* The engine's top three lines. Tap one to play its first move. */}
       <section className="analysis-lines" aria-live="polite">

@@ -374,7 +374,7 @@ export function FreeChessApp() {
   if (view === 'analysis') {
     return (
       <BoardThemeContext.Provider value={settings.board}>
-        <AnalysisBoard canSetUp onBack={() => setView('tabs')} />
+        <AnalysisBoard canSetUp playerRating={Math.round(profile.rating?.rating ?? 800)} onBack={() => setView('tabs')} />
       </BoardThemeContext.Provider>
     )
   }

@@ -289,3 +289,87 @@
   background: #f59628;
   color: #1c1204;
 }
+
+/* Play from here (Oct 2026). */
+.position-play-who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 12px;
+  font-weight: 800;
+}
+
+.position-play-who span {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.position-play-status {
+  margin: 0 12px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.analysis-controls.position-play-controls {
+  grid-template-columns: 1fr 1fr;
+}
+
+.analysis-controls.position-play-controls button {
+  font: inherit;
+  font-weight: 800;
+}
+
+.play-from-here {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 8px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--card);
+}
+
+.play-from-here-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.play-from-here-row strong {
+  flex: 1;
+  text-align: center;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+
+.play-from-here-row button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.play-from-here .go {
+  min-height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: var(--buff);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.analysis-tool.on-blue {
+  background: var(--buff);
+  color: var(--ink);
+}
+
+.analysis-tool:disabled {
+  opacity: 0.4;
+}
