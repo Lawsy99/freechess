@@ -25,8 +25,10 @@ import { ReviewScreen } from '../screens/ReviewScreen'
 import { SettingsScreen } from '../screens/SettingsScreen'
 import { MistakesDeckScreen } from '../screens/MistakesDeckScreen'
 import { dueCards } from '../logic/mistakesDeck'
+import { trainingFocus, type Focus } from '../logic/focus'
 import {
   archiveGame,
+  listArchivedGames,
   loadCards,
   loadCurrentGame,
   loadProfile,
@@ -94,10 +96,16 @@ export function FreeChessApp() {
   // Your own mistakes waiting to be practised (FreeChess, Sep 2026: the deck
   // was filling up from reviews with nowhere to play it). Checked on the tabs.
   const [mistakesDue, setMistakesDue] = useState(0)
+  // Your training focus (Oct 2026): the mistake you make most lately, which
+  // picks today's lesson, a puzzle set for you, and what the Coach watches for.
+  const [focus, setFocus] = useState<Focus | null>(null)
   useEffect(() => {
     if (view !== 'tabs') return
     loadCards()
       .then((cards) => setMistakesDue(dueCards(cards).length))
+      .catch(() => undefined)
+    listArchivedGames()
+      .then((games) => setFocus(trainingFocus(games)))
       .catch(() => undefined)
   }, [view])
   const [lesson, setLesson] = useState<Lesson | null>(null)
@@ -250,6 +258,7 @@ export function FreeChessApp() {
           playerName="You"
           chatter={settings.chatter}
           confirmMoves={settings.confirmMoves ?? true}
+          focusKinds={focus?.kinds ?? []}
           onReview={() => finishGame(game)}
           onContinue={() => finishGame(game)}
           onPause={() => {
@@ -436,7 +445,7 @@ export function FreeChessApp() {
   return (
     <div className="fc-shell">
       {tab === 'home' && (
-        <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onOpenLearn={() => setTab('learn')} onOpenPuzzles={() => setTab('puzzles')} />
+        <HomeTab profile={profile} paused={paused} onResume={() => setView('game')} onPickBot={pick} onOpenPlay={() => setTab('play')} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onOpenLearn={() => setTab('learn')} onOpenPuzzles={() => setTab('puzzles')} focus={focus} onOpenLesson={openLesson} />
       )}
       {tab === 'play' && (
         <PlayTab profile={profile} onPick={pick} onPlayCoach={() => (paused ? setView('game') : startCoachGame())} onAnalysis={() => setView('analysis')} onCustom={() => (paused ? setView('game') : setView('custom'))}
@@ -451,6 +460,7 @@ export function FreeChessApp() {
         <PuzzlesTab
           profile={profile}
           mistakesDue={mistakesDue}
+          focus={focus}
           onStart={(mode) => {
             setPuzzleMode(mode)
             setView('puzzle')

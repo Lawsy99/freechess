@@ -6,6 +6,8 @@ import type { Bot } from '../data/bots'
 import { currentStreak, dayKey, GOALS, PUZZLE_GOAL, puzzlesSolvedToday, thisWeek, todaysGoals, totalStars, type Goal, type Profile } from '../logic/profile'
 import { CheckIcon, ChevronIcon, FlameIcon, SnowIcon, Stars, StarIcon } from './icons'
 import { Logo } from './Logo'
+import { ALL_LESSONS } from '../data/learnPath'
+import type { Focus } from '../logic/focus'
 import './learnhome.css'
 import { suggestedBot } from '../logic/botPicks'
 
@@ -19,6 +21,9 @@ type Props = {
   onPlayCoach: () => void
   onOpenLearn: () => void
   onOpenPuzzles: () => void
+  /** Your training focus: today's lesson is the one that practises it. */
+  focus: Focus | null
+  onOpenLesson: (id: string) => void
 }
 
 const GOAL_TEXT: Record<Goal, { title: string; detail: string; ready: boolean }> = {
@@ -28,7 +33,8 @@ const GOAL_TEXT: Record<Goal, { title: string; detail: string; ready: boolean }>
   coach: { title: 'Play the Coach', detail: 'At your level, with tips as you go.', ready: true },
 }
 
-export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPlayCoach, onOpenLearn, onOpenPuzzles }: Props) {
+export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPlayCoach, onOpenLearn, onOpenPuzzles, focus, onOpenLesson }: Props) {
+  const focusLesson = focus ? ALL_LESSONS.find((l) => l.id === focus.lesson) : undefined
   const today = dayKey(new Date())
   const done = todaysGoals(profile, today)
   const streak = currentStreak(profile, today)
@@ -98,7 +104,9 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
                   <span>
                     {goal === 'puzzles' && !isDone
                       ? `${puzzlesSolvedToday(profile, today)} of ${PUZZLE_GOAL} solved today. Any kind counts.`
-                      : text.detail}
+                      : goal === 'lesson' && !isDone && focusLesson
+                        ? `For you: “${focusLesson.title}”. You’ve been ${focus!.label} lately.`
+                        : text.detail}
                   </span>
                 </span>
                 {goal === 'bot' && !isDone && (
@@ -112,7 +120,7 @@ export function HomeTab({ profile, paused, onResume, onPickBot, onOpenPlay, onPl
                   </button>
                 )}
                 {goal === 'lesson' && !isDone && (
-                  <button type="button" className="fc-chip-button" onClick={onOpenLearn}>
+                  <button type="button" className="fc-chip-button" onClick={() => (focusLesson ? onOpenLesson(focusLesson.id) : onOpenLearn())}>
                     Learn
                   </button>
                 )}

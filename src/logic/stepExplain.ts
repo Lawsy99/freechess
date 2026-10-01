@@ -107,6 +107,27 @@ export function coachTip(
   fromPly = 0,
 ): CoachTip | null {
   const counts = new Map<ErrorKind, number>()
+  for (const kind of errorKindsIn(moves, evals, reviewed, player, fromPly)) {
+    if (TIPS[kind]) counts.set(kind, (counts.get(kind) ?? 0) + 1)
+  }
+  const top = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]
+  if (!top) return null
+  const tip = TIPS[top[0]]!
+  return { kind: top[0], text: tip.text(top[1]), lesson: tip.lesson }
+}
+
+/**
+ * What kind of error each of your mistakes and blunders was, in order (also
+ * used across games for your training focus, logic/focus.ts).
+ */
+export function errorKindsIn(
+  moves: readonly string[],
+  evals: readonly PositionEval[],
+  reviewed: readonly ReviewedMove[],
+  player: Colour,
+  fromPly = 0,
+): ErrorKind[] {
+  const kinds: ErrorKind[] = []
   for (const m of reviewed) {
     if (m.mover !== player || m.ply < fromPly || (m.rating !== 'mistake' && m.rating !== 'blunder')) continue
     try {
@@ -114,13 +135,10 @@ export function coachTip(
       // (A vague reason, but the punishment starts by taking one of your
       // pieces: that's losing material, and there's a lesson for it.)
       if (!TIPS[kind] && takesAPiece(moves, m.ply, evals[m.ply + 1]?.bestMove)) kind = 'lost-material'
-      if (TIPS[kind]) counts.set(kind, (counts.get(kind) ?? 0) + 1)
+      kinds.push(kind)
     } catch {
       // (skip a move that can't be read)
     }
   }
-  const top = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]
-  if (!top) return null
-  const tip = TIPS[top[0]]!
-  return { kind: top[0], text: tip.text(top[1]), lesson: tip.lesson }
+  return kinds
 }

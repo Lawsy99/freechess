@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { PUZZLE_THEMES } from '../logic/puzzleModes'
 import { dayKey, type Profile } from '../logic/profile'
 import { loadPuzzleProgress } from '../storage/db'
+import type { Focus } from '../logic/focus'
 import { CheckIcon, ChevronIcon, PuzzleIcon } from './icons'
 
 export type PuzzleMode = { kind: 'rated' } | { kind: 'daily' } | { kind: 'theme'; theme: string; label: string } | { kind: 'rush' } | { kind: 'vision' } | { kind: 'mistakes' }
@@ -12,10 +13,12 @@ type Props = {
   profile: Profile
   /** Positions from your own games waiting to be practised. */
   mistakesDue: number
+  /** Your training focus: a puzzle set for it. */
+  focus: Focus | null
   onStart: (mode: PuzzleMode) => void
 }
 
-export function PuzzlesTab({ profile, mistakesDue, onStart }: Props) {
+export function PuzzlesTab({ profile, mistakesDue, focus, onStart }: Props) {
   const [rating, setRating] = useState<number | null>(null)
   useEffect(() => {
     loadPuzzleProgress()
@@ -54,6 +57,18 @@ export function PuzzlesTab({ profile, mistakesDue, onStart }: Props) {
         </span>
         <ChevronIcon size={20} />
       </button>
+
+      {/* For you (Oct 2026): puzzles on the mistake you make most lately. */}
+      {focus && (
+        <button type="button" className="fc-card fc-mode fc-for-you" onClick={() => onStart({ kind: 'theme', theme: focus.theme, label: focus.themeLabel })}>
+          <span className="fc-mode-badge for-you">For you</span>
+          <span>
+            <strong>{focus.themeLabel}</strong>
+            <span>You’ve been {focus.label} lately. These will sharpen it.</span>
+          </span>
+          <ChevronIcon size={20} />
+        </button>
+      )}
 
       {/* Your own mistakes, brought back on a schedule (spaced repetition). */}
       <button type="button" className={`fc-card fc-mode ${mistakesDue > 0 ? 'due' : ''}`} onClick={() => onStart({ kind: 'mistakes' })}>
