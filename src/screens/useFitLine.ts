@@ -22,9 +22,9 @@ export function useFitLine(key: unknown) {
       setOverflowing(panel.scrollHeight > panel.clientHeight + 1)
       return
     }
-    // Room for the line: the panel, less anything above it and the padding.
-    const style = getComputedStyle(panel)
-    const room = panel.clientHeight - (line.offsetTop - panel.offsetTop) - parseFloat(style.paddingBottom || '0')
+    // Room for the line: the panel, less anything above it. (The panel's bottom
+    // padding can take the last few pixels of text.)
+    const room = panel.clientHeight - (line.offsetTop - panel.offsetTop) - 2
     let size = LARGEST
     line.style.fontSize = `${size}px`
     while (line.offsetHeight > room && size > SMALLEST) {
