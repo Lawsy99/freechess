@@ -16,6 +16,7 @@ import { moveName } from '../logic/notation'
 import { bestMoveOfGame, gameAccuracy, ratingCounts, reviewMoves, settleEvals, SHORTEST_REVIEW, type PositionEval } from '../logic/review'
 import { bookLength, PHASE_LABELS, PHASES, phaseAccuracy, playedLike, SPECIAL_LABELS, specialMoves, winPoints, type Special } from '../logic/reviewExtras'
 import { coachTip } from '../logic/stepExplain'
+import { gameStory } from '../logic/gameStory'
 import { gamePgn } from '../logic/pgn'
 import { resolveOpponent } from '../data/opponents'
 import { detectOpening } from '../logic/openings'
@@ -138,6 +139,16 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
     [reviewed, evals, game.moves, player, game.startPly],
   )
   const tipLesson = tip ? ALL_LESSONS.find((l) => l.id === tip.lesson) : undefined
+  // The story of the game (Oct 2026): how it went, the plan, the turning point.
+  const story = useMemo(() => {
+    if (!reviewed || !evals || !outcome) return []
+    const result = outcome.winner === null ? 'draw' : outcome.winner === player ? 'win' : 'loss'
+    try {
+      return gameStory({ moves: game.moves, evals, reviewed, player, result, startPly: game.startPly ?? 0 })
+    } catch {
+      return [] // (never break the review over a summary)
+    }
+  }, [reviewed, evals, outcome, game.moves, player, game.startPly])
   // The opening, by name, and how long the game followed known theory.
   const opening = useMemo(() => {
     const key = detectOpening(replay(game.moves.slice(0, 12)).history())
@@ -415,6 +426,30 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
               current={-1}
               onSelect={(i) => openAt(i, null)}
             />
+          )}
+
+          {/* The Coach's story of the game: the big picture first, then the numbers. */}
+          {story.length > 0 && (
+            <section className="review-story">
+              <p className="review-story-head">
+                <Portrait who="coach" size={32} expression="neutral" className="fc-face" />
+                The story of the game
+              </p>
+              {story.map((b) =>
+                b.ply !== undefined ? (
+                  <button key={b.title} type="button" className="review-story-beat" onClick={() => openAt(b.ply! + 1, null)}>
+                    <span className="review-story-title">{b.title}</span>
+                    <span>{b.text}</span>
+                    <span className="review-story-go">See it ›</span>
+                  </button>
+                ) : (
+                  <div key={b.title} className="review-story-beat">
+                    <span className="review-story-title">{b.title}</span>
+                    <span>{b.text}</span>
+                  </div>
+                ),
+              )}
+            </section>
           )}
 
           <div className="phase-row">

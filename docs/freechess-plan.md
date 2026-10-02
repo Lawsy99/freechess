@@ -36,7 +36,20 @@
    the mistake you make most lately picks today's lesson, a "For you" puzzle set,
    and what the Coach points out. Your openings (logic/myOpenings.ts): drills of
    the lines you play, slips put right.
-9. **Next.** A real-iPhone check by Joseph; piece sets (needs a download, asked);
+9. **Master Games (built, Oct 2026).** Six classic games on Learn
+   (data/masterGames): the Opera Game, Réti v Tartakower, Lasker v Thomas, the
+   Evergreen, the Immortal and Sämisch v Nimzowitsch. The big picture before move
+   1, "The plan now" at each turning point, a note on every move, "Your move"
+   stops, and lessons at the end. Moves checked against published scores; every
+   note checked against Stockfish 19 (scratch/analyseGames.mjs, report.mjs,
+   allMoves.mjs), with honest modern footnotes where the engine disagrees with
+   the legend. Our own notes: Joseph's copy of Chernev's book (copyright) is
+   not used. More games can follow the same way.
+10. **A more strategic Coach (built, Oct 2026).** In coached games the Coach
+   says the big picture at turning points (opening over, queens off, the ending:
+   logic/plans.ts). Every review opens with the story of the game: the opening,
+   the plan from there, the turning point and how it ended (logic/gameStory.ts).
+11. **Next.** A real-iPhone check by Joseph; piece sets (needs a download, asked);
    later, the App Store version (Capacitor). Bundle is about 300 KB gzipped: the
    dialogue file could be trimmed if load time becomes a problem.
 

@@ -35,6 +35,7 @@ import { useAnalysis } from '../engine/useAnalysis'
 import { useMoveRating } from '../engine/useMoveRating'
 import { getEngine } from '../engine/stockfish'
 import { isKeyMoment, KEY_FROM_PLY, KEY_LINES } from '../logic/keyMoment'
+import { planMoment, type PlanMomentKind } from '../logic/plans'
 import { useWakeLock } from './useWakeLock'
 import { assessMove, describeBlunder } from '../logic/blunder'
 import { flipScore, scoreFor, toCentipawns } from '../logic/evaluation'
@@ -687,6 +688,19 @@ export function GameScreen({
     dialogue.say(`${onFocus ? 'That’s the one we’ve been working on.' : pickLine(coachVoice.afterMistake, null)} ${comment}`, coachVoice.afterGood ? 'neutral' : 'annoyed')
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once per rated move
   }, [ratedKey])
+
+  // The big picture (Joseph, Oct 2026): at the game's turning points (the
+  // opening over, queens off, the ending) the Coach says what the plan is.
+  // Coached game only, on your turn, and never over something he's still saying.
+  const plansSaid = useRef<{ kind: PlanMomentKind; idea: string }[]>([])
+  useEffect(() => {
+    if (!coachVoice || stage.id !== 'assisted' || !playersTurn || viewPly !== null || dialogue.line) return
+    const moment = planMoment(fen, game.playerColour, game.moves.length, !!last?.captured, plansSaid.current)
+    if (!moment) return
+    plansSaid.current = [...plansSaid.current, { kind: moment.kind, idea: moment.idea }]
+    dialogue.say(moment.text)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per position
+  }, [game.moves.length, playersTurn])
 
   const downloading = maiaStatus.state === 'downloading' && opponentToMove
 
