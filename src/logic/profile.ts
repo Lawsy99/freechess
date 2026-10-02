@@ -58,6 +58,8 @@ export type Profile = {
   updatedAt?: number
   /** Master Games finished, by id (data/masterGames). */
   masterGames?: string[]
+  /** Best "Guess the move" score in each master game, as a percentage. */
+  masterScores?: Record<string, number>
   /** Chess legends: how many of each one's levels you've beaten (data/legends.ts). */
   legends?: Record<string, number>
   /** Puzzles solved today, for the puzzle goal. */
@@ -302,7 +304,9 @@ export function recordLegendGame(
 }
 
 /** A master game studied to the end: remembered, and today's lesson goal. */
-export function recordMasterGame(p: Profile, id: string, now: Date): Profile {
+export function recordMasterGame(p: Profile, id: string, now: Date, guessScore?: number): Profile {
   const done = p.masterGames ?? []
-  return completeGoal({ ...p, masterGames: done.includes(id) ? done : [...done, id] }, 'lesson', dayKey(now))
+  const scores = { ...p.masterScores }
+  if (guessScore !== undefined) scores[id] = Math.max(scores[id] ?? 0, guessScore)
+  return completeGoal({ ...p, masterGames: done.includes(id) ? done : [...done, id], masterScores: scores }, 'lesson', dayKey(now))
 }

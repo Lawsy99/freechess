@@ -62,6 +62,8 @@ export function mergeProfiles(a: Profile | null, b: Profile | null): Profile | n
     puzzlesToday,
     streak,
     legends: maxRecord(older.legends, newer.legends),
+    masterGames: union(older.masterGames ?? [], newer.masterGames ?? []),
+    masterScores: maxRecord(older.masterScores, newer.masterScores),
     lessonsDone: union(older.lessonsDone, newer.lessonsDone),
     activeDays: union(older.activeDays, newer.activeDays).sort().slice(-60),
     frozenDays: union(older.frozenDays, newer.frozenDays).sort().slice(-30),

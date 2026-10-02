@@ -36,15 +36,25 @@
    the mistake you make most lately picks today's lesson, a "For you" puzzle set,
    and what the Coach points out. Your openings (logic/myOpenings.ts): drills of
    the lines you play, slips put right.
-9. **Master Games (built, Oct 2026).** Six classic games on Learn
-   (data/masterGames): the Opera Game, Réti v Tartakower, Lasker v Thomas, the
-   Evergreen, the Immortal and Sämisch v Nimzowitsch. The big picture before move
-   1, "The plan now" at each turning point, a note on every move, "Your move"
-   stops, and lessons at the end. Moves checked against published scores; every
+9. **Master Games (built, Oct 2026).** Twelve classic games on Learn
+   (data/masterGames), in two rows. Attacking classics: the Opera Game, Réti v
+   Tartakower, Lasker v Thomas, the Evergreen, the Immortal, Steinitz v von
+   Bardeleben, Rotlewi v Rubinstein. Strategy and endgames: Lasker v Capablanca
+   1914, Sämisch v Nimzowitsch, Alekhine v Nimzowitsch (the gun), Capablanca v
+   Tartakower 1924, Botvinnik v Capablanca 1938. Each has the big picture before
+   move 1, "The plan now" at turning points (with the plan drawn as arrows), a
+   note on every move, "Your move" stops, and lessons at the end.
+   Beyond a book: every alternative a note names can be played through on the
+   board ("See the line", lines.json from scratch/makeLines.mjs, following the
+   note's own moves then the engine's), the engine's verdict on every position,
+   and "Guess the moves": play the winner's moves yourself, each guess graded by
+   the engine (logic/masterGuess.ts), best score saved and synced.
+   Accuracy: every score checked against two sources where possible
+   (chessgames.com, Wikipedia, German Wikipedia), replayed by the rules; every
    note checked against Stockfish 19 (scratch/analyseGames.mjs, report.mjs,
    allMoves.mjs), with honest modern footnotes where the engine disagrees with
-   the legend. Our own notes: Joseph's copy of Chernev's book (copyright) is
-   not used. More games can follow the same way.
+   the legend; tests check every note, stop, line and arrow against the moves.
+   Our own notes: Joseph's copy of Chernev's book (copyright) is not used.
 10. **A more strategic Coach (built, Oct 2026).** In coached games the Coach
    says the big picture at turning points (opening over, queens off, the ending:
    logic/plans.ts). Every review opens with the story of the game: the opening,

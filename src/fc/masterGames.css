@@ -189,3 +189,138 @@
   font-size: 17px;
   font-weight: 800;
 }
+
+/* Two ways through a game: read along, or guess the moves. */
+.mg-modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.mg-modes button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mg-modes button span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.mg-modes button.on {
+  border-color: var(--buff);
+}
+
+.mg-howto {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* "See the line" buttons under a note. */
+.mg-sees {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mg-see {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--buff);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* A line on the board. */
+.mg-line-head {
+  margin: 0;
+  font-weight: 800;
+}
+
+.mg-line-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+}
+
+.mg-line-moves button {
+  min-height: 36px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mg-line-moves button.on {
+  background: var(--buff);
+  color: var(--ink);
+}
+
+.mg-controls.mg-line-controls {
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.mg-back-game {
+  font: inherit;
+  font-weight: 800;
+}
+
+/* Guess the moves. */
+.mg-guess.good {
+  box-shadow: inset 3px 0 0 var(--good);
+}
+
+.mg-running {
+  color: #e6c98a;
+  font-weight: 800;
+}
+
+.mg-controls .mg-showme {
+  font-size: 15px;
+}
+
+.mg-score {
+  width: 100%;
+  padding: 14px 16px;
+}
+
+.mg-score p {
+  margin: 0;
+}
+
+.mg-score-value {
+  color: #e6c98a;
+  font-size: 36px;
+  font-weight: 900;
+}
+
+/* Learn: the master games in two rows. */
+.mg-group-title {
+  margin: 6px 0 4px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}

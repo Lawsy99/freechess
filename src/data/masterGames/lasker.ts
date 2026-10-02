@@ -21,6 +21,7 @@ export const LASKER: MasterGame = {
   chapters: [
     {
       ply: 16,
+      arrows: ['f1d3', 'd1h5'],
       title: 'Aiming at h7',
       text: 'Black has castled, but the f-pawn has gone and the bishop from f8 is on f6, so nothing but the king guards h7. White’s knights stand on e4 and e5. The plan: bring the bishop to d3 and the queen to h5, all aimed at h7.',
     },

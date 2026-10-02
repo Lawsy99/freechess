@@ -37,6 +37,7 @@ export const IMMORTAL: MasterGame = {
     },
     {
       ply: 36,
+      arrows: ['d6f8'],
       title: 'The mating net',
       text: 'White has lost a rook and the other is about to go. It doesn’t matter if Black’s king can be trapped. The bishop on d6 takes e7 and f8 from it, the knights on d5 and f5 cover c7, e7 and g7, and the queen is ready on f3. Black’s queen is far away, and most of Black’s pieces are still at home.',
     },
@@ -85,7 +86,7 @@ export const IMMORTAL: MasterGame = {
     // 11. Rg1
     'Anderssen leaves his bishop on b5 to be taken. The rook comes out of the corner and protects the pawn on g4. White is betting that time matters more than a bishop, and here the engine agrees this was the best move.',
     // 11... cxb5
-    'Black takes the bishop and is a piece up. But look at the cost: the queen on g5 now has very few squares, and White’s pawns are about to chase her. 11…h5, hitting the g4 pawn, was the engine’s choice and kept Black better.',
+    'Black takes the bishop and is a piece up. But look at the cost: the queen on g5 now has very few squares. 11…h5, hitting the g4 pawn, was the engine’s choice and kept Black better.',
     // 12. h4
     'The pawn attacks the queen, and she has only one safe square. Taking the knight on f5, or defending with …h6, would cost Black far too much.',
     // 12... Qg6

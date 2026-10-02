@@ -44,13 +44,13 @@ export const ZUGZWANG: MasterGame = {
   ],
   notes: [
     // 1. d4
-    'The queen’s pawn takes a share of the centre.',
+    'The queen’s pawn takes a share of the centre. Unlike a pawn on e4, it’s protected by the queen from the start, one reason queen’s pawn openings tend to be slower and more strategic.',
     // 1... Nf6
-    'A flexible reply: the knight develops and stops e4 for now. The engine’s choice.',
+    'A flexible reply: the knight develops towards the centre and stops e4 for now, while Black keeps the pawns uncommitted. The engine’s choice.',
     // 2. c4
-    'White takes more of the centre.',
+    'White takes more space. The pawn on c4 also eyes d5, so a Black pawn there can always be challenged.',
     // 2... e6
-    'Black opens the way for the dark-squared bishop.',
+    'Black opens the diagonal for the bishop on f8 and prepares …d5 or …Bb4.',
     // 3. Nf3
     'A solid developing move. 3.Nc3 would have allowed 3…Bb4, the Nimzo-Indian Defence, named after the man playing Black.',
     // 3... b6
@@ -58,33 +58,33 @@ export const ZUGZWANG: MasterGame = {
     // 4. g3
     'White prepares to put the bishop on g2, to oppose Black’s bishop on the long diagonal. The engine’s choice.',
     // 4... Bb7
-    'The bishop takes the long diagonal.',
+    'The bishop takes the long diagonal from b7 to h1, aiming at e4 and, further on, at White’s kingside. A modern footnote: 4…Ba6, hitting the pawn on c4, is the main line today, and the engine slightly prefers it.',
     // 5. Bg2
-    'White’s bishop faces it.',
+    'White’s bishop faces Black’s on the long diagonal. Whoever controls that diagonal has a say over e4, the key square of this opening.',
     // 5... Be7
-    'Black gets ready to castle. Quiet and solid.',
+    'Black gets ready to castle. Quiet and solid; 5…Bb4+ was a touch more active.',
     // 6. Nc3
-    'Another piece out.',
+    'Another piece out, adding control of e4 and d5.',
     // 6... O-O
-    'Black castles. The best move.',
+    'Black castles, the best move: the king is safe before anything opens up.',
     // 7. O-O
-    'White castles too. The engine’s choice.',
+    'White castles too, the engine’s choice. Both kings are safe, so the fight will be about space and squares.',
     // 7... d5
-    'Black takes a share of the centre with a pawn as well.',
+    'Black now claims the centre with a pawn as well, backing up the pieces that were already watching it.',
     // 8. Ne5
     'The knight jumps to a strong central square and opens the long diagonal for White’s bishop on g2. The engine’s choice.',
     // 8... c6
     'Black supports d5 and blunts White’s bishop. 8…Nbd7, challenging the knight, was a little better.',
     // 9. cxd5
-    'White releases the tension. 9.e4!, striking in the centre, was stronger.',
+    'White releases the tension, and the c-file will open for both sides. 9.e4!, striking in the centre while Black’s pieces are a little awkward, was stronger.',
     // 9... cxd5
-    'Black takes back and the c-file opens. The best move.',
+    'Black takes back with the c-pawn, keeping a solid pawn on d5. The c-file is now open for both sides’ rooks. The best move.',
     // 10. Bf4
-    'White develops the last minor piece. The engine’s choice.',
+    'White develops the last minor piece, which also supports the knight on e5. The engine’s choice.',
     // 10... a6
     'Black prepares …b5, to gain space on the queenside. 10…Nc6 was a little more accurate.',
     // 11. Rc1
-    'The rook takes the open c-file. The engine’s choice.',
+    'The rook takes the open c-file, hoping to reach c7 one day. The engine’s choice.',
     // 11... b5
     'Black gains space on the queenside. The engine’s choice. Next, …b4 can drive White’s knight away.',
     // 12. Qb3
@@ -92,9 +92,9 @@ export const ZUGZWANG: MasterGame = {
     // 12... Nc6
     'Black develops and challenges the knight on e5.',
     // 13. Nxc6
-    'White trades knights. 13.Nxd5 was a little better.',
+    'White trades knights, swapping off the best-placed White piece. 13.Nxd5 was a little better.',
     // 13... Bxc6
-    'Black takes back with the bishop. The best move.',
+    'Black takes back with the bishop, which now watches b5 and the long diagonal. The best move.',
     // 14. h3
     'A slow move, and from here Black is slightly better. 14.Ne4 was the engine’s choice and kept the balance.',
     // 14... Qd7
@@ -104,7 +104,7 @@ export const ZUGZWANG: MasterGame = {
     // 15... Nh5
     'The knight attacks the bishop on f4. The engine’s choice.',
     // 16. Bd2
-    'The bishop retreats.',
+    'The bishop steps back rather than be swapped for the knight. 16.Be3 was about as good.',
     // 16... f5
     'Black grabs space on the kingside and takes control of e4. Now Black has space on both wings. The engine preferred 16…b4 first, and calls the game level after this.',
     // 17. Qd1
@@ -112,11 +112,11 @@ export const ZUGZWANG: MasterGame = {
     // 17... b4
     'The pawn kicks the knight, and its best square is b1, at the back. The engine’s choice.',
     // 18. Nb1
-    'Back where it started. This knight will not move again.',
+    'Back where it started: other squares cost material, since 18.Nxd5 exd5 just loses the knight for a pawn. This knight will not move again.',
     // 18... Bb5
     'The bishop switches diagonals, aiming at e2 and at White’s rook on f1. The engine’s choice.',
     // 19. Rg1
-    'The rook steps off the bishop’s diagonal. 19.Bf3 or 19.a3 was a little better.',
+    'The rook steps off the bishop’s diagonal. White is now completely passive, waiting to see what Black does. 19.Bf3 or 19.a3 was a little better.',
     // 19... Bd6
     'The second bishop aims at g3 and, behind it, White’s king on h2. 19…a5 was slightly better.',
     // 20. e4
@@ -124,7 +124,7 @@ export const ZUGZWANG: MasterGame = {
     // 20... fxe4
     'Black takes and leaves the knight on h5 to be captured. The engine’s choice: Black has seen further.',
     // 21. Qxh5
-    'White takes the knight.',
+    'White takes the knight and is a piece up for a pawn, for the moment.',
     // 21... Rxf2
     'The point. For the knight, Black has two pawns and a rook on White’s second rank, attacking both bishops, right next to White’s king.',
     // 22. Qg5

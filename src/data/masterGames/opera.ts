@@ -41,7 +41,7 @@ export const OPERA: MasterGame = {
     // 1. e4
     'The king’s pawn opens lines for the queen and the light-squared bishop, and takes a share of the centre.',
     // 1... e5
-    'Black matches it in the centre.',
+    'Black matches it, claiming an equal share of the centre.',
     // 2. Nf3
     'A knight out towards the centre, with a threat: the pawn on e5.',
     // 2... d6
@@ -91,7 +91,7 @@ export const OPERA: MasterGame = {
     // 13... Rxd7
     'Black takes back with the rook, which leaves that rook pinned in turn. 13…Nxd7 kept a little more resistance.',
     // 14. Rd1
-    'The second rook replaces the first. The pinned rook on d7 is attacked twice more, and Black runs out of ways to hold it.',
+    'The second rook replaces the first. Now the pinned rook on d7 is attacked twice, by the bishop and the rook, and, pinned along a diagonal, it can’t move at all.',
     // 14... Qe6
     'Black offers to trade queens. But on e6 the queen no longer guards d8, and she doesn’t watch b8 either: those are exactly the squares White needs. 14…Qd6, keeping an eye on b8, was the best defence.',
     // 15. Bxd7+

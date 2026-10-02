@@ -36,7 +36,13 @@ export type MasterGame = {
    * turning point, "The plan now": where the game stands and what each side wants.
    * Shown when the board reaches `ply` moves.
    */
-  chapters: { ply: number; title: string; text: string }[]
+  chapters: {
+    ply: number
+    title: string
+    text: string
+    /** The plan drawn on the board, as from-to squares ("d4e6"): a knight's route, a file, a diagonal. */
+    arrows?: string[]
+  }[]
   /** The moves, as published. */
   pgn: string
   /** One note for each move, in order (notes[0] is White's first move). */

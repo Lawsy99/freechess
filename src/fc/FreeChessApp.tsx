@@ -444,8 +444,8 @@ export function FreeChessApp() {
           key={masterGame.id}
           game={masterGame}
           onBack={back}
-          onDone={() => {
-            updateProfile(recordMasterGame(profile, masterGame.id, new Date()))
+          onDone={(score) => {
+            updateProfile(recordMasterGame(profile, masterGame.id, new Date(), score))
             back()
           }}
         />

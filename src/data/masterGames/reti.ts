@@ -62,13 +62,13 @@ export const RETI: MasterGame = {
     // 8. O-O-O
     'The answer to the pin, and much more. White’s king leaves the e-file, so the knight is free again, and the rook lands on d1, on the open file. The engine’s choice.',
     // 8... Nxe4
-    'Black takes the knight, which looks like a fair trade. But it moves the knight off f6, where it was blocking the diagonal from g5 to d8, and Black’s king is still on e8 with the d-file open. 8…Be7, developing and getting ready to castle, kept Black in the game.',
+    'Black takes the knight, which looks like a fair trade. But the knight on f6 was an important defender, and Black’s king is still on e8 with the d-file open. 8…Be7, developing and getting ready to castle, kept Black in the game.',
     // 9. Qd8+
     'The queen sacrifice. Black has to take her, and the king is pulled onto the open file.',
     // 9... Kxd8
     'Forced: nothing else can deal with the check.',
     // 10. Bg5+
-    'Double check: the bishop checks from g5 and the rook checks from d1. Against a double check, the king has to move.',
+    'Double check: the bishop checks from g5, along the diagonal the knight on f6 used to block, and the rook checks from d1. Against a double check, the king has to move.',
     // 10... Kc7
     'Going back with 10…Ke8 allows 11.Rd8 mate.',
     // 11. Bd8#

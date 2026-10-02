@@ -32,6 +32,7 @@ export const EVERGREEN: MasterGame = {
     },
     {
       ply: 36,
+      arrows: ['g8g2', 'e1e7'],
       title: 'The race',
       text: 'Both kings are under fire. Black’s rook has the open g-file, the queen is close, and g2 is a target: if Black ever gets time for …Qxf3, mate on g2 is coming. Black’s king is stuck on e8, and the knight on e7 is pinned by White’s rook. White’s plan: bring in the last rook and strike first, with checks, so Black never gets that time.',
     },
@@ -70,7 +71,7 @@ export const EVERGREEN: MasterGame = {
     // 8... Qf6
     'Black protects f7 with the queen, the best defence.',
     // 9. e5
-    'White gains time by attacking the queen, and takes the f6 square away from her for good.',
+    'White gains time by attacking the queen, and the pawn on e5 cramps Black: it takes f6 and d6 away from Black’s pieces.',
     // 9... Qg6
     'The queen moves again. The best square she has.',
     // 10. Re1
@@ -112,9 +113,9 @@ export const EVERGREEN: MasterGame = {
     // 19. Rad1
     'The famous quiet move: the last rook comes in to take the d-file, setting up the finish. The engine’s verdict is more sober: 19.Be4 was a little better, and Black could now have held with 19…Bd4!.',
     // 19... Qxf3
-    'Black takes the knight and threatens mate with …Qxg2. But White moves first, and every White move from here is a check. 19…Bd4 was the way to hold.',
+    'Black takes the knight and threatens mate with …Qxg2. But it’s White’s move. 19…Bd4 was the way to hold.',
     // 20. Rxe7+
-    'The rook takes the pinned knight with check, and Black must answer.',
+    'The rook takes the pinned knight with check, and Black must answer. From here every White move is a check, so Black never gets time for …Qxg2.',
     // 20... Nxe7
     'Taking with the knight allows a forced mate. 20…Kd8 was the only way to fight on, though White would still be winning.',
     // 21. Qxd7+
