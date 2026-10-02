@@ -56,6 +56,8 @@ export type Profile = {
   frozenDays?: string[]
   /** When this profile was last saved (for combining devices: the newest decides the rating and streak). */
   updatedAt?: number
+  /** Master Games finished, by id (data/masterGames). */
+  masterGames?: string[]
   /** Chess legends: how many of each one's levels you've beaten (data/legends.ts). */
   legends?: Record<string, number>
   /** Puzzles solved today, for the puzzle goal. */
@@ -297,4 +299,10 @@ export function recordLegendGame(
   // (Beating the last level finishes the journey: no level beyond it.)
   const levelUp = next < levels.length ? { level: next + 1, rating: levels[next] } : null
   return { profile, ratingChange: recorded.ratingChange, levelUp }
+}
+
+/** A master game studied to the end: remembered, and today's lesson goal. */
+export function recordMasterGame(p: Profile, id: string, now: Date): Profile {
+  const done = p.masterGames ?? []
+  return completeGoal({ ...p, masterGames: done.includes(id) ? done : [...done, id] }, 'lesson', dayKey(now))
 }

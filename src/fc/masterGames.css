@@ -1,0 +1,191 @@
+/* Master Games (Oct 2026): board first, a note card under it, the step
+   buttons pinned to the bottom. */
+.mg {
+  gap: 10px;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+}
+
+.mg-players {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.mg-players strong {
+  color: var(--text);
+}
+
+.mg-note {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 120px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--card);
+  line-height: 1.5;
+}
+
+.mg-note p {
+  margin: 0;
+}
+
+.mg-note.stop {
+  box-shadow: inset 0 0 0 2px var(--buff);
+}
+
+.mg-move {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mg-eval {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mg-stop-title {
+  color: var(--brass);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mg-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.mg-options button {
+  min-height: 48px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.mg-verdict {
+  font-weight: 800;
+  color: var(--star);
+}
+
+.mg-verdict.best {
+  color: var(--good);
+}
+
+.mg-controls {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.mg-controls .mg-next {
+  background: var(--buff);
+  border-color: var(--buff);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+}
+
+.mg-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 24px;
+  text-align: center;
+}
+
+.mg-lessons {
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.mg-lessons h2 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.mg-lessons ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.45;
+}
+
+/* On Learn: a row of game cards. */
+.fc-master-games .fc-legend-card {
+  width: 156px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.mg-card-year {
+  color: #e6c98a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mg-card-theme {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+/* The big picture and the plan at each turning point. */
+.mg-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, #e6c98a 14%, var(--panel));
+  box-shadow: inset 3px 0 0 #e6c98a;
+}
+
+.mg-plan-title {
+  color: #e6c98a;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* A "Your move" stop, under the note. */
+.mg-stop {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--panel);
+}
+
+/* While a stop waits, its choices take the bottom bar. */
+.mg-controls.mg-options {
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 0;
+}
+
+.mg-controls.mg-options button {
+  border: 2px solid var(--buff);
+  font-size: 17px;
+  font-weight: 800;
+}

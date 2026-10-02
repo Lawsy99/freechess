@@ -10,11 +10,16 @@ import { isOpen, nextLesson } from '../logic/learn'
 import type { Profile } from '../logic/profile'
 import { CheckIcon } from './icons'
 import type { MyOpening } from '../logic/myOpenings'
+import { MASTER_GAMES } from '../data/masterGames'
+import type { MasterGame } from '../data/masterGames/types'
+import './legends.css'
+import './masterGames.css'
 import './learnhome.css'
 
 type Props = {
   profile: Profile
   onStart: (lesson: Lesson) => void
+  onMasterGame: (game: MasterGame) => void
   /** The openings you play, from your games (null while loading). */
   openings: MyOpening[] | null
 }
@@ -90,7 +95,7 @@ const LESSON_PIECE: Record<string, string> = {
 
 const piece = (key: string, size: number) => defaultPieces[key]({ svgStyle: { width: size, height: size } })
 
-export function LearnTab({ profile, onStart, openings }: Props) {
+export function LearnTab({ profile, onStart, openings, onMasterGame }: Props) {
   const done = profile.lessonsDone ?? []
   const upNext = nextLesson(done)
   let n = 0
@@ -103,6 +108,33 @@ export function LearnTab({ profile, onStart, openings }: Props) {
           {done.length} of {ALL_LESSONS.length} lessons done.{upNext ? ` Next: ${upNext.title}.` : ' All done!'}
         </p>
       </header>
+
+      {/* Master Games (Oct 2026): famous games, every move explained, with the big picture. */}
+      <section className="fc-master-games">
+        <h2 className="fc-menu-label">
+          Master games <span>Every move explained</span>
+        </h2>
+        <ul className="fc-legend-row">
+          {MASTER_GAMES.map((g) => {
+            const done = (profile.masterGames ?? []).includes(g.id)
+            return (
+              <li key={g.id}>
+                <button type="button" className="fc-legend-card mg-card" onClick={() => onMasterGame(g)}>
+                  <span className="mg-card-year">
+                    {g.year}
+                    {done ? ' · ✓ studied' : ''}
+                  </span>
+                  <strong>{g.title}</strong>
+                  <span className="mg-card-theme">
+                    {g.players ?? `${g.white.split(' ').at(-1)} v ${g.black.split(' ').at(-1)}`}
+                  </span>
+                  <span className="mg-card-theme">{g.theme}</span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
 
       {/* Your openings (Oct 2026): drills of the lines you actually play. */}
       {openings && openings.length > 0 && (

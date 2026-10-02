@@ -8,7 +8,7 @@ import { BOT_GROUPS, findBot, type Bot } from '../data/bots'
 import { characterOpponentId } from '../data/opponents'
 import { newGameRecord, outcomeOf, upgradeGameRecord, type GameRecord } from '../logic/gameRecord'
 import type { PathGame } from '../logic/path'
-import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordLegendGame, recordCoachGame, recordLesson, withRushScore,
+import { countPuzzle, dayKey, NEW_PROFILE, recordBotGame, recordLegendGame, recordMasterGame, recordCoachGame, recordLesson, withRushScore,
   withVisionScore, type Profile } from '../logic/profile'
 import { ALL_LESSONS, type Lesson } from '../data/learnPath'
 import { LearnTab } from './LearnTab'
@@ -45,6 +45,8 @@ import { PlayTab } from './PlayTab'
 import { SyncPanel } from './SyncPanel'
 import { syncCode, syncNow } from '../storage/sync'
 import { LegendSheet } from './LegendSheet'
+import { MasterGameView } from './MasterGameView'
+import type { MasterGame } from '../data/masterGames/types'
 import { findLegend, legendBot, LEGEND_LEVELS, legendLevel, type Legend } from '../data/legends'
 import { analyseInBackground } from '../engine/reviewJobs'
 import { SHORTEST_REVIEW } from '../logic/review'
@@ -62,7 +64,7 @@ import { ResultScreen, type LastResult } from './ResultScreen'
 import { TabBar, type Tab } from './TabBar'
 import './fc.css'
 
-type View = 'tabs' | 'bot' | 'custom' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis' | 'insights' | 'badges' | 'legend'
+type View = 'tabs' | 'bot' | 'custom' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis' | 'insights' | 'badges' | 'legend' | 'master'
 
 const CHARACTER_PREFIX = 'char:'
 
@@ -96,6 +98,7 @@ export function FreeChessApp() {
   const [pastGame, setPastGame] = useState<ArchivedGame | null>(null)
   const [puzzleMode, setPuzzleMode] = useState<PuzzleMode | null>(null)
   const [legend, setLegend] = useState<Legend | null>(null)
+  const [masterGame, setMasterGame] = useState<MasterGame | null>(null)
   // Sync (Oct 2026): progress kept the same on every linked device.
   const reloadProfile = () => {
     loadProfile()
@@ -430,6 +433,26 @@ export function FreeChessApp() {
     )
   }
 
+  if (view === 'master' && masterGame) {
+    const back = () => {
+      setView('tabs')
+      setTab('learn')
+    }
+    return (
+      <BoardThemeContext.Provider value={settings.board}>
+        <MasterGameView
+          key={masterGame.id}
+          game={masterGame}
+          onBack={back}
+          onDone={() => {
+            updateProfile(recordMasterGame(profile, masterGame.id, new Date()))
+            back()
+          }}
+        />
+      </BoardThemeContext.Provider>
+    )
+  }
+
   if (view === 'legend' && legend) {
     return (
       <LegendSheet
@@ -501,6 +524,10 @@ export function FreeChessApp() {
         <LearnTab
           profile={profile}
           openings={openings}
+          onMasterGame={(g) => {
+            setMasterGame(g)
+            setView('master')
+          }}
           onStart={(l) => {
             setLesson(l)
             setView('lesson')
