@@ -41,5 +41,12 @@ export function useFitLine(key: unknown) {
     return () => window.removeEventListener('resize', fit)
   }, [fit])
 
-  return { panelRef, lineRef, overflowing }
+  // (Callback refs, so they fit any element: a paragraph or a button.)
+  const setPanel = useCallback((el: HTMLElement | null) => {
+    panelRef.current = el
+  }, [])
+  const setLine = useCallback((el: HTMLElement | null) => {
+    lineRef.current = el
+  }, [])
+  return { panelRef: setPanel, lineRef: setLine, overflowing }
 }
