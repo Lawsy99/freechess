@@ -1,7 +1,8 @@
 // Chooses the opponent's move. Characters first play from their opening
-// book; after that (and for practice levels) the custom low-rated bot plays
-// below 800 and Maia-3 from 800 up, nudged towards the character's style.
-// If Maia is unavailable, the bot stands in (at its strongest settings).
+// book; after that every bot plays through Maia-3 at the setting measured to
+// match its rating (logic/botStrength.ts, Oct 2026), nudged towards the
+// character's style. If Maia is unavailable, the old Stockfish-based bot
+// stands in until it's back.
 // Then a human-like pause: the design's thinking times for characters, a
 // short one for practice levels.
 import { Chess } from 'chess.js'
@@ -10,7 +11,10 @@ import type { Opponent } from '../data/opponents'
 import { botDepth, pickBotMove } from '../logic/botMistakeModel'
 import { toCentipawns } from '../logic/evaluation'
 import { bookMove } from '../logic/openingBook'
-import { MIN_LIKELIHOOD, sampleMove } from '../logic/sampleMove'
+import { MIN_LIKELIHOOD } from '../logic/sampleMove'
+import { botPlan, standInRating } from '../logic/botStrength'
+import { checkCandidates, pickHumanMove, usesCheck, type MoveCheck } from '../logic/humanBot'
+import { applyUci } from '../logic/game'
 import { styleWeight } from '../logic/style'
 import { classifyMove, thinkTime, type MoveKind } from '../logic/thinkTime'
 import { getMaia } from './maia/maia'
@@ -72,25 +76,51 @@ export async function chooseOpponentMove(
 }
 
 async function maiaMove(fen: string, opponent: Opponent, moves: readonly string[]) {
-  // Until player ratings exist (phase 4), assume an evenly matched opponent.
-  const { policy, ms } = await getMaia().predict(fen, opponent.rating, opponent.rating)
+  // (Calibrated with Maia imagining an equal opponent, so asked the same way.)
+  const plan = botPlan(opponent.rating)
+  const { policy, ms } = await getMaia().predict(fen, plan.maiaElo, plan.maiaElo)
   const style = opponent.character?.style
   const traits = opponent.character?.traits ?? []
   const nudged = style
     ? policy.map((m) => (m.p >= MIN_LIKELIHOOD ? { ...m, p: m.p * styleWeight(style, fen, m.move, traits) } : m))
     : policy
   const kind = classifyMove(policy[0]?.p ?? 1, isRecaptureAvailable(fen, moves, policy[0]?.move))
-  return { choice: { move: sampleMove(nudged), maiaMs: ms }, kind }
+  const move = usesCheck(plan) ? await checkedMove(fen, nudged, plan.check!) : pickHumanMove(nudged, plan)
+  return { choice: { move, maiaMs: ms }, kind }
+}
+
+/**
+ * The strongest bots: Stockfish compares Maia's few likeliest moves and plays
+ * the soundest, so the move is still one a strong person would play.
+ */
+async function checkedMove(fen: string, policy: readonly { move: string; p: number }[], check: MoveCheck): Promise<string | null> {
+  const candidates = checkCandidates(policy, check)
+  if (candidates.length <= 1) return candidates[0] ?? null
+  let best: { move: string; cp: number } | null = null
+  for (const move of candidates) {
+    const after = new Chess(fen)
+    if (!applyUci(after, move)) continue
+    // (Scored for the side that moved: the reply's score, turned round.)
+    const cp = after.isCheckmate()
+      ? Infinity
+      : after.isDraw()
+        ? 0
+        : -toCentipawns((await getEngine().search(after.fen(), { depth: check.depth, movetime: 600 })).lines[0]?.score ?? { type: 'cp', value: 0 })
+    if (!best || cp > best.cp) best = { move, cp }
+  }
+  return best?.move ?? candidates[0]
 }
 
 async function botMove(fen: string, opponent: Opponent, moves: readonly string[]) {
-  const { lines } = await getEngine().search(fen, { depth: botDepth(opponent.rating), multiPv: 6, movetime: 400 })
+  // (Set lower than the bot's rating: measured, this bot plays above its setting.)
+  const setting = standInRating(opponent.rating)
+  const { lines } = await getEngine().search(fen, { depth: botDepth(setting), multiPv: 6, movetime: 400 })
   const candidates = lines.map((l) => ({ move: l.pv[0], cp: toCentipawns(l.score) }))
   const legal = new Chess(fen).moves({ verbose: true }).map((m) => m.from + m.to + (m.promotion ?? ''))
   const style = opponent.character?.style
   const traits = opponent.character?.traits ?? []
   const weights = style ? candidates.map((c) => styleWeight(style, fen, c.move, traits)) : undefined
-  const move = pickBotMove(candidates, legal, opponent.rating, Math.random, weights)
+  const move = pickBotMove(candidates, legal, setting, Math.random, weights)
   // Without Maia's likelihoods, judge "obvious" by how far the best move stands out.
   const gap = candidates.length > 1 ? candidates[0].cp - candidates[1].cp : 1000
   const kind = classifyMove(gap > 150 ? 0.8 : gap < 30 ? 0.15 : 0.4, isRecaptureAvailable(fen, moves, move))

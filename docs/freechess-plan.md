@@ -59,7 +59,12 @@
    says the big picture at turning points (opening over, queens off, the ending:
    logic/plans.ts). Every review opens with the story of the game: the opening,
    the plan from there, the turning point and how it ended (logic/gameStory.ts).
-11. **Next.** A real-iPhone check by Joseph; piece sets (needs a download, asked);
+11. **Bots measured (built, Oct 2026).** The old low bots (Stockfish plus a random move
+   now and then) played far above their numbers and swung wildly. Every bot now plays
+   through Maia at a measured setting; about 2,500 calibration games put Maia, its
+   loosened and sharpened forms and a Stockfish-checked form on one Elo scale pinned at
+   Maia 1500 = 1500 (docs/bot-calibration.md). Maia downloads soon after the app opens.
+12. **Next.** A real-iPhone check by Joseph; piece sets (needs a download, asked);
    later, the App Store version (Capacitor). Bundle is about 300 KB gzipped: the
    dialogue file could be trimmed if load time becomes a problem.
 

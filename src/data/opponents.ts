@@ -8,17 +8,15 @@ export type Opponent = {
   name: string
   rating: number
   /**
-   * Below 800 the custom mistake-model bot plays; from 800 up, Maia-3.
-   * 'full': Stockfish's best move every time (only Toby on trial night).
+   * 'maia': every bot (Oct 2026), at the Maia setting measured to match its
+   * rating (logic/botStrength.ts). 'bot': the old Stockfish-based bot, now only
+   * Maia's stand-in. 'full': Stockfish's best move every time.
    */
   engine: 'bot' | 'maia' | 'full'
   /** Rating hidden on screen (Toby on trial night: new members are unrated). */
   unrated?: boolean
   character?: Character
 }
-
-/** Maia-3 takes over from here (design document, "Which engine plays"). */
-export const MAIA_FROM = 800
 
 /** Until ratings arrive (phase 4), the test screen sets a stand-in baseline. */
 export const DEFAULT_BASELINE = 1000
@@ -37,7 +35,7 @@ export function resolveOpponent(opponentId: string, rating?: number, fullStrengt
     if (character) {
       const r = rating ?? characterRating(character, DEFAULT_BASELINE)
       if (fullStrength) return { id: opponentId, name: character.name, rating: r, engine: 'full', unrated: true, character }
-      return { id: opponentId, name: character.name, rating: r, engine: r < MAIA_FROM ? 'bot' : 'maia', character }
+      return { id: opponentId, name: character.name, rating: r, engine: 'maia', character }
     }
   }
   const level = findLevel(opponentId)

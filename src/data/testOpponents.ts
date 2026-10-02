@@ -12,8 +12,8 @@ export type TestOpponentLevel = {
 }
 
 export const TEST_OPPONENT_LEVELS: TestOpponentLevel[] = [
-  { id: 'beginner', label: 'Beginner', rating: 400, engine: 'bot' },
-  { id: 'novice', label: 'Novice', rating: 600, engine: 'bot' },
+  { id: 'beginner', label: 'Beginner', rating: 400, engine: 'maia' },
+  { id: 'novice', label: 'Novice', rating: 600, engine: 'maia' },
   { id: 'casual', label: 'Casual', rating: 800, engine: 'maia' },
   { id: 'improver', label: 'Improver', rating: 1000, engine: 'maia' },
   { id: 'club', label: 'Club player', rating: 1200, engine: 'maia' },

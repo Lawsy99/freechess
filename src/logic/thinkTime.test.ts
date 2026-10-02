@@ -24,7 +24,8 @@ describe('opponents', () => {
     const marjorie = resolveOpponent(characterOpponentId('marjorie'))
     expect(marjorie.name).toBe('Marjorie')
     expect(marjorie.rating).toBe(940) // default baseline 1000 − 60
-    expect(resolveOpponent(characterOpponentId('marjorie'), 700).engine).toBe('bot')
+    // Every rating plays through Maia now (Oct 2026), however low.
+    expect(resolveOpponent(characterOpponentId('marjorie'), 150).engine).toBe('maia')
     expect(resolveOpponent(characterOpponentId('marjorie'), 1300).engine).toBe('maia')
   })
 

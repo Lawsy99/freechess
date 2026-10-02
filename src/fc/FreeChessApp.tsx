@@ -62,6 +62,7 @@ import { setShowLegalMoves } from '../components/boardPrefs'
 import { ProfileTab } from './ProfileTab'
 import { ResultScreen, type LastResult } from './ResultScreen'
 import { TabBar, type Tab } from './TabBar'
+import { getMaia } from '../engine/maia/maia'
 import './fc.css'
 
 type View = 'tabs' | 'bot' | 'custom' | 'game' | 'result' | 'review' | 'past' | 'past-review' | 'settings' | 'puzzle' | 'lesson' | 'analysis' | 'insights' | 'badges' | 'legend' | 'master'
@@ -105,6 +106,12 @@ export function FreeChessApp() {
       .then((p) => p && setProfile(p))
       .catch(() => undefined)
   }
+  // Every bot plays through Maia (Oct 2026), so fetch it soon after the app
+  // opens (a one-off 44 MB, kept on the phone), not at the first move.
+  useEffect(() => {
+    const t = window.setTimeout(() => getMaia().load(), 5000)
+    return () => window.clearTimeout(t)
+  }, [])
   const lastSync = useRef(0)
   useEffect(() => {
     if (!loaded || view !== 'tabs' || !syncCode() || Date.now() - lastSync.current < 30_000) return

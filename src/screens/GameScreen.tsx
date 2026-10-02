@@ -196,7 +196,7 @@ export function GameScreen({
   const ratedMove = useMoveRating(game.moves, game.playerColour)
   useWakeLock(!outcome)
 
-  // Maia (800+) is a one-off download: show its progress while it arrives.
+  // Maia is a one-off download: show its progress while it arrives.
   useEffect(() => {
     if (opponent.engine !== 'maia') return
     const maia = getMaia()
