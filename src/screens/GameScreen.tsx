@@ -71,6 +71,7 @@ import {
 import { detectOpening } from '../logic/openings'
 import { triggersFor } from '../logic/gameTriggers'
 import { useDialogue } from './useDialogue'
+import { useFitLine } from './useFitLine'
 import { Chess } from 'chess.js'
 import { RATING_GLYPHS, RATING_LABELS } from '../logic/moveRating'
 import { repertoireHint, sanInWords } from '../logic/repertoire'
@@ -702,6 +703,9 @@ export function GameScreen({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once per position
   }, [game.moves.length, playersTurn])
 
+  // The message under the board, fitted so it can always be read in full.
+  const fitLine = useFitLine(`${dialogue.line?.key ?? ''}|${pending?.warning ?? ''}|${bubble?.kind ?? ''}|${viewPly ?? ''}`)
+
   const downloading = maiaStatus.state === 'downloading' && opponentToMove
 
   // Looking back: how your move at that point rated (not in matches, which
@@ -867,7 +871,7 @@ export function GameScreen({
 
       {/* The message panel: whatever room is left, never over the board. What's
           said at the top, the moves so far below. It scrolls inside itself. */}
-      <section className="game-panel" aria-live="polite">
+      <section className={`game-panel ${fitLine.overflowing ? 'more' : ''}`} aria-live="polite" ref={fitLine.panelRef}>
         {!competitive &&
           (viewedRating && viewedBefore ? (
             <div className="move-info">
@@ -896,7 +900,7 @@ export function GameScreen({
           ) : null)}
 
         {pending?.warning ? (
-          <p className="panel-line">
+          <p className="panel-line" ref={fitLine.lineRef}>
             {coachVoice && opponent.character && <Portrait who={opponent.character.id} size={28} />}
             <span>{coachVoice ? `“${pending.warning}”` : `${pending.warning} Play it anyway?`}</span>
           </p>
@@ -906,7 +910,7 @@ export function GameScreen({
             <span>{bubble.kind === 'offer' ? '“Draw?”' : bubble.kind === 'thinking' ? '…' : '“I’ll play on.”'}</span>
           </p>
         ) : dialogue.line ? (
-          <button type="button" className="panel-line talk" onClick={dialogue.dismiss} key={dialogue.line.key}>
+          <button type="button" className="panel-line talk" onClick={dialogue.dismiss} key={dialogue.line.key} ref={fitLine.lineRef}>
             <Portrait who={dialogue.line.face} size={28} expression={dialogue.line.expression} />
             <span>{dialogue.line.text.startsWith('(') ? dialogue.line.text : `“${dialogue.line.text}”`}</span>
           </button>

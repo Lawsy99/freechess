@@ -846,3 +846,15 @@
   overflow-y: auto;
   align-content: start;
 }
+
+/* A message still too long for the panel at the smallest size: a fade at the
+   bottom says there's more to scroll (Oct 2026). */
+.game-panel.more::after {
+  content: '';
+  position: sticky;
+  bottom: -2px;
+  flex: 0 0 22px;
+  margin-top: -22px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events: none;
+}

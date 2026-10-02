@@ -43,7 +43,7 @@ describe('the Coach’s big-picture moments', () => {
   it('speaks once the opening is over, and only once', () => {
     const m = planMoment(middlegame, 'w', 20, false, [])
     expect(m?.kind).toBe('middlegame')
-    expect(m?.text).toMatch(/^The opening’s done, so here’s the big picture\. Finish developing/)
+    expect(m?.text).toMatch(/^Big picture: Finish developing/)
     expect(planMoment(middlegame, 'w', 20, false, [{ kind: 'middlegame', idea: m!.idea }])).toBeNull()
   })
 

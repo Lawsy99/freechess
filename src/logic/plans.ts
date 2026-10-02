@@ -163,13 +163,13 @@ export function planMoment(
     intro = idea.kind === 'king-active' ? '' : 'It’s an ending now. '
   } else if (!ending && !queensOn && ply >= 12 && !has('queens-off')) {
     kind = 'queens-off'
-    intro = 'The queens are off, and that changes the plan. '
+    intro = 'Queens off, new plan: '
   } else if (!ending && ply >= 16 && ply <= 40 && said.length === 0) {
     kind = 'middlegame'
-    intro = 'The opening’s done, so here’s the big picture. '
+    intro = 'Big picture: '
   } else if (!ending && ply >= 36 && has('middlegame') && !has('later') && !said.some((s) => s.idea === idea.kind)) {
     kind = 'later'
-    intro = 'The position has changed, so here’s the big picture now. '
+    intro = 'New big picture: '
   }
   if (!kind) return null
   return { kind, idea: idea.kind, text: intro + idea.text }
