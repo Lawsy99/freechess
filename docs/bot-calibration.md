@@ -77,7 +77,7 @@ Bo (100), Grace (150) and Finn (200) all play at it.
 Lichess runs Maia bots (maia1, maia5, maia9: trained on 1100, 1500 and 1900
 players) that always play their likeliest move and are rated from games
 against real people. Measured the same way here (Maia-3, always the likeliest
-move, ), our scale lands on their Lichess rapid ratings:
+move, `maiat:R:0.01:60`), our scale lands on their Lichess rapid ratings:
 
 | Setting | Our scale | Lichess bot, rapid (blitz) |
 |---|---|---|
