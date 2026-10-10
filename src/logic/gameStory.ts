@@ -47,6 +47,9 @@ export function standing(cp: number): string {
 
 const moveNo = (ply: number) => Math.floor(ply / 2) + 1
 
+/** "Your move 5: the bishop move to b5" from a label that may already say "Move 5: ...". */
+const whose = (who: string, label: string) => `${who} move ${label.replace(/^Move /, '')}`
+
 /** The first position from `from` on that isn't in the middle of a trade (the last move wasn't a capture). */
 function settledPly(moves: readonly string[], from: number): number {
   const history = replay(moves).history({ verbose: true })
@@ -78,7 +81,7 @@ export function gameStory({ moves, evals, reviewed, player, result, startPly = 0
     const label = moveLabel({ fenBefore: turning.fenBefore, uci: turning.uci, ply: turning.ply, rating: turning.rating })
     if (turning.mover === player) {
       const why = stepExplanation(moves, evals, reviewed, turning.ply, player)
-      beats.push({ title: 'The turning point', text: `Your move ${label}. ${why ?? ''}`.trim(), ply: turning.ply })
+      beats.push({ title: 'The turning point', text: `${whose('Your', label)}. ${why ?? ''}`.trim(), ply: turning.ply })
     } else {
       // Did you make them pay? Your next move, judged by how much of their gift you kept.
       const next = reviewed[turning.ply + 1]
@@ -88,7 +91,7 @@ export function gameStory({ moves, evals, reviewed, player, result, startPly = 0
         kept === null ? '' : kept ? ' You made it count.' : ' You didn’t take the chance straight away: step through to find what was there.'
       beats.push({
         title: 'The turning point',
-        text: `Their move ${label} was the biggest swing of the game, in your favour${better ? ` (${better} was their best)` : ''}.${tail}`,
+        text: `${whose('Their', label)} was the biggest swing of the game, in your favour${better ? ` (${better} was their best)` : ''}.${tail}`,
         ply: turning.ply,
       })
     }

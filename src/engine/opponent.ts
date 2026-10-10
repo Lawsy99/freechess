@@ -26,6 +26,8 @@ export type OpponentChoice = {
   maiaMs?: number
   /** The move came from the character's opening book (so leaving it can be noticed). */
   fromBook?: boolean
+  /** Maia couldn't answer, so the backup Stockfish bot played this move. */
+  standIn?: boolean
 }
 
 export async function chooseOpponentMove(
@@ -58,6 +60,7 @@ export async function chooseOpponentMove(
       // carries on; Maia is tried again a minute later.
       console.warn('Maia unavailable; the backup bot plays this move.', err)
       ;({ choice, kind } = await botMove(fen, opponent, movesSoFar))
+      choice = { ...choice, standIn: true }
     }
   } else if (opponent.engine === 'full') {
     ;({ choice, kind } = await fullStrengthMove(fen))

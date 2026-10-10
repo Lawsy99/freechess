@@ -179,3 +179,29 @@
 .full-game-coach > span {
   flex: 1;
 }
+
+/* Guided review (Oct 2026): "Key moves" skips quiet moves; tap for "Every move". */
+.full-game .every-move {
+  min-height: 40px;
+  margin-left: auto;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.full-game .every-move + .analyse {
+  margin-left: 0;
+}
+
+/* Next is the main way through, so it stands out. */
+.full-game-controls button.next {
+  border-color: var(--buff);
+  background: var(--buff);
+  color: var(--ink);
+}

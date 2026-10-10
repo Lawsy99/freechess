@@ -22,6 +22,11 @@ export type GameRecord = {
   hintsUsed?: number
   /** Played with the "Full help" setting: unlimited hints and takebacks (data/helpStages.ts). */
   unlimited?: boolean
+  /**
+   * How many of the bot's moves the backup Stockfish bot played because Maia
+   * couldn't answer (Oct 2026: so a review can say whether Maia was really playing).
+   */
+  standInMoves?: number
   /** A retry: the moves before this ply were the original game's, replayed (not counted again in reviews and stats). */
   startPly?: number
   /**

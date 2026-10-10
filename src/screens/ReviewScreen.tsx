@@ -489,6 +489,13 @@ export function ReviewScreen({ game, onContinue, fromHistory = false, ratingChan
 
           {moments.length === 0 && <p className="review-note">No big mistakes this game.</p>}
 
+          {/* (Oct 2026) If Maia couldn't load, the backup engine played some moves: say so. */}
+          {(game.standInMoves ?? 0) > 0 && (
+            <p className="review-note">
+              Maia wasn’t available for {game.standInMoves} of the bot’s moves, so the backup engine played {game.standInMoves === 1 ? 'that one' : 'those'}. It plays less like a person.
+            </p>
+          )}
+
           {/* The Coach's tip: the thing to work on, and where to practise it. */}
           {tip && tipLesson && (
             <div className="review-tip">

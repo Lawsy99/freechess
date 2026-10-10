@@ -416,7 +416,7 @@ export function GameScreen({
         setGame((g) => (g ? withResignation(g, opponentColour) : g))
         return
       }
-      const { move, maiaMs: ms, fromBook = false } = await chooseOpponentMove(
+      const { move, maiaMs: ms, fromBook = false, standIn = false } = await chooseOpponentMove(
         fen,
         game.moves,
         opponent,
@@ -492,6 +492,7 @@ export function GameScreen({
         let next = withTimedMove(withOpponentEval(g, cp), move, usedThisTurn())
         if (offer) next = { ...next, opponentLastOfferMove: moveNumber }
         if (spoke) next = { ...next, talk: talkAfter }
+        if (standIn) next = { ...next, standInMoves: (next.standInMoves ?? 0) + 1 }
         return next
       })
       if (offer) setBubble({ kind: 'offer' })
