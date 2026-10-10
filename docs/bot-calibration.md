@@ -72,6 +72,23 @@ read with care.
 Random moves measure about 235, the same as the weakest setting: that is the floor.
 Bo (100), Grace (150) and Finn (200) all play at it.
 
+## Check against Lichess (Oct 2026)
+
+Lichess runs Maia bots (maia1, maia5, maia9: trained on 1100, 1500 and 1900
+players) that always play their likeliest move and are rated from games
+against real people. Measured the same way here (Maia-3, always the likeliest
+move, ), our scale lands on their Lichess rapid ratings:
+
+| Setting | Our scale | Lichess bot, rapid (blitz) |
+|---|---|---|
+| 1100 | 1481 | maia1: 1527 (1335) |
+| 1500 | 1657 | maia5: 1655 (1513) |
+| 1900 | 1658 | maia9: 1657 (1558) |
+
+So our numbers read as Lichess rapid ratings. (Different Maia versions, so a
+guide, not proof.) Lichess blitz ratings run about 150 to 200 lower than rapid
+for the same player, so a Lichess blitz 1100 is stronger than a 1100 here.
+
 ## How the app uses it
 
 - `logic/botStrength.ts`: the measured ladder; `botPlan(rating)` blends the two
