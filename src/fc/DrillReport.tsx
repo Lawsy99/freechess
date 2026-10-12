@@ -24,11 +24,13 @@ type Props = {
   onGraded: (grade: DrillGrade) => void
   onNext: () => void
   nextLabel: string
+  /** Play the same drill again (the new try replaces this one in the set). */
+  onReplay: () => void
 }
 
 const SHOWN: MoveRating[] = ['best', 'good', 'inaccuracy', 'mistake', 'blunder']
 
-export function DrillReport({ drill, moves, verdict, onGraded, onNext, nextLabel }: Props) {
+export function DrillReport({ drill, moves, verdict, onGraded, onNext, nextLabel, onReplay }: Props) {
   const [evals, setEvals] = useState<PositionEval[] | null>(null)
   const [progress, setProgress] = useState({ done: 0, total: moves.length + 1 })
   const [failed, setFailed] = useState(false)
@@ -138,6 +140,9 @@ export function DrillReport({ drill, moves, verdict, onGraded, onNext, nextLabel
       )}
       <button type="button" className="fc-primary" onClick={onNext}>
         {nextLabel}
+      </button>
+      <button type="button" className="fc-secondary" onClick={onReplay}>
+        Try this drill again
       </button>
       <button type="button" className="fc-secondary" onClick={() => setLooking(true)}>
         Look at the moves

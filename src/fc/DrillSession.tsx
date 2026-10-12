@@ -1,7 +1,8 @@
 // A set of drills in a row (FreeChess, Oct 2026, after maiachess.com): each
 // one played, then its report, then the next; at the end, how the set went.
 // In a lesson the set has to be passed (enough drills passed); if not, a
-// fresh set. Built-your-own sets just end.
+// fresh set. Built-your-own sets just end. Any drill can be played again from
+// its report; the latest try is the one that counts.
 import { useState } from 'react'
 import { summariseDrills, type Drill, type DrillGrade } from '../logic/drills'
 import type { DrillVerdict } from '../logic/endgameDrill'
@@ -28,6 +29,8 @@ export function DrillSession({ drills, rating, pass, onDone, onRetry }: Props) {
   const [index, setIndex] = useState(0)
   const [played, setPlayed] = useState<Played | null>(null)
   const [grades, setGrades] = useState<DrillGrade[]>([])
+  // Tries at this drill: a replay starts it afresh.
+  const [tries, setTries] = useState(0)
 
   if (drills.length === 0) {
     return (
@@ -71,7 +74,7 @@ export function DrillSession({ drills, rating, pass, onDone, onRetry }: Props) {
   if (!played) {
     return (
       <DrillPlayer
-        key={`${index}:${drill.id}`}
+        key={`${index}:${drill.id}:${tries}`}
         drill={drill}
         rating={rating}
         position={{ index, total: drills.length }}
@@ -84,7 +87,7 @@ export function DrillSession({ drills, rating, pass, onDone, onRetry }: Props) {
   }
   return (
     <DrillReport
-      key={`report:${index}`}
+      key={`report:${index}:${tries}`}
       drill={drill}
       moves={played.moves}
       verdict={played.verdict}
@@ -92,7 +95,14 @@ export function DrillSession({ drills, rating, pass, onDone, onRetry }: Props) {
       onNext={() => {
         window.scrollTo(0, 0)
         setPlayed(null)
+        setTries(0)
         setIndex(index + 1)
+      }}
+      onReplay={() => {
+        window.scrollTo(0, 0)
+        setGrades((all) => all.slice(0, index))
+        setPlayed(null)
+        setTries((t) => t + 1)
       }}
       nextLabel={index + 1 < drills.length ? 'Next drill' : 'See how you did'}
     />
