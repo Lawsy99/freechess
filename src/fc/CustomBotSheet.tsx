@@ -1,13 +1,14 @@
-// The custom bot: pick any strength and a style, then a colour, then play
-// (FreeChess, Sep 2026). Starts from what you chose last time, or your rating.
+// The custom bot: pick any strength, then a colour, then play (FreeChess,
+// Sep 2026). Starts from what you chose last time, or your rating. (Oct 2026:
+// no style to pick any more: every bot is pure Maia at its rating.)
 import { useState } from 'react'
 import { BOT_GROUPS } from '../data/bots'
 import type { Style } from '../data/characters'
-import { CUSTOM_MAX, CUSTOM_MIN, CUSTOM_STEP, CUSTOM_STYLES, customBot } from '../data/customBot'
-import { groupFor, STYLE_LABELS } from '../logic/botPicks'
+import { CUSTOM_MAX, CUSTOM_MIN, CUSTOM_STEP, customBot } from '../data/customBot'
+import { groupFor } from '../logic/botPicks'
 import type { Bot } from '../data/bots'
 import type { Profile } from '../logic/profile'
-import { BotBanner, type ColourChoice } from './BotSheet'
+import { BotBanner, HowTheyPlay, type ColourChoice } from './BotSheet'
 import type { TimeControlId } from '../logic/clock'
 import { GameOptions } from './GameOptions'
 
@@ -22,7 +23,7 @@ type Props = {
 export function CustomBotSheet({ profile, onBack, onPlay, timeControl }: Props) {
   const yours = Math.round(profile.rating?.rating ?? 800)
   const [rating, setRating] = useState(profile.customBot?.rating ?? Math.round(yours / CUSTOM_STEP) * CUSTOM_STEP)
-  const [style, setStyle] = useState<Style>(profile.customBot?.style ?? 'adaptive')
+  const style: Style = profile.customBot?.style ?? 'adaptive'
   const [colour, setColour] = useState<ColourChoice>('random')
   const [time, setTime] = useState<TimeControlId>(timeControl)
   const bot = customBot(rating, style)
@@ -34,7 +35,7 @@ export function CustomBotSheet({ profile, onBack, onPlay, timeControl }: Props) 
       <BotBanner bg="6c9bff" who={bot.id} onBack={onBack} />
       <div className="fc-bot-hero">
         <h1>Custom bot</h1>
-        <p className="fc-bot-meta">Choose how strong it is and how it plays.</p>
+        <p className="fc-bot-meta">Choose how strong it is.</p>
       </div>
 
       <section className="fc-card fc-custom-strength">
@@ -65,17 +66,7 @@ export function CustomBotSheet({ profile, onBack, onPlay, timeControl }: Props) 
         />
       </section>
 
-      <section>
-        <h2 className="fc-menu-label">Style</h2>
-        <div className="fc-style-grid" role="radiogroup" aria-label="Style">
-          {CUSTOM_STYLES.map((s) => (
-            <button key={s} type="button" role="radio" aria-checked={style === s} className={style === s ? 'selected' : undefined} onClick={() => setStyle(s)}>
-              {STYLE_LABELS[s].label}
-            </button>
-          ))}
-        </div>
-        <p className="fc-style-detail">{STYLE_LABELS[style].detail}</p>
-      </section>
+      <HowTheyPlay rating={bot.rating} />
 
       <GameOptions colour={colour} onColour={setColour} time={time} onTime={setTime} />
       <button type="button" className="fc-primary" onClick={() => onPlay(bot, colour, time)}>

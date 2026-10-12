@@ -8,9 +8,7 @@ import { FACES } from '../data/faces'
 import type { Profile } from '../logic/profile'
 import type { TimeControlId } from '../logic/clock'
 import { GameOptions } from './GameOptions'
-import { BackIcon, Stars, StyleIcon } from './icons'
-import { STYLE_LABELS } from '../logic/botPicks'
-import { favouriteOpenings } from '../logic/favouriteOpenings'
+import { BackIcon, Stars } from './icons'
 
 export type ColourChoice = 'w' | 'random' | 'b'
 
@@ -27,11 +25,8 @@ export function BotSheet({ bot, profile, onBack, onPlay, timeControl }: Props) {
   const [colour, setColour] = useState<ColourChoice>('random')
   const [time, setTime] = useState<TimeControlId>(timeControl)
   const record = profile.results[bot.id]
-  const style = STYLE_LABELS[bot.style]
   const group = BOT_GROUPS.find((g) => g.id === bot.group)
   const bg = FACES[bot.id]?.bg ?? '8fb3ff'
-  const openings = favouriteOpenings(bot.id)
-  const list = (xs: string[]) => xs.join(' and ')
   return (
     <main className={`fc-page fc-bot-sheet lvl-${bot.group}`}>
       <BotBanner bg={bg} who={bot.id} onBack={onBack} />
@@ -47,22 +42,7 @@ export function BotSheet({ bot, profile, onBack, onPlay, timeControl }: Props) {
         <Stars earned={profile.stars[bot.id] ?? 0} size={24} />
       </div>
       <p className="fc-bubble">{bot.bio}</p>
-      <div className="fc-card fc-style">
-        <span className="fc-style-icon">
-          <StyleIcon style={bot.style} size={22} />
-        </span>
-        <span className="fc-style-text">
-          <strong>{style.label}</strong>
-          <span>{style.detail}</span>
-          {(openings.white.length > 0 || openings.black.length > 0) && (
-            <span className="fc-openings-line">
-              {openings.white.length > 0 && <>Opens with {list(openings.white)} as White</>}
-              {openings.white.length > 0 && openings.black.length > 0 && <>, and </>}
-              {openings.black.length > 0 && <>{openings.white.length > 0 ? '' : 'Plays '}{list(openings.black)} as Black</>}.
-            </span>
-          )}
-        </span>
-      </div>
+      <HowTheyPlay rating={bot.rating} />
       {record && record.wins + record.losses + record.draws > 0 && (
         <p className="fc-record">
           You: {record.wins} won · {record.losses} lost{record.draws ? ` · ${record.draws} drawn` : ''}
@@ -84,6 +64,18 @@ export function BotBanner({ bg, who, onBack }: { bg: string; who: string; onBack
         <BackIcon size={22} /> Bots
       </button>
       <Portrait who={who} size={128} className="fc-face fc-banner-face" />
+    </div>
+  )
+}
+
+/** How every bot plays (Oct 2026: pure Maia), said plainly on its page. */
+export function HowTheyPlay({ rating }: { rating: number }) {
+  return (
+    <div className="fc-card fc-style">
+      <span className="fc-style-text">
+        <strong>Plays like a real {rating} player</strong>
+        <span>Every move comes from Maia, an AI trained on millions of real games. It picks each move as often as players at {rating} do, mistakes and all.</span>
+      </span>
     </div>
   )
 }

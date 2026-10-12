@@ -4,13 +4,10 @@
 import { useState } from 'react'
 import { FACES } from '../data/faces'
 import { LEGEND_LEVELS, legendLevel, type Legend } from '../data/legends'
-import { STYLE_LABELS } from '../logic/botPicks'
 import type { TimeControlId } from '../logic/clock'
-import { favouriteOpenings } from '../logic/favouriteOpenings'
 import type { Profile } from '../logic/profile'
-import { BotBanner, type ColourChoice } from './BotSheet'
+import { BotBanner, HowTheyPlay, type ColourChoice } from './BotSheet'
 import { GameOptions } from './GameOptions'
-import { StyleIcon } from './icons'
 
 type Props = {
   legend: Legend
@@ -27,8 +24,6 @@ export function LegendSheet({ legend, profile, timeControl, onBack, onPlay }: Pr
   const level = legendLevel(beaten)
   const finished = beaten >= LEGEND_LEVELS.length
   const rating = LEGEND_LEVELS[level]
-  const style = STYLE_LABELS[legend.style]
-  const openings = favouriteOpenings(legend.id)
   return (
     <main className="fc-page fc-bot-sheet fc-legend-sheet">
       <BotBanner bg={FACES[legend.id]?.bg ?? 'd9c7a3'} who={legend.id} onBack={onBack} />
@@ -67,22 +62,7 @@ export function LegendSheet({ legend, profile, timeControl, onBack, onPlay }: Pr
         </ol>
       </section>
 
-      <div className="fc-card fc-style">
-        <span className="fc-style-icon">
-          <StyleIcon style={legend.style} size={22} />
-        </span>
-        <span className="fc-style-text">
-          <strong>{style.label}</strong>
-          <span>{style.detail}</span>
-          {(openings.white.length > 0 || openings.black.length > 0) && (
-            <span className="fc-openings-line">
-              {openings.white.length > 0 && <>Opens with {openings.white.join(' and ')} as White</>}
-              {openings.white.length > 0 && openings.black.length > 0 && <>, and </>}
-              {openings.black.length > 0 && <>{openings.black.join(' and ')} as Black</>}.
-            </span>
-          )}
-        </span>
-      </div>
+      <HowTheyPlay rating={rating} />
 
       <GameOptions colour={colour} onColour={setColour} time={time} onTime={setTime} />
       <button type="button" className="fc-primary" onClick={() => onPlay(rating, colour, time)}>
