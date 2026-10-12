@@ -1,8 +1,8 @@
-// Chooses the opponent's move. Characters first play from their opening
-// book; after that every bot plays through Maia-3 at the setting measured to
-// match its rating (logic/botStrength.ts, Oct 2026), nudged towards the
-// character's style. If Maia is unavailable, the old Stockfish-based bot
-// stands in until it's back.
+// Chooses the opponent's move. Every bot is pure Maia (Joseph, Oct 2026):
+// Maia-3 at exactly the bot's rating, from the first move, each move picked
+// as often as real players at that rating play it, the way maiachess.com
+// plays. No opening books, style nudges or engine help. If Maia is
+// unavailable, the old Stockfish-based bot stands in until it's back.
 // Then a human-like pause: the design's thinking times for characters, a
 // short one for practice levels.
 import { Chess } from 'chess.js'
@@ -10,11 +10,8 @@ import { TEST_THINK_TIME } from '../data/testOpponents'
 import type { Opponent } from '../data/opponents'
 import { botDepth, pickBotMove } from '../logic/botMistakeModel'
 import { toCentipawns } from '../logic/evaluation'
-import { bookMove } from '../logic/openingBook'
-import { MIN_LIKELIHOOD } from '../logic/sampleMove'
-import { botPlan, standInRating } from '../logic/botStrength'
-import { checkCandidates, pickHumanMove, usesCheck, type MoveCheck } from '../logic/humanBot'
-import { applyUci } from '../logic/game'
+import { sampleMove } from '../logic/sampleMove'
+import { maiaSetting, standInRating } from '../logic/botStrength'
 import { styleWeight } from '../logic/style'
 import { classifyMove, thinkTime, type MoveKind } from '../logic/thinkTime'
 import { getMaia } from './maia/maia'
@@ -34,17 +31,16 @@ export async function chooseOpponentMove(
   fen: string,
   movesSoFar: readonly string[],
   opponent: Opponent,
-  /** Toby's targeting: prefer book lines heading into this opening. */
-  preferOpening?: string,
+  /** (Club Night's rival steered openings; unused now bots have no books.) */
+  _preferOpening?: string,
   /** A move that must be played (Pemberton's announced trap, while the game follows it). */
   forced?: string | null,
   /** The longest the bot may take (in a timed game, less when it's short of time). */
   maxPauseMs = Infinity,
 ): Promise<OpponentChoice> {
   const started = Date.now()
-  const colour = new Chess(fen).turn()
-  const book =
-    forced ?? (opponent.character ? bookMove(opponent.character.id, colour, movesSoFar, Math.random, preferOpening) : null)
+  // (Only a scripted coaching line forces a move; FreeChess has none today.)
+  const book = forced ?? null
 
   let choice: OpponentChoice
   let kind: MoveKind
@@ -79,39 +75,11 @@ export async function chooseOpponentMove(
 }
 
 async function maiaMove(fen: string, opponent: Opponent, moves: readonly string[]) {
-  // (Calibrated with Maia imagining an equal opponent, so asked the same way.)
-  const plan = botPlan(opponent.rating)
-  const { policy, ms } = await getMaia().predict(fen, plan.maiaElo, plan.maiaElo)
-  const style = opponent.character?.style
-  const traits = opponent.character?.traits ?? []
-  const nudged = style
-    ? policy.map((m) => (m.p >= MIN_LIKELIHOOD ? { ...m, p: m.p * styleWeight(style, fen, m.move, traits) } : m))
-    : policy
+  // (Maia imagines an opponent of the same rating, as on maiachess.com.)
+  const elo = maiaSetting(opponent.rating)
+  const { policy, ms } = await getMaia().predict(fen, elo, elo)
   const kind = classifyMove(policy[0]?.p ?? 1, isRecaptureAvailable(fen, moves, policy[0]?.move))
-  const move = usesCheck(plan) ? await checkedMove(fen, nudged, plan.check!) : pickHumanMove(nudged, plan)
-  return { choice: { move, maiaMs: ms }, kind }
-}
-
-/**
- * The strongest bots: Stockfish compares Maia's few likeliest moves and plays
- * the soundest, so the move is still one a strong person would play.
- */
-async function checkedMove(fen: string, policy: readonly { move: string; p: number }[], check: MoveCheck): Promise<string | null> {
-  const candidates = checkCandidates(policy, check)
-  if (candidates.length <= 1) return candidates[0] ?? null
-  let best: { move: string; cp: number } | null = null
-  for (const move of candidates) {
-    const after = new Chess(fen)
-    if (!applyUci(after, move)) continue
-    // (Scored for the side that moved: the reply's score, turned round.)
-    const cp = after.isCheckmate()
-      ? Infinity
-      : after.isDraw()
-        ? 0
-        : -toCentipawns((await getEngine().search(after.fen(), { depth: check.depth, movetime: 600 })).lines[0]?.score ?? { type: 'cp', value: 0 })
-    if (!best || cp > best.cp) best = { move, cp }
-  }
-  return best?.move ?? candidates[0]
+  return { choice: { move: sampleMove(policy), maiaMs: ms }, kind }
 }
 
 async function botMove(fen: string, opponent: Opponent, moves: readonly string[]) {

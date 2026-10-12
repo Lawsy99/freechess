@@ -8,8 +8,8 @@ export type Opponent = {
   name: string
   rating: number
   /**
-   * 'maia': every bot (Oct 2026), at the Maia setting measured to match its
-   * rating (logic/botStrength.ts). 'bot': the old Stockfish-based bot, now only
+   * 'maia': every bot (Oct 2026), pure Maia at its own rating
+   * (logic/botStrength.ts). 'bot': the old Stockfish-based bot, now only
    * Maia's stand-in. 'full': Stockfish's best move every time.
    */
   engine: 'bot' | 'maia' | 'full'

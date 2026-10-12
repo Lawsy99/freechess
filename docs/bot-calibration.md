@@ -89,7 +89,15 @@ So our numbers read as Lichess rapid ratings. (Different Maia versions, so a
 guide, not proof.) Lichess blitz ratings run about 150 to 200 lower than rapid
 for the same player, so a Lichess blitz 1100 is stronger than a 1100 here.
 
-## How the app uses it
+## How the app uses it (superseded, Oct 2026)
+
+Joseph chose pure Maia: every bot now plays Maia at exactly its own rating, from move
+1, like maiachess.com, with no opening books, style nudges, rating remapping or
+Stockfish help (logic/botStrength.ts). The measurements above stay as a reference:
+they show where pure Maia plays above or below its number. What follows described
+the calibrated version that ran before.
+
+### The calibrated version
 
 - `logic/botStrength.ts`: the measured ladder; `botPlan(rating)` blends the two
   neighbouring rungs. `standInRating` sets the old bot lower while it stands in

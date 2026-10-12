@@ -1,44 +1,20 @@
 import { describe, expect, it } from 'vitest'
 import { BOTS } from '../data/bots'
-import { botPlan, LADDER } from './botStrength'
+import { maiaSetting, MAIA_MAX, MAIA_MIN, standInRating } from './botStrength'
 
 describe('bot strength', () => {
-  it('has a ladder that only gets stronger', () => {
-    for (let i = 1; i < LADDER.length; i++) expect(LADDER[i].strength).toBeGreaterThan(LADDER[i - 1].strength)
+  it('plays every bot as Maia at its own rating', () => {
+    for (const b of BOTS) expect(maiaSetting(b.rating)).toBe(b.rating)
   })
 
-  it('changes one setting at a time between neighbouring rungs', () => {
-    for (let i = 1; i < LADDER.length; i++) {
-      const [a, b] = [LADDER[i - 1], LADDER[i]]
-      const changed = [a.maiaElo !== b.maiaElo, a.temperature !== b.temperature || a.considered !== b.considered].filter(Boolean)
-      expect(changed.length, `rungs ${i - 1} and ${i}`).toBeLessThanOrEqual(1)
-    }
+  it('keeps Maia inside the ratings it knows', () => {
+    expect(maiaSetting(20)).toBe(MAIA_MIN)
+    expect(maiaSetting(3000)).toBe(MAIA_MAX)
   })
 
-  it('plays a rung exactly at its measured strength', () => {
-    for (const { strength, ...settings } of LADDER) {
-      const plan = botPlan(strength)
-      expect(plan.maiaElo).toBe(settings.maiaElo)
-      expect(plan.temperature).toBe(settings.temperature)
-      expect(plan.considered).toBe(settings.considered)
-      expect(!!plan.includeRare).toBe(!!settings.includeRare)
-      expect(plan.check).toEqual(settings.check)
-      expect(plan.checkChance ?? 0).toBeCloseTo(settings.check ? (settings.checkChance ?? 1) : 0)
-    }
-  })
-
-  it('blends between rungs', () => {
-    const [a, b] = [LADDER[3], LADDER[4]]
-    const mid = botPlan((a.strength + b.strength) / 2)
-    expect(mid.maiaElo).toBeGreaterThan(Math.min(a.maiaElo, b.maiaElo) - 1)
-    expect(mid.maiaElo).toBeLessThan(Math.max(a.maiaElo, b.maiaElo) + 1)
-  })
-
-  it('covers every bot in the app', () => {
-    const ratings = BOTS.map((b) => b.rating)
-    // (Random moves measure about 230 too: nothing plays weaker, so the few bots
-    // rated below the floor play at it.)
-    expect(Math.min(...ratings)).toBeGreaterThanOrEqual(LADDER[0].strength - 130)
-    expect(Math.max(...ratings)).toBeLessThanOrEqual(LADDER[LADDER.length - 1].strength + 1)
+  it('sets the stand-in bot lower, since it plays above its setting', () => {
+    expect(standInRating(1315)).toBe(700)
+    expect(standInRating(500)).toBe(100)
+    expect(standInRating(2000)).toBe(800)
   })
 })

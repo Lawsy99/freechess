@@ -41,10 +41,10 @@ folder is still called `open-file` (the app's first working name).
 - Review after every game: summary, then the step-through with "Try it again" on your
   moves. No "biggest moments" to play through (Try it again replaced them).
 - Bots never resign: every game is played to the end (logic/opponentDecisions.ts).
-- Bot strength (Oct 2026): every bot plays through Maia at the setting measured to match
-  its rating (logic/botStrength.ts, logic/humanBot.ts; docs/bot-calibration.md). Loosened for
-  the weakest, sharpened then checked by Stockfish for the strongest. No random moves; no
-  Stockfish skill levels (they play like engines with odd blunders, not like people).
+- Bot strength (Oct 2026, Joseph's choice): every bot is pure Maia at exactly its rating,
+  from move 1, like maiachess.com (logic/botStrength.ts, engine/opponent.ts). No opening books,
+  style nudges, rating remapping or Stockfish help. The calibration (docs/bot-calibration.md)
+  shows Maia's settings don't match playing strength evenly; kept as reference.
 - Learn (data/learnPath.ts): 6 units, 25 lessons; each is mostly doing (puzzles by theme,
   play-outs against the engine, opening drills) after a two- or three-sentence idea. A
   puzzle round passes with enough solved first time; otherwise a fresh set.
