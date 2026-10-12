@@ -11,8 +11,8 @@
 3. **Puzzles (built, Sep 2026).** Unlimited, rated to your level, their own puzzle rating
    (Lichess puzzle set, as in Club Night). Maybe a daily puzzle and a timed
    rush mode.
-4. **Learn (built, Sep 2026).** A Duolingo-style path of units: a short explanation, puzzles,
-   then positions to play out; pass to unlock the next. Ticks the lesson goal.
+4. **Learn (built, Sep 2026).** A Duolingo-style path of units: a short explanation, then
+   (since Oct 2026) drills against Maia; pass to unlock the next. Ticks the lesson goal.
 5. **From chess.com (built, 30 Sep 2026).** Review upgrade (graph, "you played like",
    phases, brilliant/great/book), analysis board (set up or paste any position,
    draw arrows), clocks, Insights, Achievements, the vision trainer, the custom
@@ -64,7 +64,20 @@
    through Maia at a measured setting; about 2,500 calibration games put Maia, its
    loosened and sharpened forms and a Stockfish-checked form on one Elo scale pinned at
    Maia 1500 = 1500 (docs/bot-calibration.md). Maia downloads soon after the app opens.
-12. **Next.** A real-iPhone check by Joseph; piece sets (needs a download, asked);
+   Then (Joseph's choice) pure Maia: every bot is Maia at exactly its rating, from move 1,
+   with no books or styles. Bot pages say so ("Plays like a real 850 player"); bios no
+   longer promise openings or styles; the custom bot has no style to pick.
+12. **Drills (built, Oct 2026, after maiachess.com).** Lessons are now an idea, then
+   drills: you play a position out against Maia at your level, then get a report
+   (passed or not, accuracy, best/good/inaccuracy/mistake/blunder counts, the graph,
+   the Coach on the move that mattered, and "you played like", Maia's estimate from
+   how often players of each rating choose your moves). Tactics lessons use real-game
+   positions by theme (find the idea, then play on for 6 moves); openings are shown,
+   then played from move 1 for 10 moves; finishing lessons are played to the goal.
+   Pass enough drills to pass the lesson, or get a fresh set. "Build your own drills"
+   on Learn: openings, tactics or finishing, Maia easier/your level/harder, 5 to 20
+   moves, 3 or 5 drills; it counts as the day's lesson. (logic/drills.ts, fc/Drill*.tsx.)
+13. **Next.** A real-iPhone check by Joseph; piece sets (needs a download, asked);
    later, the App Store version (Capacitor). Bundle is about 300 KB gzipped: the
    dialogue file could be trimmed if load time becomes a problem.
 

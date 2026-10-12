@@ -1,26 +1,28 @@
 // The Learn path (Joseph, Sep 2026): Duolingo-style units of short lessons.
 // Every lesson is mostly doing, not reading: a two- or three-sentence idea,
-// then puzzles on it (real positions, find the move), a harder challenge
-// with one try each, and in some lessons a position to play out against the
-// engine or an opening to play through. Pass to unlock the next lesson.
+// then drills (Oct 2026, after maiachess.com): you play positions out against
+// Maia at your level, and get a report on each. Pass enough to unlock the
+// next lesson. That keeps lessons distinct from puzzles: not "find the one
+// move", but find it and play on like a real game.
 //
-// Puzzles come from the Lichess set by theme, pitched around your rating;
-// play-outs from data/endgameDrills.ts; openings from data/openingLessons.ts.
+// Tactics positions come from real games in the Lichess set, by theme;
+// finishing positions from data/endgameDrills.ts; openings from
+// data/openingLessons.ts (shown first, then played from move 1).
+import type { DrillSpec } from '../logic/drills'
 import type { OpeningDrill } from './openingLessons'
 
 export type LearnStep =
   /** The idea, in a few sentences. The only step where you just read. */
   | { kind: 'idea'; text: string }
   /**
-   * Puzzles on a theme. `pass`: how many must be solved cleanly. `offset`:
-   * how far above or below your level they're pitched. `oneTry`: no second
-   * go (the challenge round).
+   * Drills against Maia: `count` of them, `pass` to be passed. Tactics
+   * positions are pitched `offset` from your puzzle rating.
    */
-  | { kind: 'puzzles'; title: string; themes: string[]; count: number; pass: number; offset: number; oneTry?: boolean }
-  /** Play a position out against the engine (a drill set from endgameDrills.ts, by your rating). */
-  | { kind: 'endgame'; drill: string }
-  /** Play an opening's moves yourself (openingLessons.ts). */
+  | { kind: 'drills'; title: string; spec: DrillSpec; count: number; pass: number; offset?: number }
+  /** An opening's moves shown and practised, with why (openingLessons.ts), before its drills. */
   | { kind: 'opening'; drill: string }
+  /** Build your own set of drills (the Drills card on Learn). */
+  | { kind: 'build-drills' }
   /** How the pieces move, hands on (data/rulesTutorial.ts), for complete beginners. */
   | { kind: 'rules' }
   /** Your own opening, as you play it, with the slips put right (logic/myOpenings.ts). */
@@ -29,17 +31,32 @@ export type LearnStep =
 export type Lesson = { id: string; title: string; steps: LearnStep[] }
 export type Unit = { id: string; title: string; about: string; colour: string; lessons: Lesson[] }
 
-/** The usual shape: the idea, a practice round, then a harder challenge with one try each. */
+/** The usual shape: the idea, then positions from real games where it's in the air, played on for a few moves. */
 function tactic(id: string, title: string, theme: string, idea: string): Lesson {
+  return { id, title, steps: [{ kind: 'idea', text: idea }, themeDrills(title, theme)] }
+}
+
+function themeDrills(title: string, theme: string, moves = 6): LearnStep {
+  return { kind: 'drills', title, spec: { kind: 'theme', theme, moves }, count: 3, pass: 2, offset: -150 }
+}
+
+/** An opening: shown move by move, then played from move 1 against Maia, 10 moves each. */
+function opening(id: string, title: string, idea: string): Lesson {
   return {
     id,
     title,
     steps: [
       { kind: 'idea', text: idea },
-      { kind: 'puzzles', title: 'Practice', themes: [theme], count: 5, pass: 4, offset: -200 },
-      { kind: 'puzzles', title: 'Challenge: one try each', themes: [theme], count: 3, pass: 2, offset: 0, oneTry: true },
+      { kind: 'opening', drill: id },
+      { kind: 'drills', title, spec: { kind: 'opening', opening: id, moves: 10 }, count: 3, pass: 2 },
     ],
   }
+}
+
+/** A finishing position, played to the end against Maia. */
+function finishing(id: string, title: string, drill: string, idea: string, extra?: LearnStep): Lesson {
+  const steps: LearnStep[] = [{ kind: 'idea', text: idea }, { kind: 'drills', title, spec: { kind: 'endgame', drill }, count: 1, pass: 1 }]
+  return { id, title, steps: extra ? [...steps, extra] : steps }
 }
 
 export const LEARN_PATH: Unit[] = [
@@ -53,14 +70,7 @@ export const LEARN_PATH: Unit[] = [
       { id: 'rules', title: 'How the pieces move', steps: [{ kind: 'rules' }] },
       tactic('free-pieces', 'Take the free piece', 'hangingPiece', 'Before anything else, look at every capture you have. If a piece is left undefended, take it. Then check nothing of yours is left the same way.'),
       tactic('mate-in-one', 'Checkmate in one', 'mateIn1', 'Checkmate: the king is in check and has no way out. Look at every check you have, and for each one count the king’s escape squares.'),
-      {
-        id: 'lone-king',
-        title: 'Mate a lone king',
-        steps: [
-          { kind: 'idea', text: 'With a big material advantage, the win is checkmate, and you need a method. Push the king to the edge, step by step, then mate it. Watch out for stalemate: always leave it a move.' },
-          { kind: 'endgame', drill: 'lone-king' },
-        ],
-      },
+      finishing('lone-king', 'Mate a lone king', 'lone-king', 'With a big material advantage, the win is checkmate, and you need a method. Push the king to the edge, step by step, then mate it. Watch out for stalemate: always leave it a move.'),
       tactic('stay-safe', 'Keep your pieces safe', 'defensiveMove', 'Every move your opponent makes might threaten something. Before you move, ask what their last move is attacking, and deal with it.'),
     ],
   },
@@ -95,70 +105,14 @@ export const LEARN_PATH: Unit[] = [
     about: 'Play the first moves yourself, and know why.',
     colour: '#c792ea',
     lessons: [
-      {
-        id: 'italian',
-        title: 'The Italian Game (White)',
-        steps: [
-          { kind: 'idea', text: 'Control the centre, bring out your knights and bishops, castle. The Italian does all three: e4, Nf3, Bc4 aiming at f7, then castle.' },
-          { kind: 'opening', drill: 'italian' },
-        ],
-      },
-      {
-        id: 'london',
-        title: 'The London System (White)',
-        steps: [
-          { kind: 'idea', text: 'A solid set-up you can play against almost anything: d4, Bf4, e3, Nf3, then c3 and Bd3. Easy to learn, hard to beat.' },
-          { kind: 'opening', drill: 'london' },
-        ],
-      },
-      {
-        id: 'black-e4',
-        title: 'Answering 1.e4 (Black)',
-        steps: [
-          { kind: 'idea', text: 'Meet e4 with e5: claim your share of the centre, then develop just as White does.' },
-          { kind: 'opening', drill: 'black-e4' },
-        ],
-      },
-      {
-        id: 'black-d4',
-        title: 'Answering 1.d4 (Black)',
-        steps: [
-          { kind: 'idea', text: 'Meet d4 with d5, and develop solidly: knights out, bishop out, castle.' },
-          { kind: 'opening', drill: 'black-d4' },
-        ],
-      },
-      {
-        id: 'queens-gambit',
-        title: 'The Queen’s Gambit (White)',
-        steps: [
-          { kind: 'idea', text: 'After d4 d5, play c4: it attacks their centre pawn from the side. If they take, you win the pawn back. Then develop and castle.' },
-          { kind: 'opening', drill: 'queens-gambit' },
-        ],
-      },
-      {
-        id: 'ruy-lopez',
-        title: 'The Ruy Lopez (White)',
-        steps: [
-          { kind: 'idea', text: 'Like the Italian, but the bishop goes to b5, attacking the knight that guards e5. Castle, Re1, c3, then d4 for a big centre.' },
-          { kind: 'opening', drill: 'ruy-lopez' },
-        ],
-      },
-      {
-        id: 'caro-kann',
-        title: 'The Caro-Kann (Black)',
-        steps: [
-          { kind: 'idea', text: 'Against e4: c6, then d5. Bring your light bishop out before playing e6, so it isn’t shut in. Solid and safe.' },
-          { kind: 'opening', drill: 'caro-kann' },
-        ],
-      },
-      {
-        id: 'sicilian',
-        title: 'The Sicilian (Black)',
-        steps: [
-          { kind: 'idea', text: 'Against e4: c5. When White plays d4, swap your c-pawn for their centre pawn, then develop fast. Sharp and full of chances.' },
-          { kind: 'opening', drill: 'sicilian' },
-        ],
-      },
+      opening('italian', 'The Italian Game (White)', 'Control the centre, bring out your knights and bishops, castle. The Italian does all three: e4, Nf3, Bc4 aiming at f7, then castle.'),
+      opening('london', 'The London System (White)', 'A solid set-up you can play against almost anything: d4, Bf4, e3, Nf3, then c3 and Bd3. Easy to learn, hard to beat.'),
+      opening('black-e4', 'Answering 1.e4 (Black)', 'Meet e4 with e5: claim your share of the centre, then develop just as White does.'),
+      opening('black-d4', 'Answering 1.d4 (Black)', 'Meet d4 with d5, and develop solidly: knights out, bishop out, castle.'),
+      opening('queens-gambit', 'The Queen’s Gambit (White)', 'After d4 d5, play c4: it attacks their centre pawn from the side. If they take, you win the pawn back. Then develop and castle.'),
+      opening('ruy-lopez', 'The Ruy Lopez (White)', 'Like the Italian, but the bishop goes to b5, attacking the knight that guards e5. Castle, Re1, c3, then d4 for a big centre.'),
+      opening('caro-kann', 'The Caro-Kann (Black)', 'Against e4: c6, then d5. Bring your light bishop out before playing e6, so it isn’t shut in. Solid and safe.'),
+      opening('sicilian', 'The Sicilian (Black)', 'Against e4: c5. When White plays d4, swap your c-pawn for their centre pawn, then develop fast. Sharp and full of chances.'),
       tactic('opening-traps', 'Opening tricks', 'opening', 'Games are often decided in the first ten moves by a loose piece or a trap. Find the winning idea in each of these openings.'),
     ],
   },
@@ -168,57 +122,13 @@ export const LEARN_PATH: Unit[] = [
     about: 'Turn an advantage into a win.',
     colour: '#f5c04a',
     lessons: [
-      {
-        id: 'king-pawn',
-        title: 'King and pawn',
-        steps: [
-          { kind: 'idea', text: 'In pawn endings the king is a fighting piece. Put it in front of your pawn, and use the opposition: kings facing each other, the one not to move wins the ground.' },
-          { kind: 'endgame', drill: 'king-pawn' },
-          { kind: 'puzzles', title: 'Pawn endgames', themes: ['pawnEndgame'], count: 4, pass: 3, offset: -200 },
-        ],
-      },
-      {
-        id: 'queen-mate',
-        title: 'Mate with the queen',
-        steps: [
-          { kind: 'idea', text: 'A queen and king against a lone king is always a win, if you avoid stalemate. Box the king in with your queen, a knight’s move away, then bring your king up to help.' },
-          { kind: 'endgame', drill: 'queen-mate' },
-        ],
-      },
-      {
-        id: 'rook-mate',
-        title: 'Mate with the rook',
-        steps: [
-          { kind: 'idea', text: 'Harder than the queen, but always a win. Your rook cuts the king off; your king does the pushing. Take the opposition, then check.' },
-          { kind: 'endgame', drill: 'rook-mate' },
-        ],
-      },
-      {
-        id: 'key-squares',
-        title: 'Key squares',
-        steps: [
-          { kind: 'idea', text: 'In king and pawn endings, your king wins by reaching a key square: two ranks in front of the pawn. Get there first, and the pawn walks home.' },
-          { kind: 'endgame', drill: 'key-squares' },
-        ],
-      },
-      {
-        id: 'opposition',
-        title: 'Hold the draw',
-        steps: [
-          { kind: 'idea', text: 'A pawn down is often only a draw if you know how. Stand face to face with their king, one square between, and make them move first: the opposition.' },
-          { kind: 'endgame', drill: 'opposition' },
-        ],
-      },
+      finishing('king-pawn', 'King and pawn', 'king-pawn', 'In pawn endings the king is a fighting piece. Put it in front of your pawn, and use the opposition: kings facing each other, the one not to move wins the ground.', themeDrills('Pawn endgames', 'pawnEndgame', 8)),
+      finishing('queen-mate', 'Mate with the queen', 'queen-mate', 'A queen and king against a lone king is always a win, if you avoid stalemate. Box the king in with your queen, a knight’s move away, then bring your king up to help.'),
+      finishing('rook-mate', 'Mate with the rook', 'rook-mate', 'Harder than the queen, but always a win. Your rook cuts the king off; your king does the pushing. Take the opposition, then check.'),
+      finishing('key-squares', 'Key squares', 'key-squares', 'In king and pawn endings, your king wins by reaching a key square: two ranks in front of the pawn. Get there first, and the pawn walks home.'),
+      finishing('opposition', 'Hold the draw', 'opposition', 'A pawn down is often only a draw if you know how. Stand face to face with their king, one square between, and make them move first: the opposition.'),
       tactic('promotion', 'Promotion', 'promotion', 'A pawn that reaches the end becomes a queen. Clear its path, push it, and watch out for the pieces that can stop it.'),
-      {
-        id: 'rook-endings',
-        title: 'Rook endings',
-        steps: [
-          { kind: 'idea', text: 'The most common endings of all. Rooks belong behind passed pawns, and the king comes forward. Cut the enemy king off with your rook.' },
-          { kind: 'endgame', drill: 'rook-ending' },
-          { kind: 'puzzles', title: 'Rook endgames', themes: ['rookEndgame'], count: 4, pass: 3, offset: -200 },
-        ],
-      },
+      finishing('rook-endings', 'Rook endings', 'rook-ending', 'The most common endings of all. Rooks belong behind passed pawns, and the king comes forward. Cut the enemy king off with your rook.', themeDrills('Rook endgames', 'rookEndgame', 8)),
     ],
   },
   {
@@ -268,22 +178,8 @@ export const LEARN_PATH: Unit[] = [
       tactic('passed-pawns', 'Passed pawns', 'advancedPawn', 'A pawn with no enemy pawns in front of it is dangerous. Push it, protect it, and use it to pull their pieces away.'),
       tactic('bishop-endings', 'Bishop endings', 'bishopEndgame', 'Bishops love open boards and long diagonals. Put your pawns on the other colour to your bishop, and use your king.'),
       tactic('knight-endings', 'Knight endings', 'knightEndgame', 'Knights are slow over long distances but tricky up close. Watch for forks, and keep your king active.'),
-      {
-        id: 'lucena',
-        title: 'The Lucena position',
-        steps: [
-          { kind: 'idea', text: 'The most important winning rook ending. Build a bridge: bring your rook to the fourth rank, so it can block the checks when your king steps out.' },
-          { kind: 'endgame', drill: 'lucena' },
-        ],
-      },
-      {
-        id: 'philidor',
-        title: 'The Philidor defence',
-        steps: [
-          { kind: 'idea', text: 'The most important drawing rook ending. Keep your rook on the sixth rank so their king can’t come forward; when the pawn advances, go to the back and check from behind.' },
-          { kind: 'endgame', drill: 'philidor' },
-        ],
-      },
+      finishing('lucena', 'The Lucena position', 'lucena', 'The most important winning rook ending. Build a bridge: bring your rook to the fourth rank, so it can block the checks when your king steps out.'),
+      finishing('philidor', 'The Philidor defence', 'philidor', 'The most important drawing rook ending. Keep your rook on the sixth rank so their king can’t come forward; when the pawn advances, go to the back and check from behind.'),
       tactic('queen-endings', 'Queen endings', 'queenEndgame', 'With queens on, checks come from everywhere. Look for forks and for ways to trade queens into a won pawn ending.'),
     ],
   },

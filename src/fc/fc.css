@@ -1118,7 +1118,7 @@
   padding-bottom: 24px;
 }
 
-.fc-lesson > *:not(.coach-drill):not(.puzzle):not(.fc-round) {
+.fc-lesson > *:not(.coach-drill):not(.puzzle):not(.fc-round):not(.drill-play) {
   margin-left: 16px;
   margin-right: 16px;
 }

@@ -57,11 +57,14 @@ export function moveAccuracy(winBefore: number, winAfter: number): number {
   return Math.max(0, Math.min(100, acc))
 }
 
-/** Grades every move. `evals` has one entry per position: moves.length + 1. */
-export function reviewMoves(moves: readonly string[], evals: readonly PositionEval[]): ReviewedMove[] {
-  const chess = new Chess()
+/**
+ * Grades every move. `evals` has one entry per position: moves.length + 1.
+ * `startFen`: a game (or drill, Oct 2026) that began from another position.
+ */
+export function reviewMoves(moves: readonly string[], evals: readonly PositionEval[], startFen?: string): ReviewedMove[] {
+  const chess = startFen ? new Chess(startFen) : new Chess()
   return moves.map((uci, ply) => {
-    const mover: Colour = ply % 2 === 0 ? 'w' : 'b'
+    const mover: Colour = chess.turn()
     const fenBefore = chess.fen()
     const san = applyUci(chess, uci)?.san ?? uci
     const before = evals[ply]
@@ -187,10 +190,12 @@ export function ratingCounts(moves: readonly ReviewedMove[], side: Colour): Reco
  * move actually played led to, and exactly that when the move played was the
  * engine's own choice. Worked backwards from the end, so it carries through.
  */
-export function settleEvals(moves: readonly string[], evals: readonly PositionEval[]): PositionEval[] {
+export function settleEvals(moves: readonly string[], evals: readonly PositionEval[], startFen?: string): PositionEval[] {
   const out = evals.map((e) => ({ ...e }))
+  // (Who moved at each ply: White first, unless the start position says Black.)
+  const blackFirst = startFen?.split(' ')[1] === 'b'
   for (let ply = Math.min(moves.length, out.length - 1) - 1; ply >= 0; ply--) {
-    const white = ply % 2 === 0
+    const white = (ply % 2 === 0) !== blackFirst
     const now = out[ply].cp
     const next = out[ply + 1].cp
     if (moves[ply] === out[ply].bestMove) out[ply].cp = next

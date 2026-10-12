@@ -1,21 +1,18 @@
 // Playing one Learn lesson, step by step (Joseph, Sep 2026: really playing and
-// thinking, not looking and clicking). A short idea, then puzzles to solve,
-// positions to play out against the engine, or an opening to play through.
-// A puzzle round passes with enough solved cleanly; if not, a fresh set.
+// thinking, not looking and clicking). A short idea, then drills (Oct 2026,
+// after maiachess.com): positions played out against Maia, each with a
+// report. A set passes with enough drills passed; if not, a fresh set.
 import { useEffect, useState } from 'react'
-import { EndgameDrill } from '../components/EndgameDrill'
 import { RulesTutorial } from '../components/RulesTutorial'
 import { OpeningDrill } from '../components/OpeningDrill'
 import { Portrait } from '../components/Portrait'
-import { PuzzleTrainer } from '../components/PuzzleTrainer'
-import { ENDGAME_DRILLS } from '../data/endgameDrills'
 import type { Lesson, LearnStep } from '../data/learnPath'
 import { OPENING_DRILLS } from '../data/openingLessons'
-import { loadPuzzleBank } from '../engine/puzzleBank'
-import { lessonPuzzleRating, roundPassed } from '../logic/learn'
-import { pickPuzzles, type Puzzle } from '../logic/puzzles'
-import { loadPuzzleProgress, updatePuzzleProgress } from '../storage/db'
+import type { Drill } from '../logic/drills'
+import { DrillBuilder } from './DrillBuilder'
+import { DrillSession } from './DrillSession'
 import { CheckIcon } from './icons'
+import { loadDrills } from './loadDrills'
 
 type Props = {
   lesson: Lesson
@@ -52,7 +49,7 @@ export function LessonPlayer({ lesson, playerRating, onComplete, onBack }: Props
             <CheckIcon size={44} />
           </span>
           <h1>Lesson complete</h1>
-          <p>{lesson.title}. The next lesson is open.</p>
+          <p>{lesson.id.startsWith('my-') ? 'Well practised. It counts as today’s lesson.' : `${lesson.title}. The next lesson is open.`}</p>
           <button type="button" className="fc-primary" onClick={onComplete}>
             Continue
           </button>
@@ -81,13 +78,6 @@ function StepView({ step, playerRating, onDone }: { step: LearnStep; playerRatin
       </div>
     )
   }
-  if (step.kind === 'endgame') {
-    const positions = ENDGAME_DRILLS[step.drill] ?? []
-    // The position that suits your rating (easier ones for newer players).
-    const position = positions.find((p) => playerRating <= p.upTo) ?? positions.at(-1)
-    if (!position) return <SkipStep onDone={onDone} />
-    return <EndgameDrill position={position} onDone={onDone} noSkip />
-  }
   if (step.kind === 'rules') return <RulesTutorial speaker="coach" doneLabel="Finish" onDone={onDone} onSkip={onDone} />
   if (step.kind === 'my-opening') return <OpeningDrill drill={step.drill} onDone={onDone} />
   if (step.kind === 'opening') {
@@ -95,7 +85,8 @@ function StepView({ step, playerRating, onDone }: { step: LearnStep; playerRatin
     if (!drill) return <SkipStep onDone={onDone} />
     return <OpeningDrill drill={drill} onDone={onDone} />
   }
-  return <PuzzleRound step={step} playerRating={playerRating} onDone={onDone} />
+  if (step.kind === 'build-drills') return <DrillBuilder playerRating={playerRating} onDone={onDone} />
+  return <DrillStep step={step} playerRating={playerRating} onDone={onDone} />
 }
 
 /** (A drill that's gone missing: never block the lesson on it.) */
@@ -107,86 +98,36 @@ function SkipStep({ onDone }: { onDone: () => void }) {
   )
 }
 
-type Round = { puzzles: Puzzle[]; index: number; clean: number; finished: boolean; lastClean: boolean | null }
-
-function PuzzleRound({ step, playerRating, onDone }: { step: Extract<LearnStep, { kind: 'puzzles' }>; playerRating: number; onDone: () => void }) {
-  const [round, setRound] = useState<Round | null>(null)
+/** A lesson's drills: a fresh set each attempt, at your level. */
+function DrillStep({ step, playerRating, onDone }: { step: Extract<LearnStep, { kind: 'drills' }>; playerRating: number; onDone: () => void }) {
   const [attempt, setAttempt] = useState(1)
+  const [drills, setDrills] = useState<Drill[] | null>(null)
   const [failed, setFailed] = useState(false)
 
-  // A fresh set each attempt, around your level, never ones you've seen.
   useEffect(() => {
     let cancelled = false
-    Promise.all([loadPuzzleBank(), loadPuzzleProgress()])
-      .then(([bank, progress]) => {
-        if (cancelled) return
-        const rating = lessonPuzzleRating(progress ? progress.rating.rating : playerRating, step.offset)
-        const puzzles = pickPuzzles(bank, { themes: step.themes, rating, count: step.count, exclude: new Set(progress?.seen ?? []) })
-        setRound({ puzzles, index: 0, clean: 0, finished: false, lastClean: null })
-      })
+    loadDrills([step.spec], step.count, playerRating, step.offset)
+      .then((d) => !cancelled && setDrills(d))
       .catch(() => !cancelled && setFailed(true))
     return () => {
       cancelled = true
     }
   }, [attempt, playerRating, step])
 
-  if (failed) return <p className="fc-muted">The puzzles couldn’t load. Are you offline?</p>
-  if (!round) return <p className="fc-muted">Setting up the puzzles…</p>
-
-  const puzzle = round.puzzles[round.index]
-  const doneAll = round.index >= round.puzzles.length
-  const passed = roundPassed(round.clean, Math.min(step.pass, round.puzzles.length))
-
-  if (doneAll) {
-    return (
-      <div className={`fc-round-result ${passed ? 'passed' : 'missed'}`}>
-        <strong>
-          {round.clean} of {round.puzzles.length} solved first time
-        </strong>
-        <p>{passed ? 'Well done. On to the next step.' : `You need ${step.pass}. Here’s a fresh set to try.`}</p>
-        {passed ? (
-          <button type="button" className="fc-primary" onClick={onDone}>
-            Continue
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="fc-primary"
-            onClick={() => {
-              setRound(null)
-              setAttempt((a) => a + 1)
-            }}
-          >
-            Try a fresh set
-          </button>
-        )}
-      </div>
-    )
-  }
-
-  const finished = (clean: boolean) => {
-    setRound((r) => (r ? { ...r, clean: r.clean + (clean ? 1 : 0), finished: true, lastClean: clean } : r))
-    updatePuzzleProgress((saved) => (saved ? { ...saved, seen: [...saved.seen, puzzle.id].slice(-3000) } : saved)).catch(() => undefined)
-  }
-
+  if (failed) return <p className="fc-muted">The drills couldn’t load. Are you offline?</p>
+  if (!drills) return <p className="fc-muted">Setting up the drills…</p>
   return (
-    <div className="fc-round">
-      <p className="fc-round-head">
-        <strong>{step.title}</strong>
-        <span>
-          {round.index + 1} of {round.puzzles.length} · {round.clean} solved
-        </span>
-      </p>
-      <PuzzleTrainer key={puzzle.id} puzzle={puzzle} onFinished={finished} focus={step.themes} oneTry={step.oneTry} />
-      {round.finished && (
-        <button
-          type="button"
-          className="fc-primary"
-          onClick={() => setRound((r) => (r ? { ...r, index: r.index + 1, finished: false, lastClean: null } : r))}
-        >
-          {round.index + 1 >= round.puzzles.length ? 'See how you did' : 'Next puzzle'}
-        </button>
-      )}
-    </div>
+    <DrillSession
+      key={attempt}
+      drills={drills}
+      rating={playerRating}
+      pass={Math.min(step.pass, drills.length)}
+      onDone={onDone}
+      onRetry={() => {
+        window.scrollTo(0, 0)
+        setDrills(null)
+        setAttempt((a) => a + 1)
+      }}
+    />
   )
 }

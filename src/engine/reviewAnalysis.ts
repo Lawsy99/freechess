@@ -14,8 +14,10 @@ export async function analyseGame(
   moves: readonly string[],
   onProgress: (done: number, total: number) => void,
   isCancelled: () => boolean,
+  /** A drill (Oct 2026) that started from another position. */
+  startFen?: string,
 ): Promise<PositionEval[] | null> {
-  const chess = new Chess()
+  const chess = startFen ? new Chess(startFen) : new Chess()
   const fens = [chess.fen()]
   for (const uci of moves) {
     applyUci(chess, uci)

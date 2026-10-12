@@ -111,6 +111,34 @@ export function LearnTab({ profile, onStart, openings, onMasterGame }: Props) {
         </p>
       </header>
 
+      {/* Drills (Oct 2026, after maiachess.com): build your own set, played out against Maia. */}
+      <section className="fc-my-openings">
+        <h2 className="fc-menu-label">
+          Drills <span>Play it out against Maia</span>
+        </h2>
+        <ul className="fc-card fc-menu">
+          <li>
+            <button
+              type="button"
+              className="fc-menu-row"
+              onClick={() =>
+                onStart({
+                  id: "my-drills",
+                  title: "Drills",
+                  steps: [{ kind: "build-drills" }],
+                })
+              }
+            >
+              <span className="fc-menu-text">
+                <strong>Build your own drills</strong>
+                <span>Openings, tactics or finishing, with a report on each</span>
+              </span>
+              <span className="fc-chip-button">Start</span>
+            </button>
+          </li>
+        </ul>
+      </section>
+
       {/* Master Games (Oct 2026): famous games, every move explained, with the big picture. */}
       <section className="fc-master-games">
         <h2 className="fc-menu-label">

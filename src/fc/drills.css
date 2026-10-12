@@ -1,0 +1,100 @@
+/* Drills (Oct 2026): the board, a line under it, then the report. */
+.drill-play,
+.drill-report {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.drill-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+}
+
+.drill-head span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.drill-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--card);
+  line-height: 1.45;
+}
+
+.drill-note p {
+  margin: 0;
+}
+
+.drill-verdict {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.drill-verdict.passed {
+  color: var(--good);
+}
+
+.drill-verdict.missed {
+  color: var(--star);
+}
+
+.drill-numbers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.drill-numbers .fc-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+}
+
+.drill-numbers span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.drill-numbers strong {
+  font-size: 24px;
+}
+
+.drill-counts {
+  margin: 0;
+}
+
+.drill-estimate {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* Build your own drills. */
+.drill-builder section h2 {
+  margin: 14px 0 6px;
+  font-size: 15px;
+}
+
+.drill-builder {
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+}
+
+/* In a lesson the board runs edge to edge, as in a game; the words keep their margins. */
+.drill-play > :not(.board-wrap) {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.drill-builder section {
+  display: flex;
+  flex-direction: column;
+}

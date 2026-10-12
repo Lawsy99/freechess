@@ -45,9 +45,14 @@ folder is still called `open-file` (the app's first working name).
   from move 1, like maiachess.com (logic/botStrength.ts, engine/opponent.ts). No opening books,
   style nudges, rating remapping or Stockfish help. The calibration (docs/bot-calibration.md)
   shows Maia's settings don't match playing strength evenly; kept as reference.
-- Learn (data/learnPath.ts): 6 units, 25 lessons; each is mostly doing (puzzles by theme,
-  play-outs against the engine, opening drills) after a two- or three-sentence idea. A
-  puzzle round passes with enough solved first time; otherwise a fresh set.
+- Learn (data/learnPath.ts): 9 units, 49 lessons; each is a two- or three-sentence idea,
+  then drills (Oct 2026, after maiachess.com): positions played out against Maia at your
+  level, each with a report (logic/drills.ts, fc/DrillSession.tsx). Tactics: real-game
+  positions by theme, played on for 6 moves; openings: shown, then played from move 1;
+  finishing: played to the goal. Pass enough drills, or get a fresh set. "Build your own
+  drills" on Learn counts as the day's lesson. Drills keep lessons distinct from puzzles.
+- Bot pages say how they play (pure Maia at their rating); bios are personality only,
+  never openings or styles they don't play.
 - Match screen: the board full width; nothing over it; nothing moves; no scrolling. The
   message panel below the board is a card with what's said and the scoresheet.
 - From chess.com (Sep 2026): review with a graph, "you played like", phases and
