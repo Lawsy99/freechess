@@ -14,6 +14,7 @@ import { ALL_LESSONS, type Lesson } from '../data/learnPath'
 import { LearnTab } from './LearnTab'
 import { LessonPlayer } from './LessonPlayer'
 import { PuzzleRun } from './PuzzleRun'
+import { CustomPuzzles } from './CustomPuzzles'
 import { PuzzleRush } from './PuzzleRush'
 import { PuzzlesTab, type PuzzleMode } from './PuzzlesTab'
 import { COACH_ID } from '../data/coach'
@@ -393,6 +394,8 @@ export function FreeChessApp() {
           <VisionTrainer best={profile.visionBest ?? 0} onFinished={(score) => updateProfile(withVisionScore(profile, score))} onBack={back} />
         ) : puzzleMode.kind === 'rush' ? (
           <PuzzleRush best={profile.rushBest ?? 0} onFinished={(score) => updateProfile(withRushScore(profile, score))} onBack={back} />
+        ) : puzzleMode.kind === 'customise' ? (
+          <CustomPuzzles onStart={(themes, difficulty) => setPuzzleMode({ kind: 'custom', themes, difficulty })} onBack={back} />
         ) : (
           <PuzzleRun
             mode={puzzleMode}
@@ -520,7 +523,6 @@ export function FreeChessApp() {
         <PuzzlesTab
           profile={profile}
           mistakesDue={mistakesDue}
-          focus={focus}
           onStart={(mode) => {
             setPuzzleMode(mode)
             setView('puzzle')

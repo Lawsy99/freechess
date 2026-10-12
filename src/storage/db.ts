@@ -89,11 +89,15 @@ export async function saveProgress(progress: Progress): Promise<void> {
 }
 
 /** Puzzle rating (tracked separately from the playing rating) and puzzles already seen. */
+import type { ThemeStats } from '../logic/puzzleThemes'
+
 export type PuzzleProgress = {
   rating: PlayerRating
   seen: string[]
   /** Positions from your own games already used as lesson examples ("gameId:ply"), so none is used twice. */
   ownSeen?: string[]
+  /** Rated puzzles by theme, tried and solved (logic/puzzleThemes.ts): for "Themes to work on". */
+  themeStats?: ThemeStats
   /** When last saved (for syncing). */
   updatedAt?: number
 }

@@ -1,28 +1,40 @@
-// Puzzles: your puzzle rating, then the ways to play. Rated puzzles without
-// end, the daily puzzle, Puzzle Rush, and theme practice.
+// Puzzles, laid out as chess.com does (Joseph, Oct 2026): your puzzle rating,
+// then rated puzzles without end, Puzzle Rush, the daily puzzle and custom
+// puzzles (any themes, any difficulty). "Themes to work on" comes from your
+// own rated results, so it changes as you improve.
 import { useEffect, useState } from 'react'
-import { PUZZLE_THEMES } from '../logic/puzzleModes'
 import { dayKey, type Profile } from '../logic/profile'
+import { MIN_TRIED, weakestThemes, type Difficulty } from '../logic/puzzleThemes'
 import { loadPuzzleProgress } from '../storage/db'
-import type { Focus } from '../logic/focus'
 import { CheckIcon, ChevronIcon, PuzzleIcon } from './icons'
 
-export type PuzzleMode = { kind: 'rated' } | { kind: 'daily' } | { kind: 'theme'; theme: string; label: string } | { kind: 'rush' } | { kind: 'vision' } | { kind: 'mistakes' }
+export type PuzzleMode =
+  | { kind: 'rated' }
+  | { kind: 'daily' }
+  /** Custom puzzles: chosen themes at a chosen difficulty, unrated. */
+  | { kind: 'custom'; themes: string[]; difficulty: Difficulty }
+  /** The custom puzzles picker. */
+  | { kind: 'customise' }
+  | { kind: 'rush' }
+  | { kind: 'vision' }
+  | { kind: 'mistakes' }
 
 type Props = {
   profile: Profile
   /** Positions from your own games waiting to be practised. */
   mistakesDue: number
-  /** Your training focus: a puzzle set for it. */
-  focus: Focus | null
   onStart: (mode: PuzzleMode) => void
 }
 
-export function PuzzlesTab({ profile, mistakesDue, focus, onStart }: Props) {
+export function PuzzlesTab({ profile, mistakesDue, onStart }: Props) {
   const [rating, setRating] = useState<number | null>(null)
+  const [weak, setWeak] = useState<ReturnType<typeof weakestThemes>>([])
   useEffect(() => {
     loadPuzzleProgress()
-      .then((p) => setRating(p ? Math.round(p.rating.rating) : null))
+      .then((p) => {
+        setRating(p ? Math.round(p.rating.rating) : null)
+        setWeak(weakestThemes(p?.themeStats))
+      })
       .catch(() => setRating(null))
   }, [])
   const dailyDone = profile.dailySolvedOn === dayKey(new Date())
@@ -58,16 +70,48 @@ export function PuzzlesTab({ profile, mistakesDue, focus, onStart }: Props) {
         <ChevronIcon size={20} />
       </button>
 
-      {/* For you (Oct 2026): puzzles on the mistake you make most lately. */}
-      {focus && (
-        <button type="button" className="fc-card fc-mode fc-for-you" onClick={() => onStart({ kind: 'theme', theme: focus.theme, label: focus.themeLabel })}>
-          <span className="fc-mode-badge for-you">For you</span>
-          <span>
-            <strong>{focus.themeLabel}</strong>
-            <span>You’ve been {focus.label} lately. These will sharpen it.</span>
-          </span>
-          <ChevronIcon size={20} />
-        </button>
+      <button type="button" className="fc-card fc-mode" onClick={() => onStart({ kind: 'rush' })}>
+        <span className="fc-mode-badge rush">3:00</span>
+        <span>
+          <strong>Puzzle Rush</strong>
+          <span>Three minutes, three strikes. They get harder as you go.</span>
+        </span>
+        <ChevronIcon size={20} />
+      </button>
+
+      <button type="button" className="fc-card fc-mode" onClick={() => onStart({ kind: 'daily' })}>
+        <span className="fc-mode-badge">{dailyDone ? <CheckIcon size={18} /> : new Date().getDate()}</span>
+        <span>
+          <strong>Daily puzzle</strong>
+          <span>{dailyDone ? 'Solved today. A new one tomorrow.' : 'One a day, the same for everyone.'}</span>
+        </span>
+        <ChevronIcon size={20} />
+      </button>
+
+      <button type="button" className="fc-card fc-mode" onClick={() => onStart({ kind: 'customise' })}>
+        <span className="fc-mode-badge custom">
+          <PuzzleIcon size={18} />
+        </span>
+        <span>
+          <strong>Custom puzzles</strong>
+          <span>Choose the themes and the difficulty. Unrated practice.</span>
+        </span>
+        <ChevronIcon size={20} />
+      </button>
+
+      {/* From your own rated results: your three weakest themes. */}
+      {weak.length > 0 && (
+        <section>
+          <h2>Themes to work on</h2>
+          <div className="fc-themes">
+            {weak.map((t) => (
+              <button key={t.id} type="button" className="fc-theme" onClick={() => onStart({ kind: 'custom', themes: [t.id], difficulty: 'normal' })}>
+                {t.label} · {Math.round(t.rate * 100)}%
+              </button>
+            ))}
+          </div>
+          <p className="fc-muted">Your success rate in rated puzzles (themes with at least {MIN_TRIED}).</p>
+        </section>
       )}
 
       {/* Your own mistakes, brought back on a schedule (spaced repetition). */}
@@ -84,24 +128,6 @@ export function PuzzlesTab({ profile, mistakesDue, focus, onStart }: Props) {
         <ChevronIcon size={20} />
       </button>
 
-      <button type="button" className="fc-card fc-mode" onClick={() => onStart({ kind: 'daily' })}>
-        <span className="fc-mode-badge">{dailyDone ? <CheckIcon size={18} /> : new Date().getDate()}</span>
-        <span>
-          <strong>Daily puzzle</strong>
-          <span>{dailyDone ? 'Solved today. A new one tomorrow.' : 'One a day, the same for everyone.'}</span>
-        </span>
-        <ChevronIcon size={20} />
-      </button>
-
-      <button type="button" className="fc-card fc-mode" onClick={() => onStart({ kind: 'rush' })}>
-        <span className="fc-mode-badge rush">3:00</span>
-        <span>
-          <strong>Puzzle Rush</strong>
-          <span>Three minutes, three strikes. They get harder as you go.</span>
-        </span>
-        <ChevronIcon size={20} />
-      </button>
-
       <button type="button" className="fc-card fc-mode" onClick={() => onStart({ kind: 'vision' })}>
         <span className="fc-mode-badge vision">e4</span>
         <span>
@@ -110,17 +136,6 @@ export function PuzzlesTab({ profile, mistakesDue, focus, onStart }: Props) {
         </span>
         <ChevronIcon size={20} />
       </button>
-
-      <section>
-        <h2>Practise a theme</h2>
-        <div className="fc-themes">
-          {PUZZLE_THEMES.map((t) => (
-            <button key={t.id} type="button" className="fc-theme" onClick={() => onStart({ kind: 'theme', theme: t.id, label: t.label })}>
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </section>
     </main>
   )
 }

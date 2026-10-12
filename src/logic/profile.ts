@@ -17,7 +17,7 @@ export const MAX_CHANGE = 80
 
 // Joseph, Oct 2026: the lesson first, and puzzles get a goal of their own.
 export type Goal = 'lesson' | 'puzzles' | 'bot' | 'coach'
-export const GOALS: Goal[] = ['lesson', 'puzzles', 'bot', 'coach']
+export const GOALS: Goal[] = ['lesson', 'puzzles', 'coach', 'bot']
 /** Puzzles solved in a day for the puzzle goal. */
 export const PUZZLE_GOAL = 3
 

@@ -1,18 +1,19 @@
-// Solving puzzles one after another: rated puzzles at your level, a theme,
-// or the daily puzzle. After each: solved or not, the rating change, then
-// the next one (or back).
+// Solving puzzles one after another: rated puzzles at your level, custom
+// puzzles (your themes, your difficulty, unrated), or the daily puzzle. After
+// each: solved or not, its themes, the rating change, then the next one.
 import { useEffect, useState } from 'react'
 import { PuzzleTrainer } from '../components/PuzzleTrainer'
 import { loadPuzzleBank } from '../engine/puzzleBank'
 import { dailyPuzzle } from '../logic/puzzleModes'
 import { pickPuzzles, ratePuzzle, type Puzzle } from '../logic/puzzles'
+import { DIFFICULTIES, recordThemes, themeLabel } from '../logic/puzzleThemes'
 import { dayKey } from '../logic/profile'
 import { loadPuzzleProgress, updatePuzzleProgress, type PuzzleProgress } from '../storage/db'
 import type { PuzzleMode } from './PuzzlesTab'
 import { BackIcon } from './icons'
 
 type Props = {
-  mode: Exclude<PuzzleMode, { kind: 'rush' }>
+  mode: Extract<PuzzleMode, { kind: 'rated' | 'daily' | 'custom' }>
   /** Starting puzzle rating for someone who has never done one: their playing rating. */
   playerRating: number
   onSolved: (solved: boolean, daily: boolean) => void
@@ -31,7 +32,8 @@ export function PuzzleRun({ mode, playerRating, onSolved, onBack }: Props) {
   const next = (all: Puzzle[], p: PuzzleProgress) => {
     setResult(null)
     if (mode.kind === 'daily') return setPuzzle(dailyPuzzle(all, dayKey(new Date())))
-    const [picked] = pickPuzzles(all, { themes: mode.kind === 'theme' ? [mode.theme] : undefined, rating: p.rating.rating, count: 1, exclude: new Set(p.seen) })
+    const offset = mode.kind === 'custom' ? (DIFFICULTIES.find((d) => d.id === mode.difficulty)?.offset ?? 0) : 0
+    const [picked] = pickPuzzles(all, { themes: mode.kind === 'custom' ? mode.themes : undefined, rating: p.rating.rating + offset, count: 1, exclude: new Set(p.seen) })
     setPuzzle(picked ?? null)
   }
 
@@ -49,17 +51,27 @@ export function PuzzleRun({ mode, playerRating, onSolved, onBack }: Props) {
 
   function finished(clean: boolean) {
     if (!puzzle || !progress) return
-    // The daily puzzle isn't rated (everyone gets the same one, whatever their level).
-    const rated = mode.kind !== 'daily'
+    // Only "Solve puzzles" is rated: the daily puzzle is the same for everyone,
+    // and custom puzzles are practice you choose (as on chess.com).
+    const rated = mode.kind === 'rated'
     const after = rated ? ratePuzzle(progress.rating, puzzle.rating, clean) : progress.rating
-    const updated = { ...progress, rating: after, seen: [...progress.seen, puzzle.id] }
+    // Rated results also count towards how you do in each theme.
+    const themeStats = rated ? recordThemes(progress.themeStats, puzzle.themes, clean) : progress.themeStats
+    const updated = { ...progress, rating: after, seen: [...progress.seen, puzzle.id], themeStats }
     setProgress(updated)
-    updatePuzzleProgress((saved) => ({ ...(saved ?? updated), rating: after, seen: [...(saved?.seen ?? []), puzzle.id].slice(-3000) })).catch(() => undefined)
+    updatePuzzleProgress((saved) => ({
+      ...(saved ?? updated),
+      rating: after,
+      seen: [...(saved?.seen ?? []), puzzle.id].slice(-3000),
+      themeStats: rated ? recordThemes(saved?.themeStats, puzzle.themes, clean) : saved?.themeStats,
+    })).catch(() => undefined)
     setResult({ solved: clean, change: Math.round(after.rating - progress.rating.rating) })
     onSolved(clean, mode.kind === 'daily')
   }
 
-  const title = mode.kind === 'daily' ? 'Daily puzzle' : mode.kind === 'theme' ? mode.label : 'Puzzles'
+  const title =
+    mode.kind === 'daily' ? 'Daily puzzle' : mode.kind === 'custom' ? (mode.themes.length === 1 ? themeLabel(mode.themes[0]) : 'Custom puzzles') : 'Puzzles'
+  const rated = mode.kind === 'rated'
 
   return (
     <main className="fc-page fc-puzzle-run">
@@ -68,7 +80,7 @@ export function PuzzleRun({ mode, playerRating, onSolved, onBack }: Props) {
           <BackIcon size={22} /> Puzzles
         </button>
         <strong>{title}</strong>
-        {progress && mode.kind !== 'daily' && <span className="fc-rating-tag">{Math.round(progress.rating.rating)}</span>}
+        {progress && rated && <span className="fc-rating-tag">{Math.round(progress.rating.rating)}</span>}
       </header>
       {failed ? (
         <p className="fc-muted">The puzzles couldn’t load. Are you offline?</p>
@@ -76,11 +88,11 @@ export function PuzzleRun({ mode, playerRating, onSolved, onBack }: Props) {
         <p className="fc-muted">Finding a puzzle…</p>
       ) : (
         <>
-          <PuzzleTrainer key={puzzle.id} puzzle={puzzle} onFinished={finished} focus={mode.kind === 'theme' ? [mode.theme] : []} />
+          <PuzzleTrainer key={puzzle.id} puzzle={puzzle} onFinished={finished} focus={mode.kind === 'custom' ? mode.themes : []} />
           {result && (
             <div className={`fc-puzzle-result ${result.solved ? 'solved' : 'missed'}`}>
               <strong>{result.solved ? 'Solved!' : 'Not this time'}</strong>
-              {mode.kind !== 'daily' && (
+              {rated && (
                 <span>
                   {result.change >= 0 ? '+' : ''}
                   {result.change}

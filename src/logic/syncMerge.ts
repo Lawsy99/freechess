@@ -15,7 +15,7 @@ export type SyncData = {
   cards: MistakeCard[]
 }
 
-export type SyncPuzzles = { rating: unknown; seen: string[]; ownSeen?: string[]; updatedAt?: number }
+export type SyncPuzzles = { rating: unknown; seen: string[]; ownSeen?: string[]; themeStats?: Record<string, { tried: number; solved: number }>; updatedAt?: number }
 type SyncGame = { id: string; finishedAt?: number; evals?: unknown[] } & Record<string, unknown>
 
 const union = <T>(a: readonly T[] = [], b: readonly T[] = []) => [...new Set([...a, ...b])]
@@ -80,7 +80,10 @@ export function mergeProfiles(a: Profile | null, b: Profile | null): Profile | n
 export function mergePuzzles(a: SyncPuzzles | null, b: SyncPuzzles | null): SyncPuzzles | null {
   if (!a || !b) return a ?? b
   const [newer, older] = (a.updatedAt ?? 0) >= (b.updatedAt ?? 0) ? [a, b] : [b, a]
-  return { ...newer, seen: union(older.seen, newer.seen).slice(-3000), ownSeen: union(older.ownSeen, newer.ownSeen) }
+  // Theme results: for each theme, the device that has tried more.
+  const themeStats = { ...older.themeStats }
+  for (const [t, s] of Object.entries(newer.themeStats ?? {})) if (!themeStats[t] || s.tried >= themeStats[t].tried) themeStats[t] = s
+  return { ...newer, seen: union(older.seen, newer.seen).slice(-3000), ownSeen: union(older.ownSeen, newer.ownSeen), themeStats }
 }
 
 /** Every game from both; where both have it, the one that's been analysed (or finished later). */

@@ -1845,3 +1845,28 @@
 .fc-for-you {
   box-shadow: inset 0 0 0 2px var(--buff), var(--lift);
 }
+
+/* Custom puzzles (Oct 2026): chosen themes stand out; Start stays in reach. */
+.fc-theme.on {
+  background: var(--buff);
+  color: var(--ink);
+}
+
+.fc-custom-puzzles {
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+}
+
+.fc-custom-start {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(22, 24, 29, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.fc-custom-start .fc-primary {
+  width: 100%;
+}

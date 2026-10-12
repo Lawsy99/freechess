@@ -5,6 +5,7 @@ import { Chess } from 'chess.js'
 import { useEffect, useState } from 'react'
 import { applyUci } from '../logic/game'
 import { isCorrect, solverColour, type Puzzle } from '../logic/puzzles'
+import { shownThemes } from '../logic/puzzleThemes'
 import { puzzleExplanation } from '../logic/lessonExtras'
 import { Board } from './Board'
 import { HINT_ARROW_COLOUR } from './lineArrows'
@@ -142,20 +143,14 @@ export function PuzzleTrainer({ puzzle, onFinished, focus = [], oneTry = false }
       )}
       <p className="puzzle-meta">
         Puzzle rated {puzzle.rating}
-        {puzzle.themes.length > 0 &&
-          (done || !oneTry) &&
-          ` · ${[...puzzle.themes]
-            .filter((t) => !['advantage', 'crushing', 'equality', 'middlegame', 'endgame', 'opening', 'short', 'long'].includes(t))
-            .sort((a, b) => Number(focus.includes(b)) - Number(focus.includes(a)))
+        {/* The ideas in it: once it's done, or from the start when you chose the
+            theme (custom puzzles, lessons). In rated puzzles they'd give it away. */}
+        {(done || (focus.length > 0 && !oneTry)) &&
+          shownThemes([...puzzle.themes].sort((a, b) => Number(focus.includes(b)) - Number(focus.includes(a))))
             .slice(0, 2)
-            .map(themeName)
-            .join(', ')}`}
+            .map((t) => ` · ${t}`)
+            .join('')}
       </p>
     </div>
   )
-}
-
-/** "backRankMate" → "back rank mate". */
-function themeName(theme: string): string {
-  return theme.replace(/([A-Z])/g, ' $1').replace(/(\d)/g, ' $1').toLowerCase()
 }
